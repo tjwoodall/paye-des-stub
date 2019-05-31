@@ -1,8 +1,102 @@
+# PAYE DES Stub
 
-# paye-des-stub
+The PAYE DES Stub is a service to support stateful sandbox testing in the
+External Test environment. It stubs the behaviour of DES in order that an API microservice
+is able to implement only a single set of routes regardless of whether it is being called
+in a test or production environment.
 
-This is a placeholder README.md for a new repository
+It is a semi-stateful test service - in order to use it, you need to request it to set up test
+data for a specific taxpayer and tax year. It will then generate pre-defined test data for that
+taxpayer and tax year.
 
-### License
+The POST endpoints for setting up test data are exposed on the API Platform as the Individual PAYE
+Test Support API. The GET endpoints are called by the relevant API microservices.
 
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
+There are two versions of the Individual PAYE Test Support API:
+* version 1.0 supports the Individual Benefits, Individual Employment, Individual Income and Individual Tax APIs
+* version 2.0 supports the Individual PAYE API
+
+
+## What uses this service?
+
+API microservices that make PAYE-related calls to DES which are deployed to the
+External Test environment should be configured to connect to this stub instead of a real DES.
+
+API microservices which this stubs behaviour for are:
+* individual-benefits
+* individual-employment
+* individual-income
+* individual-tax
+* individuals-paye
+
+
+## What does this service use?
+
+* datastream (for Audit)
+* Metrics/Grafana
+
+
+## Running the tests
+
+```
+./run_all_tests.sh
+```
+
+## Running the service locally
+
+First, make sure you have mongo running locally
+
+To run the service locally on port `9689`:
+```
+./run_local.sh
+```
+
+To test the stub endpoints for Individual Benefits:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/sa/2234567890/benefits/annual-summary/2017-18
+curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/benefits/tax-year/2017
+```
+
+To test the stub endpoint for Individual Employment:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/sa/2234567890/employments/annual-summary/2017-18
+curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/employment-history/tax-year/2017
+```
+
+To test the stub endpoint for Individual Income:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/sa/2234567890/income/annual-summary/2017-18
+curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/income-summary/tax-year/2017
+```
+
+To test the stub endpoint for Individual Tax:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/sa/2234567890/tax/annual-summary/2017-18
+curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/tax-summary/tax-year/2017
+```
+
+To test the stub endpoint for Individual PAYE:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.2.0+json" \
+  --request POST \
+  --data '{ "scenario": "EVERYTHING" }' \
+  http://localhost:9689/paye/nino/AA000001A/tax-year/2017-18
+curl -X GET http://localhost:9689/tax-history/AA000001A/2017/all-details
+```
