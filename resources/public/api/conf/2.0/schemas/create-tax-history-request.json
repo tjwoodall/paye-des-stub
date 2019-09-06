@@ -12,6 +12,10 @@
           "description": "an individual with a full complement of PAYE data in various combinations (unlikely in real life)"
         },
         {
+          "enum": ["EVERYTHING_MISSING_PAY_AND_TAX"],
+          "description": "an individual with a full complement of PAYE data in various combinations, but with pay and tax amounts missing. NEW TEST SCENARIO"
+        },
+        {
           "enum": ["EMPLOYED"],
           "description": "an individual with a single employment and company benefits"
         },
