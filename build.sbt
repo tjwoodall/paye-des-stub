@@ -10,8 +10,8 @@ lazy val appName = "paye-des-stub"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 lazy val compile = Seq(
-  "uk.gov.hmrc" %% "simple-reactivemongo" % "7.20.0-play-25",
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.16.0",
+  "uk.gov.hmrc" %% "simple-reactivemongo" % "7.21.0-play-25",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "5.1.0",
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-25"
 )
 
