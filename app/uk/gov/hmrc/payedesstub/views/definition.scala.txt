@@ -11,13 +11,13 @@
     "versions": [
       {
         "version": "1.0",
-        "status": "BETA",
+        "status": "DEPRECATED",
         "endpointsEnabled": true,
         "access": @Json.toJson(access("""1.0"""))
       },
       {
         "version": "2.0",
-        "status": "BETA",
+        "status": "DEPRECATED",
         "endpointsEnabled": true,
         "access": @Json.toJson(access("""2.0"""))
       }
