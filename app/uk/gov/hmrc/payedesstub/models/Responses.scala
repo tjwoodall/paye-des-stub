@@ -53,6 +53,7 @@ case class StateBenefits(otherPensionsAndRetirementAnnuities: Double,
 
 case class ExtendedStateBenefits(otherPensionsAndRetirementAnnuities: Double,
                                  incapacityBenefit: Double,
-                                 jobseekersAllowance: Double)
+                                 jobseekersAllowance: Double,
+                                 seissNetPaid: Option[Double])
 
 case class Refund(taxRefundedOrSetOff: Double)

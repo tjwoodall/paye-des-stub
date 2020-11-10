@@ -60,7 +60,7 @@ class IndividualIncomeControllerSpec extends UnitSpec with MockitoSugar with Wit
     val validTaxYearString = "2016-17"
     val utr = SaUtr(validUtrString)
     val taxYear = TaxYear(validTaxYearString)
-    val individualIncomeResponse = IndividualIncomeResponse(ExtendedStateBenefits(0.0, 0.0, 0.0), Nil)
+    val individualIncomeResponse = IndividualIncomeResponse(ExtendedStateBenefits(0.0, 0.0, 0.0, Some(0.0)), Nil)
     val individualIncome = IndividualIncome("", "", individualIncomeResponse)
   }
 
