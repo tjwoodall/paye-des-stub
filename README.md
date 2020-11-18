@@ -12,9 +12,8 @@ taxpayer and tax year.
 The POST endpoints for setting up test data are exposed on the API Platform as the Individual PAYE
 Test Support API. The GET endpoints are called by the relevant API microservices.
 
-There are two versions of the Individual PAYE Test Support API:
-* version 1.0 supports the Individual Benefits, Individual Employment, Individual Income and Individual Tax APIs
-* version 2.0 supports the Individual PAYE API
+The API supports the Individual Benefits, Individual Employment, Individual Income and Individual Tax APIs
+
 
 
 ## What uses this service?

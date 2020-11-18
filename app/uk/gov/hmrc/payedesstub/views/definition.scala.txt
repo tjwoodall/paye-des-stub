@@ -18,7 +18,7 @@
       {
         "version": "2.0",
         "status": "RETIRED",
-        "endpointsEnabled": true,
+        "endpointsEnabled": false,
         "access": @Json.toJson(access("""2.0"""))
       }
     ]
