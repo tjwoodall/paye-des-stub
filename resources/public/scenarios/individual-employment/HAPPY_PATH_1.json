@@ -2,11 +2,14 @@
   "employments": [
     {
       "employerPayeReference": "123/AB456",
-      "employerName": "Company XYZ"
+      "employerName": "Company XYZ",
+      "offPayrollWorkFlag": true
+
     },
     {
       "employerPayeReference": "456/AB456",
-      "employerName": "Company ABC"
+      "employerName": "Company ABC",
+      "offPayrollWorkFlag": false
     }
   ]
 }

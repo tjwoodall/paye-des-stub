@@ -46,7 +46,8 @@ case class IndividualIncomeEmployment(employerPayeReference: String,
                                       payFromEmployment: Double)
 
 case class IndividualEmploymentEmployment(employerPayeReference: String,
-                                          employerName: String)
+                                          employerName: String,
+                                          offPayrollWorkFlag: Option[Boolean])
 
 case class StateBenefits(otherPensionsAndRetirementAnnuities: Double,
                          incapacityBenefit: Double)
