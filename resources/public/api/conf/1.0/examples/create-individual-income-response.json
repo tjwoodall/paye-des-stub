@@ -2,7 +2,8 @@
   "pensionsAnnuitiesAndOtherStateBenefits": {
     "otherPensionsAndRetirementAnnuities": 36.50,
     "incapacityBenefit": 980.45,
-    "jobseekersAllowance": 89.99
+    "jobseekersAllowance": 89.99,
+    "seissNetPaid": 55.55
   },
   "employments": [
     {

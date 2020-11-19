@@ -21,6 +21,11 @@
           "description": "The amount of income from Jobseeker’s Allowance.",
           "type": "number",
           "example": "89.99"
+        },
+        "seissNetPaid": {
+          "description": "The amount of income from the Self-Employment Income Support Scheme.",
+          "type": "number",
+          "example": "55.55"
         }
       }
     },
