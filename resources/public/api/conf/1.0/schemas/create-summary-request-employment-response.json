@@ -18,6 +18,11 @@
             "description": "The name of the employer.",
             "type": "string",
             "example": "Company XYZ"
+          },
+          "offPayrollWorkFlag": {
+            "description": "The value of OPW flag.",
+            "type": "boolean",
+            "example": "false"
           }
         },
         "required": [ "employerPayeReference", "employerName" ]
