@@ -16,13 +16,4 @@
 
 package uk.gov.hmrc.payedesstub.models
 
-import play.api.Configuration
-
 case class APIAccess(`type`: String, whitelistedApplicationIds: Option[Seq[String]], isTrial: Option[Boolean] = None)
-
-object APIAccess {
-  def build(config: Option[Configuration])(version: String): APIAccess = APIAccess(
-    `type` = config.flatMap(_.getString(s"version-$version.type")).getOrElse("PRIVATE"),
-    whitelistedApplicationIds = config.foldLeft[Option[Seq[String]]](None) { (_, conf) => conf.getStringSeq(s"version-$version.whitelistedApplicationIds") },
-    isTrial = config.flatMap(_.getBoolean(s"version-$version.isTrial")))
-}

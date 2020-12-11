@@ -17,14 +17,16 @@
 package uk.gov.hmrc.payedesstub.controllers
 
 import play.api.http.HeaderNames.ACCEPT
-import play.api.mvc.{ActionBuilder, ActionFilter, Request, Results}
+import play.api.mvc.{ActionFilter, ControllerComponents, Request, Result, Results}
 import uk.gov.hmrc.payedesstub.models.ErrorAcceptHeaderInvalid
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match
 
 trait HeaderValidator extends Results with ErrorConversion {
+
+  def cc: ControllerComponents
 
   private val validateContentType: String => Boolean = ct => ct == "json"
 
@@ -33,19 +35,20 @@ trait HeaderValidator extends Results with ErrorConversion {
   def acceptHeaderValidationRules(versions: String*): Option[String] => Boolean =
     _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && versions.contains(res.group("version")))) getOrElse false
 
-  private def validateAction(rules: Option[String] => Boolean) = new ActionBuilder[Request] with ActionFilter[Request] {
+  private def validateAction(rules: Option[String] => Boolean): ActionFilter[Request] = new ActionFilter[Request] {
 
-    def filter[T](input: Request[T]) = Future.successful {
-      implicit val r = input
+    def filter[T](input: Request[T]): Future[Option[Result]] = Future.successful {
       if (!rules(input.headers.get(ACCEPT))) {
         Some(ErrorAcceptHeaderInvalid)
       } else {
         None
       }
     }
+
+    override protected def executionContext: ExecutionContext = cc.executionContext
   }
 
-  def validateAcceptHeader(versions: String*) : ActionBuilder[Request] = {
+  def validateAcceptHeader(versions: String*) : ActionFilter[Request] = {
     validateAction(acceptHeaderValidationRules(versions: _*))
   }
 }

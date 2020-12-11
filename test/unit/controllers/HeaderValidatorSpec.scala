@@ -16,10 +16,14 @@
 
 package unit.controllers
 
+import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.payedesstub.controllers.HeaderValidator
 import uk.gov.hmrc.play.test.UnitSpec
+import play.api.test.Helpers.stubControllerComponents
 
 class HeaderValidatorSpec extends UnitSpec with HeaderValidator {
+
+  val cc: ControllerComponents = stubControllerComponents()
 
   "acceptHeaderValidationRules" should {
     "return false when the header value is missing" in {

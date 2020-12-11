@@ -23,14 +23,17 @@ import play.api.mvc._
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.payedesstub.models._
 import uk.gov.hmrc.payedesstub.services.{IndividualBenefitsSummaryService, ScenarioLoader}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class IndividualBenefitsController @Inject()(val scenarioLoader: ScenarioLoader,
-                                             val service: IndividualBenefitsSummaryService)
-  extends BaseController with HeaderValidator {
+    val service: IndividualBenefitsSummaryService,
+    val cc: ControllerComponents)
+  extends BackendController(cc) with HeaderValidator {
+
+  implicit val ec: ExecutionContext = cc.executionContext
 
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
@@ -43,7 +46,8 @@ class IndividualBenefitsController @Inject()(val scenarioLoader: ScenarioLoader,
     }
   }
 
-  final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] = validateAcceptHeader("1.0").async(parse.json) { implicit request =>
+  final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
+    (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { implicit request =>
     withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
       val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
 

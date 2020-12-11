@@ -19,10 +19,11 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
+import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.payedesstub.controllers.IndividualEmploymentController
@@ -42,7 +43,11 @@ class IndividualEmploymentControllerSpec extends UnitSpec with MockitoSugar with
     def createIndividualEmploymentRequest = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    val underTest = new IndividualEmploymentController(mock[ScenarioLoader], mock[IndividualEmploymentSummaryService])
+    val underTest = new IndividualEmploymentController(
+      mock[ScenarioLoader],
+      mock[IndividualEmploymentSummaryService],
+      stubControllerComponents()
+    )
 
     def createSummaryRequest(scenario: String) = {
       createIndividualEmploymentRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))

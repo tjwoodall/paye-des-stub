@@ -20,10 +20,11 @@ import common.LogSuppressing
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
+import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.payedesstub.controllers.IndividualIncomeController
@@ -42,7 +43,11 @@ class IndividualIncomeControllerSpec extends UnitSpec with MockitoSugar with Wit
 
     val createIndividualIncomeRequest = FakeRequest()
 
-    val underTest = new IndividualIncomeController(mock[ScenarioLoader], mock[IndividualIncomeSummaryService])
+    val underTest = new IndividualIncomeController(
+      mock[ScenarioLoader],
+      mock[IndividualIncomeSummaryService],
+      stubControllerComponents()
+    )
 
     def createRequestWithHeaders =
       FakeRequest()

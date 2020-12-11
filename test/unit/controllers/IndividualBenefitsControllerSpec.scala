@@ -19,7 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
@@ -29,6 +29,7 @@ import uk.gov.hmrc.payedesstub.controllers.IndividualBenefitsController
 import uk.gov.hmrc.payedesstub.models.{IndividualBenefits, IndividualBenefitsResponse, InvalidScenarioException, TaxYear}
 import uk.gov.hmrc.payedesstub.services.{IndividualBenefitsSummaryService, ScenarioLoader}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import play.api.test.Helpers.stubControllerComponents
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +43,10 @@ class IndividualBenefitsControllerSpec extends UnitSpec with MockitoSugar with W
     def createIndividualBenefitsRequest = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    val underTest = new IndividualBenefitsController(mock[ScenarioLoader], mock[IndividualBenefitsSummaryService])
+    val underTest = new IndividualBenefitsController(
+      mock[ScenarioLoader],
+      mock[IndividualBenefitsSummaryService],
+      stubControllerComponents())
 
     def createSummaryRequest(scenario: String) = {
       createIndividualBenefitsRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))

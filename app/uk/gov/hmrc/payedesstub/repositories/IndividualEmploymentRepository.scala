@@ -17,17 +17,15 @@
 package uk.gov.hmrc.payedesstub.repositories
 
 import javax.inject.{Inject, Singleton}
-
 import play.modules.reactivemongo.ReactiveMongoComponent
 import reactivemongo.bson.BSONObjectID
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.payedesstub.models.{IndividualEmployment, _}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IndividualEmploymentRepository @Inject()(mongo: ReactiveMongoComponent)
+class IndividualEmploymentRepository @Inject()(mongo: ReactiveMongoComponent)(implicit ec: ExecutionContext)
   extends ReactiveRepository[IndividualEmployment, BSONObjectID]("individualEmployment", mongo.mongoConnector.db,
     formatIndividualEmployment, formatObjectId) {
 

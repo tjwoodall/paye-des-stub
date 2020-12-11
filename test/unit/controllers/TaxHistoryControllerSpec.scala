@@ -19,10 +19,11 @@ package unit.controllers
 import common.LogSuppressing
 import org.mockito.ArgumentMatchers.{any, anyString, eq => mEq}
 import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
+import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.payedesstub.controllers.TaxHistoryController
@@ -43,7 +44,9 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
 
     def createTaxHistoryRequest = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.2.0+json")
 
-    val underTest = new TaxHistoryController(mock[ScenarioLoader], mock[TaxHistoryService])
+    val underTest = new TaxHistoryController(mock[ScenarioLoader], mock[TaxHistoryService],
+      stubControllerComponents()
+    )
 
     def createSummaryRequestV1(scenario: String) = {
       createTaxHistoryRequestV1.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))

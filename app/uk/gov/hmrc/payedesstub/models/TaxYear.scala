@@ -22,8 +22,8 @@ import scala.util.matching.Regex.Match
 case class TaxYear(ty: String) {
   if (!TaxYear.isValid(ty)) throw new IllegalArgumentException
 
-  val startYr = ty.split("-")(0)
-  val endYr = (startYr.toInt + 1).toString
+  val startYr: String = ty.split("-")(0)
+  val endYr: String = (startYr.toInt + 1).toString
 }
 
 object TaxYear {
