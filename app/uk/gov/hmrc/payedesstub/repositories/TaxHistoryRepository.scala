@@ -22,11 +22,10 @@ import reactivemongo.bson.BSONObjectID
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.payedesstub.models._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TaxHistoryRepository @Inject()(mongo: ReactiveMongoComponent)
+class TaxHistoryRepository @Inject()(mongo: ReactiveMongoComponent)(implicit ec: ExecutionContext)
   extends ReactiveRepository[TaxHistory, BSONObjectID]("taxHistory", mongo.mongoConnector.db,
     formatTaxHistory, formatObjectId) {
 

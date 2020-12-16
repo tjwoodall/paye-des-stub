@@ -17,12 +17,12 @@
 package uk.gov.hmrc.payedesstub.controllers
 
 import play.api.libs.json.Json
-import play.api.mvc.{Request, Result, Results}
+import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.payedesstub.models.ErrorResponse
 
 trait ErrorConversion {
 
   import Results._
 
-  implicit def toResult[T](error: ErrorResponse)(implicit request: Request[T]): Result = Status(error.httpStatusCode)(Json.toJson(error))
+  implicit def toResult(error: ErrorResponse): Result = Status(error.httpStatusCode)(Json.toJson(error))
 }

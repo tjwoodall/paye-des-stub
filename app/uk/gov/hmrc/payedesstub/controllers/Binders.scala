@@ -23,7 +23,7 @@ import uk.gov.hmrc.referencechecker.SelfAssessmentReferenceChecker
 
 object Binders {
 
-  implicit def saUtrBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[SaUtr] {
+  implicit def saUtrBinder(implicit stringBinder: PathBindable[String]): PathBindable[SaUtr] = new PathBindable[SaUtr] {
 
     def unbind(key: String, saUtr: SaUtr): String = stringBinder.unbind(key, saUtr.value)
 
@@ -36,7 +36,7 @@ object Binders {
     }
   }
 
-  implicit def ninoBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[Nino] {
+  implicit def ninoBinder(implicit stringBinder: PathBindable[String]): PathBindable[Nino] = new PathBindable[Nino] {
 
     override def unbind(key: String, nino: Nino): String = stringBinder.unbind(key, nino.nino)
 
@@ -49,7 +49,7 @@ object Binders {
     }
   }
 
-  implicit def taxYearBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[TaxYear] {
+  implicit def taxYearBinder(implicit stringBinder: PathBindable[String]): PathBindable[TaxYear] = new PathBindable[TaxYear] {
 
     override def unbind(key: String, taxYear: TaxYear): String = stringBinder.unbind(key, taxYear.ty)
 

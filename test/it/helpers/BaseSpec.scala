@@ -19,7 +19,7 @@ package uk.gov.hmrc.helpers
 import java.util.concurrent.TimeUnit
 
 import org.scalatest._
-import org.scalatestplus.play.OneServerPerSuite
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -29,9 +29,7 @@ import scala.concurrent.duration.Duration
 import scalaj.http.Http
 
 trait BaseSpec extends FeatureSpec with MongoSpecSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
-  with OneServerPerSuite with GivenWhenThen {
-
-  override lazy val port = 9000
+  with GuiceOneServerPerSuite with GivenWhenThen {
 
   implicit override lazy val app: Application = GuiceApplicationBuilder().configure(
       "auditing.enabled" -> false,

@@ -1,9 +1,7 @@
 resolvers += Resolver.url("HMRC Sbt Plugin Releases", url("https://dl.bintray.com/hmrc/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
 resolvers += "HMRC Releases" at "https://dl.bintray.com/hmrc/releases"
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.3")
-
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.19")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.25")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "2.6.0")
 

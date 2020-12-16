@@ -18,18 +18,21 @@ package uk.gov.hmrc.payedesstub.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.payedesstub.models._
 import uk.gov.hmrc.payedesstub.services.{ScenarioLoader, TaxHistoryService}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class TaxHistoryController @Inject()(val scenarioLoader: ScenarioLoader,
-                                     val service: TaxHistoryService)
-  extends BaseController with HeaderValidator {
+    val service: TaxHistoryService,
+    val cc: ControllerComponents)
+  extends BackendController(cc) with HeaderValidator {
+
+  implicit val ec: ExecutionContext = cc.executionContext
 
   final def find(nino: Nino, taxYear: Int): Action[AnyContent] = Action async {
     service.fetch(nino, taxYear) map {
@@ -40,7 +43,8 @@ class TaxHistoryController @Inject()(val scenarioLoader: ScenarioLoader,
     }
   }
 
-  final def create(nino: Nino, taxYear: TaxYear): Action[JsValue] = validateAcceptHeader("2.0").async(parse.json) { implicit request =>
+  final def create(nino: Nino, taxYear: TaxYear): Action[JsValue] =
+    (cc.actionBuilder andThen validateAcceptHeader("2.0")).async(parse.json) { implicit request =>
     withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
       val scenario = createSummaryRequest.scenario.getOrElse("EVERYTHING")
 

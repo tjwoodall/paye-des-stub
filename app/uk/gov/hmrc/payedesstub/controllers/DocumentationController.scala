@@ -16,24 +16,25 @@
 
 package uk.gov.hmrc.payedesstub.controllers
 
-import controllers.AssetsBuilder
+import controllers.Assets
 import javax.inject.{Inject, Singleton}
-import play.api.http.HttpErrorHandler
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.payedesstub.config.ApplicationConfig
 import uk.gov.hmrc.payedesstub.views.txt
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 @Singleton
-class DocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, appConfig: ApplicationConfig)
-  extends AssetsBuilder(httpErrorHandler) with BaseController {
+class DocumentationController @Inject()(appConfig: ApplicationConfig,
+    assets: Assets,
+    cc: ControllerComponents)
+  extends BackendController(cc) {
 
-  def definition = Action {
+  def definition: Action[AnyContent] = Action {
     Ok(txt.definition(appConfig.access)).withHeaders(CONTENT_TYPE -> JSON)
   }
 
   final def raml(version: String, file: String): Action[AnyContent] = {
-    super.at(s"/public/api/conf/$version", file)
+    assets.at(s"/public/api/conf/$version", file)
   }
 
 }

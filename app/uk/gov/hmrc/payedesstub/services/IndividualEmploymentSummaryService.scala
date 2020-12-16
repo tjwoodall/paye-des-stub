@@ -17,7 +17,6 @@
 package uk.gov.hmrc.payedesstub.services
 
 import javax.inject.{Inject, Singleton}
-
 import uk.gov.hmrc.payedesstub.models.{IndividualEmployment, IndividualEmploymentResponse}
 import uk.gov.hmrc.payedesstub.repositories.IndividualEmploymentRepository
 
@@ -26,8 +25,11 @@ import scala.concurrent.Future
 @Singleton
 class IndividualEmploymentSummaryService @Inject()(val repository: IndividualEmploymentRepository) {
 
-  def create(utr: String, taxYear: String, individualEmploymentResponse: IndividualEmploymentResponse): Future[IndividualEmployment] = {
-    repository.store(IndividualEmployment(utr, taxYear, individualEmploymentResponse))
+  def create(utr: String,
+      taxYear: String,
+      individualEmploymentResponse: IndividualEmploymentResponse
+    ): Future[IndividualEmployment] = {
+      repository.store(IndividualEmployment(utr, taxYear, individualEmploymentResponse))
   }
 
   def fetch(utr: String, taxYear: String): Future[Option[IndividualEmployment]] = {

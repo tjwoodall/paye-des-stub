@@ -17,7 +17,14 @@
 package uk.gov.hmrc.payedesstub.models
 
 import play.api.http.Status.NOT_ACCEPTABLE
+import play.api.libs.json.{Json, Writes}
 
-sealed abstract class ErrorResponse(val httpStatusCode: Int, val errorCode: String, val message: String)
+sealed case class ErrorResponse(httpStatusCode: Int, errorCode: String, message: String)
 
-case object ErrorAcceptHeaderInvalid extends ErrorResponse(NOT_ACCEPTABLE, "ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+object ErrorAcceptHeaderInvalid extends ErrorResponse(NOT_ACCEPTABLE, "ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+
+object ErrorResponse {
+  implicit val errorResponseWrites: Writes[ErrorResponse] = (e: ErrorResponse) =>
+    Json.obj("code" -> e.errorCode, "message" -> e.message)
+
+}
