@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package unit.controllers
 
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.mvc.ControllerComponents
-import uk.gov.hmrc.payedesstub.controllers.HeaderValidator
-import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.Helpers.stubControllerComponents
+import uk.gov.hmrc.payedesstub.controllers.HeaderValidator
 
-class HeaderValidatorSpec extends UnitSpec with HeaderValidator {
+class HeaderValidatorSpec extends WordSpecLike with Matchers with OptionValues with HeaderValidator {
 
   val cc: ControllerComponents = stubControllerComponents()
 

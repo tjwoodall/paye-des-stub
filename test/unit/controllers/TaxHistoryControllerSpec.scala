@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,58 +16,64 @@
 
 package unit.controllers
 
+import akka.stream.Materializer
 import common.LogSuppressing
 import org.mockito.ArgumentMatchers.{any, anyString, eq => mEq}
 import org.mockito.BDDMockito.given
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status._
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.stubControllerComponents
+import play.api.test.Helpers.{stubControllerComponents, _}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.payedesstub.controllers.TaxHistoryController
 import uk.gov.hmrc.payedesstub.models._
 import uk.gov.hmrc.payedesstub.services.{ScenarioLoader, TaxHistoryService}
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeApplication with LogSuppressing {
+class TaxHistoryControllerSpec extends WordSpecLike with Matchers with OptionValues
+  with MockitoSugar with ScalaFutures with GuiceOneAppPerSuite with LogSuppressing {
 
   trait Setup {
-    implicit lazy val materializer = fakeApplication.materializer
-    implicit val hc = HeaderCarrier()
+    implicit lazy val materializer: Materializer = fakeApplication.materializer
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    def createTaxHistoryRequestV1 = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
+    def createTaxHistoryRequestV1: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().
+      withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    def createTaxHistoryRequest = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.2.0+json")
+    def createTaxHistoryRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().
+      withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.2.0+json")
 
     val underTest = new TaxHistoryController(mock[ScenarioLoader], mock[TaxHistoryService],
       stubControllerComponents()
     )
 
-    def createSummaryRequestV1(scenario: String) = {
+    def createSummaryRequestV1(scenario: String): FakeRequest[JsValue] = {
       createTaxHistoryRequestV1.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     }
 
-    def createSummaryRequest(scenario: String) = {
+    def createSummaryRequest(scenario: String): FakeRequest[JsValue] = {
       createTaxHistoryRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     }
 
-    def emptyRequest = {
+    def emptyRequest: FakeRequest[JsValue] = {
       createTaxHistoryRequest.withBody[JsValue](Json.parse("{}"))
     }
 
-    val taxYear = TaxYear("2016-17")
-    val nino = Nino("AA000000A")
-    val taxHistoryResponse =
+    val taxYear: TaxYear = TaxYear("2016-17")
+    val nino: Nino = Nino("AA000000A")
+    val taxHistoryResponse: String =
       """|{
          |  "employments": []
          |}
       """.stripMargin
-    val taxHistory = TaxHistory(nino.nino, taxYear.toString, taxHistoryResponse)
+    val taxHistory: TaxHistory = TaxHistory(nino.nino, taxYear.toString, taxHistoryResponse)
   }
 
   "find" should {
@@ -76,17 +82,17 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
       given(underTest.service.fetch(nino, taxYear.startYr.toInt))
         .willReturn(Future(Some(TaxHistory("", "", taxHistoryResponse))))
 
-      val result = await(underTest.find(nino, taxYear.startYr.toInt)(createTaxHistoryRequest))
+      val result: Future[Result] = Future(underTest.find(nino, taxYear.startYr.toInt)(createTaxHistoryRequest)).futureValue
 
       status(result) shouldBe OK
-      jsonBodyOf(result) shouldBe Json.parse(taxHistoryResponse)
+      contentAsJson(result) shouldBe Json.parse(taxHistoryResponse)
     }
 
     "return 404 (NotFound) when called with a utr and taxYear that are not found" in new Setup {
 
       given(underTest.service.fetch(nino, taxYear.startYr.toInt)).willReturn(Future(None))
 
-      val result = await(underTest.find(nino, taxYear.startYr.toInt)(createTaxHistoryRequest))
+      val result: Future[Result] = Future(underTest.find(nino, taxYear.startYr.toInt)(createTaxHistoryRequest)).futureValue
 
       status(result) shouldBe NOT_FOUND
     }
@@ -94,10 +100,10 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
 
   "create" should {
     "return 406 Not Acceptable when called with version 1" in new Setup {
-      val result = await(underTest.create(nino, taxYear)(createSummaryRequestV1("EVERYTHING")))
+      val result: Future[Result] = Future(underTest.create(nino, taxYear)(createSummaryRequestV1("EVERYTHING"))).futureValue
 
       status(result) shouldBe NOT_ACCEPTABLE
-      (jsonBodyOf(result) \ "code").as[String] shouldBe "ACCEPT_HEADER_INVALID"
+      (contentAsJson(result) \ "code").as[String] shouldBe "ACCEPT_HEADER_INVALID"
     }
 
     "return a created response and store the tax history" in new Setup {
@@ -105,10 +111,10 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
       given(underTest.scenarioLoader.loadScenarioRaw(mEq("tax-history"), mEq("EVERYTHING"))).willReturn(Future.successful(taxHistoryResponse))
       given(underTest.service.create(mEq(nino), mEq(taxYear), mEq(taxHistoryResponse))).willReturn(Future.successful(taxHistory))
 
-      val result = await(underTest.create(nino, taxYear)(createSummaryRequest("EVERYTHING")))
+      val result: Future[Result] = Future(underTest.create(nino, taxYear)(createSummaryRequest("EVERYTHING"))).futureValue
 
       status(result) shouldBe CREATED
-      bodyOf(result) shouldBe "{}"
+      contentAsString(result) shouldBe "{}"
     }
 
     "default to EVERYTHING Scenario when no scenario is specified in the request" in new Setup {
@@ -116,10 +122,10 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
       given(underTest.scenarioLoader.loadScenarioRaw(mEq("tax-history"), mEq("EVERYTHING"))).willReturn(Future.successful(taxHistoryResponse))
       given(underTest.service.create(mEq(nino), mEq(taxYear), mEq(taxHistoryResponse))).willReturn(Future.successful(taxHistory))
 
-      val result = await(underTest.create(nino, taxYear)(emptyRequest))
+      val result: Future[Result] = Future(underTest.create(nino, taxYear)(emptyRequest)).futureValue
 
       status(result) shouldBe CREATED
-      bodyOf(result) shouldBe "{}"
+      contentAsString(result) shouldBe "{}"
     }
 
     "return an Internal Server Error when the repository fails" in new Setup {
@@ -127,7 +133,7 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
       given(underTest.scenarioLoader.loadScenarioRaw(mEq("tax-history"), mEq("EVERYTHING"))).willReturn(Future.successful(taxHistoryResponse))
       given(underTest.service.create(any(), any(), anyString)).willReturn(Future.failed(new RuntimeException("expected test error")))
 
-      val result = await(underTest.create(nino, taxYear)(createSummaryRequest("EVERYTHING")))
+      val result: Future[Result] = Future(underTest.create(nino, taxYear)(createSummaryRequest("EVERYTHING"))).futureValue
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
@@ -136,10 +142,10 @@ class TaxHistoryControllerSpec extends UnitSpec with MockitoSugar with WithFakeA
 
       given(underTest.scenarioLoader.loadScenarioRaw(mEq("tax-history"), mEq("INVALID"))).willReturn(Future.failed(new InvalidScenarioException("INVALID")))
 
-      val result = await(underTest.create(nino, taxYear)(createSummaryRequest("INVALID")))
+      val result: Future[Result] = Future(underTest.create(nino, taxYear)(createSummaryRequest("INVALID"))).futureValue
 
       status(result) shouldBe BAD_REQUEST
-      (jsonBodyOf(result) \ "code").as[String] shouldBe "UNKNOWN_SCENARIO"
+      (contentAsJson(result) \ "code").as[String] shouldBe "UNKNOWN_SCENARIO"
     }
   }
 }

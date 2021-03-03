@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,15 @@ class IndividualBenefitsController @Inject()(val scenarioLoader: ScenarioLoader,
 
   implicit val ec: ExecutionContext = cc.executionContext
 
+  private val logger = Logger(this.getClass)
+
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
       case Some(result) => Ok(Json.toJson(result.individualBenefitsResponse))
       case _ => NotFound
     } recover {
       case e =>
-        Logger.error("An error occurred while finding test data", e)
+        logger.error("An error occurred while finding test data", e)
         InternalServerError
     }
   }
