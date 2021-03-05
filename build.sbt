@@ -62,7 +62,7 @@ unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTe
 libraryDependencies ++= appDependencies
 
 // Coverage configuration
-coverageMinimum := 80
+coverageMinimum := 60
 coverageFailOnMinimum := true
 coverageExcludedPackages :=
   "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;live.*;uk.gov.hmrc.BuildInfo;uk.gov.hmrc.payedesstub.config"
