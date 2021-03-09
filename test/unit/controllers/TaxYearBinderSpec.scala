@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 package unit.controllers
 
-import org.scalatest.Matchers
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import uk.gov.hmrc.payedesstub.controllers.Binders
 import uk.gov.hmrc.payedesstub.models.TaxYear
-import uk.gov.hmrc.play.test.UnitSpec
 
-class TaxYearBinderSpec extends UnitSpec with Matchers{
+class TaxYearBinderSpec extends WordSpecLike with Matchers with OptionValues{
 
   "a valid tax year '2014-15'" should {
     "be transformed to a TaxYear object" in {

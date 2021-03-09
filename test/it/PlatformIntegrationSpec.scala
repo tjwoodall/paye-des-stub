@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,16 @@ package it
 
 import akka.stream.Materializer
 import common.LogSuppressing
-import org.scalatest.TestData
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.{Matchers, OptionValues, TestData, WordSpecLike}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Mode}
-import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.util.Random
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
   * Testcase to verify the capability of integration with the API platform.
@@ -40,11 +39,8 @@ import scala.util.Random
   *
   * See: https://confluence.tools.tax.service.gov.uk/display/ApiPlatform/API+Platform+Architecture+with+Flows
   */
-class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
+class PlatformIntegrationSpec extends WordSpecLike with Matchers with OptionValues with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
   implicit def mat = app.injector.instanceOf[Materializer]
-
-  val stubHost = "example.com"
-  val stubPort = Random.nextInt
 
   override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Test")
@@ -53,15 +49,15 @@ class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneAp
   "microservice" should {
 
     "provide definition endpoint and documentation endpoint for each api" in {
-      val result = await(route(app, FakeRequest(GET, "/api/definition"))).get
+      val result = Future(route(app, FakeRequest(GET, "/api/definition"))).futureValue.get
       status(result) shouldBe OK
-      bodyOf(result).futureValue should include("\"name\": \"Individual PAYE Test Support\"")
+      contentAsString(result) should include("\"name\": \"Individual PAYE Test Support\"")
     }
 
     "provide raml documentation" in {
-      val result = await(route(app, FakeRequest(GET, "/api/conf/1.0/application.raml"))).get
+      val result = Future(route(app, FakeRequest(GET, "/api/conf/1.0/application.raml"))).futureValue.get
       status(result) shouldBe OK
-      bodyOf(result).futureValue should startWith("#%RAML 1.0")
+      contentAsString(result) should startWith("#%RAML 1.0")
     }
   }
 }

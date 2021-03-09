@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package it
 
+import it.helpers.BaseSpec
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
-import uk.gov.hmrc.helpers.BaseSpec
 import uk.gov.hmrc.payedesstub.repositories.IndividualEmploymentRepository
 
 import scala.concurrent.Await.result

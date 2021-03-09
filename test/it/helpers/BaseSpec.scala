@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.helpers
-
-import java.util.concurrent.TimeUnit
+package it.helpers
 
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
+import scalaj.http.Http
 import uk.gov.hmrc.mongo.MongoSpecSupport
 
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.Duration
-import scalaj.http.Http
 
 trait BaseSpec extends FeatureSpec with MongoSpecSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
   with GuiceOneServerPerSuite with GivenWhenThen {
 
   implicit override lazy val app: Application = GuiceApplicationBuilder().configure(
+      "metrics.enabled" -> false,
       "auditing.enabled" -> false,
       "auditing.traceRequests" -> false,
       "mongodb.uri" -> mongoUri,
