@@ -35,7 +35,8 @@ lazy val microservice = (project in file("."))
     coverageMinimum := 60,
     coverageFailOnMinimum := true,
     coverageExcludedPackages :=
-      "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;live.*;uk.gov.hmrc.BuildInfo;uk.gov.hmrc.payedesstub.config"
+      "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;live.*;uk.gov.hmrc.BuildInfo;uk.gov.hmrc.payedesstub.config",
+    addTestReportOption(IntegrationTest, "int-test-reports")
   )
   scalacOptions ++= Seq(
     "-P:silencer:pathFilters=views;routes"
