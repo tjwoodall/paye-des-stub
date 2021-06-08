@@ -15,7 +15,7 @@ lazy val microservice = (project in file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
     name := appName,
     scalaSettings,
@@ -32,7 +32,7 @@ lazy val microservice = (project in file("."))
     testOptions in IntegrationTest := Seq(Tests.Filter(itTestFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest) (base => Seq(base / "test")).value,
     libraryDependencies ++= AppDependencies(),
-    coverageMinimum := 60,
+    coverageMinimum := 80,
     coverageFailOnMinimum := true,
     coverageExcludedPackages :=
       "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;live.*;uk.gov.hmrc.BuildInfo;uk.gov.hmrc.payedesstub.config",

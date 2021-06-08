@@ -37,15 +37,15 @@ class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggin
     }
   }
 
-  def hasError(msg: String) = {
+  def hasError(msg: String): Boolean = {
     suppressedEntries.exists(entry => entry.getLevel == Level.ERROR && entry.getMessage.contains(msg))
   }
 
-  def hasWarn(msg: String) = {
+  def hasWarn(msg: String): Boolean = {
     suppressedEntries.exists(entry => entry.getLevel == Level.WARN && entry.getMessage.contains(msg))
   }
 
-  def hasInfo(msg: String) = {
+  def hasInfo(msg: String): Boolean = {
     suppressedEntries.exists(entry => entry.getLevel == Level.INFO && entry.getMessage.contains(msg))
   }
 }

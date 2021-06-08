@@ -26,9 +26,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Mode}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-
 /**
   * Testcase to verify the capability of integration with the API platform.
   *
@@ -40,7 +37,7 @@ import scala.concurrent.Future
   * See: https://confluence.tools.tax.service.gov.uk/display/ApiPlatform/API+Platform+Architecture+with+Flows
   */
 class PlatformIntegrationSpec extends WordSpecLike with Matchers with OptionValues with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
-  implicit def mat = app.injector.instanceOf[Materializer]
+  implicit def mat: Materializer = app.injector.instanceOf[Materializer]
 
   override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Test")
@@ -49,13 +46,13 @@ class PlatformIntegrationSpec extends WordSpecLike with Matchers with OptionValu
   "microservice" should {
 
     "provide definition endpoint and documentation endpoint for each api" in {
-      val result = Future(route(app, FakeRequest(GET, "/api/definition"))).futureValue.get
+      val result = route(app, FakeRequest(GET, "/api/definition")).get
       status(result) shouldBe OK
       contentAsString(result) should include("\"name\": \"Individual PAYE Test Support\"")
     }
 
     "provide raml documentation" in {
-      val result = Future(route(app, FakeRequest(GET, "/api/conf/1.0/application.raml"))).futureValue.get
+      val result = route(app, FakeRequest(GET, "/api/conf/1.0/application.raml")).get
       status(result) shouldBe OK
       contentAsString(result) should startWith("#%RAML 1.0")
     }
