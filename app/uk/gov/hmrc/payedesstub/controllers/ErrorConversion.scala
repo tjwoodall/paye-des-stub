@@ -20,6 +20,8 @@ import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.payedesstub.models.ErrorResponse
 
+import scala.language.implicitConversions
+
 trait ErrorConversion {
 
   import Results._
