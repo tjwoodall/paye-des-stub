@@ -17,23 +17,28 @@
 package uk.gov.hmrc.payedesstub.repositories
 
 import javax.inject.{Inject, Singleton}
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.bson.BSONObjectID
-import uk.gov.hmrc.mongo.ReactiveRepository
+import org.mongodb.scala.model.Filters._
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.payedesstub.models.{IndividualEmployment, _}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IndividualEmploymentRepository @Inject()(mongo: ReactiveMongoComponent)(implicit ec: ExecutionContext)
-  extends ReactiveRepository[IndividualEmployment, BSONObjectID]("individualEmployment", mongo.mongoConnector.db,
-    formatIndividualEmployment, formatObjectId) {
+class IndividualEmploymentRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+  extends PlayMongoRepository[IndividualEmployment](
+    mongoComponent = mongo,
+    collectionName = "individualEmployment",
+    domainFormat   =  formatIndividualEmployment,
+    indexes = Seq.empty
+  )
+{
 
   def store[T <: IndividualEmployment](individualEmployment: T): Future[T] = {
-    insert(individualEmployment) map {_ => individualEmployment}
+    collection.insertOne(individualEmployment).toFuture().map( _ =>individualEmployment)
   }
 
   def fetch(utr: String, taxYear: String): Future[Option[IndividualEmployment]] = {
-    find("utr" -> utr, "taxYear" -> taxYear) map(_.headOption)
+    collection.find(and(equal("utr" , utr), equal("taxYear" , taxYear))).headOption()
   }
 }

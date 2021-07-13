@@ -21,7 +21,6 @@ import it.helpers.BaseSpec
 import uk.gov.hmrc.payedesstub.repositories.IndividualIncomeRepository
 
 import scala.concurrent.Await.result
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class IndividualIncomeSpec extends BaseSpec {
   feature("Fetch individual income summary data") {
@@ -78,7 +77,7 @@ class IndividualIncomeSpec extends BaseSpec {
 
   override protected def beforeEach(): Unit = {
     val repository = app.injector.instanceOf[IndividualIncomeRepository]
-    result(repository.drop, timeout)
+    result(repository.collection.drop().toFuture(), timeout)
     result(repository.ensureIndexes, timeout)
   }
 }

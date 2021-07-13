@@ -16,27 +16,29 @@
 
 package uk.gov.hmrc.payedesstub.repositories
 
+import org.mongodb.scala.model.Filters._
 import javax.inject.{Inject, Singleton}
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.bson.BSONObjectID
-import uk.gov.hmrc.mongo.ReactiveRepository
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.payedesstub.models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TaxHistoryRepository @Inject()(mongo: ReactiveMongoComponent)(implicit ec: ExecutionContext)
-  extends ReactiveRepository[TaxHistory, BSONObjectID]("taxHistory", mongo.mongoConnector.db,
-    formatTaxHistory, formatObjectId) {
+class TaxHistoryRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+  extends PlayMongoRepository[TaxHistory](
+    mongoComponent = mongo,
+    collectionName = "taxHistory",
+    domainFormat   = formatTaxHistory,
+    indexes = Seq.empty
+  )
+{
 
-  def store[T <: TaxHistory](taxHistory: T): Future[T] = {
-    for {
-      _ <- remove("nino" -> taxHistory.nino, "taxYear" -> taxHistory.taxYear)
-      _ <- insert(taxHistory)
-    } yield taxHistory
+  def store (taxHistory: TaxHistory): Future[TaxHistory] = {
+    collection.findOneAndReplace(and(equal("nino" , taxHistory.nino), equal("taxYear" , taxHistory.taxYear)),taxHistory).toFuture()
   }
 
   def fetch(nino: String, taxYear: String): Future[Option[TaxHistory]] = {
-    find("nino" -> nino, "taxYear" -> taxYear) map(_.headOption)
+    collection.find(and(equal("nino" , nino), equal("taxYear" , taxYear))).headOption()
   }
 }

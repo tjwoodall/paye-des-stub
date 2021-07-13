@@ -21,7 +21,6 @@ import it.helpers.BaseSpec
 import uk.gov.hmrc.payedesstub.repositories.IndividualTaxRepository
 
 import scala.concurrent.Await.result
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class IndividualTaxSpec extends BaseSpec {
   feature("Fetch individual tax summary data") {
@@ -78,7 +77,7 @@ class IndividualTaxSpec extends BaseSpec {
 
   override protected def beforeEach(): Unit = {
     val repository = app.injector.instanceOf[IndividualTaxRepository]
-    result(repository.drop, timeout)
+    result(repository.collection.drop().toFuture(), timeout)
     result(repository.ensureIndexes, timeout)
   }
 }

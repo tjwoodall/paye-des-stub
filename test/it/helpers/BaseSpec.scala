@@ -21,13 +21,13 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
-import scalaj.http.Http
-import uk.gov.hmrc.mongo.MongoSpecSupport
+import scalaj.http.{Http, HttpResponse}
+import uk.gov.hmrc.mongo.test.MongoSupport
 
 import java.util.concurrent.TimeUnit
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.{Duration, FiniteDuration}
 
-trait BaseSpec extends FeatureSpec with MongoSpecSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
+trait BaseSpec extends FeatureSpec with MongoSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
   with GuiceOneServerPerSuite with GivenWhenThen {
 
   implicit override lazy val app: Application = GuiceApplicationBuilder().configure(
@@ -38,14 +38,14 @@ trait BaseSpec extends FeatureSpec with MongoSpecSupport with BeforeAndAfterAll 
       "run.mode" -> "It"
     ).build()
 
-  val timeout = Duration(5, TimeUnit.SECONDS)
+  val timeout: FiniteDuration = Duration(5, TimeUnit.SECONDS)
   val serviceUrl = s"http://localhost:$port"
 
-  def getEndpoint(endpoint: String) =
+  def getEndpoint(endpoint: String): HttpResponse[String] =
     Http(s"$serviceUrl/$endpoint")
       .asString
 
-  def postEndpoint(endpoint: String, payload: String) =
+  def postEndpoint(endpoint: String, payload: String): HttpResponse[String] =
     Http(s"$serviceUrl/$endpoint")
       .method("POST")
       .header(HeaderNames.CONTENT_TYPE, "application/json")

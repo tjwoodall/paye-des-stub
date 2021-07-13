@@ -16,32 +16,32 @@
 
 package uk.gov.hmrc.payedesstub
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
-
+import org.bson.types.ObjectId
+import play.api.libs.json.{Format, Json, OFormat}
+import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
 package object models {
-  implicit val formatObjectId = ReactiveMongoFormats.objectIdFormats
+  implicit val formatObjectId: Format[ObjectId] = MongoFormats.objectIdFormat
 
-  implicit val createSummaryRequest = Json.format[CreateSummaryRequest]
+  implicit val createSummaryRequest: OFormat[CreateSummaryRequest] = Json.format[CreateSummaryRequest]
 
-  implicit val refund = Json.format[Refund]
-  implicit val extendedStateBenefits = Json.format[ExtendedStateBenefits]
-  implicit val stateBenefits = Json.format[StateBenefits]
-  implicit val individualEmploymentEmployment = Json.format[IndividualEmploymentEmployment]
-  implicit val individualIncomeEmployment = Json.format[IndividualIncomeEmployment]
-  implicit val individualTaxEmployment = Json.format[IndividualTaxEmployment]
-  implicit val individualBenefitsEmployment = Json.format[IndividualBenefitsEmployment]
-  implicit val individualTaxResponse = Json.format[IndividualTaxResponse]
-  implicit val individualIncomeResponse = Json.format[IndividualIncomeResponse]
-  implicit val individualEmploymentResponse = Json.format[IndividualEmploymentResponse]
-  implicit val individualBenefitsResponse = Json.format[IndividualBenefitsResponse]
+  implicit val refund: OFormat[Refund] = Json.format[Refund]
+  implicit val extendedStateBenefits: OFormat[ExtendedStateBenefits] = Json.format[ExtendedStateBenefits]
+  implicit val stateBenefits: OFormat[StateBenefits] = Json.format[StateBenefits]
+  implicit val individualEmploymentEmployment: OFormat[IndividualEmploymentEmployment] = Json.format[IndividualEmploymentEmployment]
+  implicit val individualIncomeEmployment: OFormat[IndividualIncomeEmployment] = Json.format[IndividualIncomeEmployment]
+  implicit val individualTaxEmployment: OFormat[IndividualTaxEmployment] = Json.format[IndividualTaxEmployment]
+  implicit val individualBenefitsEmployment: OFormat[IndividualBenefitsEmployment] = Json.format[IndividualBenefitsEmployment]
+  implicit val individualTaxResponse: OFormat[IndividualTaxResponse] = Json.format[IndividualTaxResponse]
+  implicit val individualIncomeResponse: OFormat[IndividualIncomeResponse] = Json.format[IndividualIncomeResponse]
+  implicit val individualEmploymentResponse: OFormat[IndividualEmploymentResponse] = Json.format[IndividualEmploymentResponse]
+  implicit val individualBenefitsResponse: OFormat[IndividualBenefitsResponse] = Json.format[IndividualBenefitsResponse]
 
-  implicit val formatIndividualEmployment = Json.format[IndividualEmployment]
-  implicit val formatIndividualIncome = Json.format[IndividualIncome]
-  implicit val formatIndividualTax = Json.format[IndividualTax]
-  implicit val formatIndividualBenefits = Json.format[IndividualBenefits]
+  implicit val formatIndividualEmployment: OFormat[IndividualEmployment] = Json.format[IndividualEmployment]
+  implicit val formatIndividualIncome: OFormat[IndividualIncome] = Json.format[IndividualIncome]
+  implicit val formatIndividualTax: OFormat[IndividualTax] = Json.format[IndividualTax]
+  implicit val formatIndividualBenefits: OFormat[IndividualBenefits] = Json.format[IndividualBenefits]
 
-  implicit val formatTaxHistory = Json.format[TaxHistory]
+  implicit val formatTaxHistory: OFormat[TaxHistory] = Json.format[TaxHistory]
 
-  implicit val apiAccessFmt = Json.format[APIAccess]
+  implicit val apiAccessFmt: OFormat[APIAccess] = Json.format[APIAccess]
 }
