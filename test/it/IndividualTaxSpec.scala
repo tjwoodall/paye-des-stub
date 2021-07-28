@@ -23,8 +23,8 @@ import uk.gov.hmrc.payedesstub.repositories.IndividualTaxRepository
 import scala.concurrent.Await.result
 
 class IndividualTaxSpec extends BaseSpec {
-  feature("Fetch individual tax summary data") {
-    scenario("No data is returned because utr and taxYear are not found") {
+  Feature("Fetch individual tax summary data") {
+    Scenario("No data is returned because utr and taxYear are not found") {
       When("I request tax summary data for a given utr and taxYear")
       val response = fetchIndividualTaxData("1111111111", "2016-17")
 
@@ -32,7 +32,7 @@ class IndividualTaxSpec extends BaseSpec {
       response.code shouldBe NOT_FOUND
     }
 
-    scenario("Tax summary data can be primed") {
+    Scenario("Tax summary data can be primed") {
       When("I request tax summary data for a given utr and taxYear")
       val response = primeIndividualTaxData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
@@ -40,7 +40,7 @@ class IndividualTaxSpec extends BaseSpec {
       response.code shouldBe CREATED
     }
 
-    scenario("Individual tax summary data is returned for the given utr and taxYear when primed with the default scenario") {
+    Scenario("Individual tax summary data is returned for the given utr and taxYear when primed with the default scenario") {
       When("I prime tax data for a given utr and taxYear")
       val primeResponse = primeIndividualTaxData("1111111111", "2016-17", "{}")
 
@@ -54,7 +54,7 @@ class IndividualTaxSpec extends BaseSpec {
       fetchResponse.code shouldBe OK
     }
 
-    scenario("Individual tax summary data is returned for the given utr and taxYear when primed with a specific scenario") {
+    Scenario("Individual tax summary data is returned for the given utr and taxYear when primed with a specific scenario") {
       When("I prime tax summary data for a given utr, taxYear and test scenario")
       val primeResponse = primeIndividualTaxData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 

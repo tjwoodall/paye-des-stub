@@ -19,7 +19,9 @@ package it
 import akka.stream.Materializer
 import common.LogSuppressing
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{Matchers, OptionValues, TestData, WordSpecLike}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{OptionValues, TestData}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -36,7 +38,7 @@ import play.api.{Application, Mode}
   *
   * See: https://confluence.tools.tax.service.gov.uk/display/ApiPlatform/API+Platform+Architecture+with+Flows
   */
-class PlatformIntegrationSpec extends WordSpecLike with Matchers with OptionValues with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
+class PlatformIntegrationSpec extends AnyWordSpecLike with Matchers with OptionValues with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
   implicit def mat: Materializer = app.injector.instanceOf[Materializer]
 
   override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()

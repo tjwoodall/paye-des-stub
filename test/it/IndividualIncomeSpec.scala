@@ -23,8 +23,8 @@ import uk.gov.hmrc.payedesstub.repositories.IndividualIncomeRepository
 import scala.concurrent.Await.result
 
 class IndividualIncomeSpec extends BaseSpec {
-  feature("Fetch individual income summary data") {
-    scenario("No data is returned because utr and taxYear are not found") {
+  Feature("Fetch individual income summary data") {
+    Scenario("No data is returned because utr and taxYear are not found") {
       When("I request income summary data for a given utr and taxYear")
       val response = fetchIndividualIncomeData("1111111111", "2016-17")
 
@@ -32,7 +32,7 @@ class IndividualIncomeSpec extends BaseSpec {
       response.code shouldBe NOT_FOUND
     }
 
-    scenario("Income summary data can be primed") {
+    Scenario("Income summary data can be primed") {
       When("I request income summary data for a given utr and taxYear")
       val response = primeIndividualIncomeData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
@@ -40,7 +40,7 @@ class IndividualIncomeSpec extends BaseSpec {
       response.code shouldBe CREATED
     }
 
-    scenario("Individual income summary data is returned for the given utr and taxYear when primed with the default scenario") {
+    Scenario("Individual income summary data is returned for the given utr and taxYear when primed with the default scenario") {
       When("I prime income data for a given utr and taxYear")
       val primeResponse = primeIndividualIncomeData("1111111111", "2016-17", "{}")
 
@@ -54,7 +54,7 @@ class IndividualIncomeSpec extends BaseSpec {
       fetchResponse.code shouldBe OK
     }
 
-    scenario("Individual income summary data is returned for the given utr and taxYear when primed with a specific scenario") {
+    Scenario("Individual income summary data is returned for the given utr and taxYear when primed with a specific scenario") {
       When("I prime income summary data for a given utr, taxYear and test scenario")
       val primeResponse = primeIndividualIncomeData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 

@@ -24,8 +24,8 @@ import scala.concurrent.Await.result
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class IndividualEmploymentSpec extends BaseSpec {
-  feature("Fetch individual employment summary data") {
-    scenario("No data is returned because utr and taxYear are not found") {
+  Feature("Fetch individual employment summary data") {
+    Scenario("No data is returned because utr and taxYear are not found") {
       When("I request employment summary data for a given utr and taxYear")
       val response = fetchIndividualEmploymentData("1111111111", "2016-17")
 
@@ -33,7 +33,7 @@ class IndividualEmploymentSpec extends BaseSpec {
       response.code shouldBe NOT_FOUND
     }
 
-    scenario("Employment summary data can be primed") {
+    Scenario("Employment summary data can be primed") {
       When("I request benefits summary data for a given utr and taxYear")
       val response = primeIndividualEmploymentData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
@@ -41,7 +41,7 @@ class IndividualEmploymentSpec extends BaseSpec {
       response.code shouldBe CREATED
     }
 
-    scenario("Individual employment summary data is returned for the given utr and taxYear when primed with the default scenario") {
+    Scenario("Individual employment summary data is returned for the given utr and taxYear when primed with the default scenario") {
       When("I prime employment data for a given utr and taxYear")
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", "{}")
 
@@ -55,7 +55,7 @@ class IndividualEmploymentSpec extends BaseSpec {
       fetchResponse.code shouldBe OK
     }
 
-    scenario("Individual employment summary data is returned for the given utr and taxYear when primed with a specific scenario") {
+    Scenario("Individual employment summary data is returned for the given utr and taxYear when primed with a specific scenario") {
       When("I prime employment data for a given utr, taxYear and test scenario")
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 

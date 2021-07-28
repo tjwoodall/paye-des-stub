@@ -22,7 +22,9 @@ import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{Matchers, OptionValues, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.OptionValues
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.libs.json.{JsValue, Json}
@@ -39,7 +41,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class IndividualIncomeControllerSpec extends
-  WordSpec with Matchers with MockitoSugar with OptionValues
+  AnyWordSpec with Matchers with MockitoSugar with OptionValues
   with GuiceOneServerPerSuite with LogSuppressing with ScalaFutures{
 
   trait Setup {

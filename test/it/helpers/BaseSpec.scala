@@ -17,6 +17,8 @@
 package it.helpers
 
 import org.scalatest._
+import org.scalatest.featurespec.AnyFeatureSpecLike
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
@@ -27,7 +29,7 @@ import uk.gov.hmrc.mongo.test.MongoSupport
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
-trait BaseSpec extends FeatureSpec with MongoSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
+trait BaseSpec extends AnyFeatureSpecLike with MongoSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
   with GuiceOneServerPerSuite with GivenWhenThen {
 
   implicit override lazy val app: Application = GuiceApplicationBuilder().configure(

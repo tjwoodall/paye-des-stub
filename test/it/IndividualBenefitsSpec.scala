@@ -23,8 +23,8 @@ import uk.gov.hmrc.payedesstub.repositories.IndividualBenefitsRepository
 import scala.concurrent.Await.result
 
 class IndividualBenefitsSpec extends BaseSpec {
-  feature("Fetch individual benefits summary data") {
-    scenario("No data is returned because utr and taxYear are not found") {
+  Feature("Fetch individual benefits summary data") {
+    Scenario("No data is returned because utr and taxYear are not found") {
       When("I request benefits summary data for a given utr and taxYear")
       val response = fetchIndividualBenefitsData("1111111111", "2016-17")
 
@@ -32,7 +32,7 @@ class IndividualBenefitsSpec extends BaseSpec {
       response.code shouldBe NOT_FOUND
     }
 
-    scenario("Benefits summary data can be primed") {
+    Scenario("Benefits summary data can be primed") {
       When("I request benefits summary data for a given utr and taxYear")
       val response = primeIndividualBenefitsData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
@@ -40,7 +40,7 @@ class IndividualBenefitsSpec extends BaseSpec {
       response.code shouldBe CREATED
     }
 
-    scenario("Individual benefits summary data is returned for the given utr and taxYear when primed with the default scenario") {
+    Scenario("Individual benefits summary data is returned for the given utr and taxYear when primed with the default scenario") {
       When("I prime tax data for a given utr and taxYear")
       val primeResponse = primeIndividualBenefitsData("1111111111", "2016-17", "{}")
 
@@ -54,7 +54,7 @@ class IndividualBenefitsSpec extends BaseSpec {
       fetchResponse.code shouldBe OK
     }
 
-    scenario("Individual benefits summary data is returned for the given ut and taxYear when primed with a specific scenario") {
+    Scenario("Individual benefits summary data is returned for the given ut and taxYear when primed with a specific scenario") {
       When("I prime tax data for a given utr, taxYear and test scenario")
       val primeResponse = primeIndividualBenefitsData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 

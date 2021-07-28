@@ -21,7 +21,9 @@ import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.OptionValues
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
@@ -37,7 +39,7 @@ import uk.gov.hmrc.payedesstub.services.{IndividualBenefitsSummaryService, Scena
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class IndividualBenefitsControllerSpec extends WordSpecLike with Matchers with OptionValues
+class IndividualBenefitsControllerSpec extends AnyWordSpecLike with Matchers with OptionValues
   with MockitoSugar with ScalaFutures with GuiceOneAppPerSuite {
 
   trait Setup {

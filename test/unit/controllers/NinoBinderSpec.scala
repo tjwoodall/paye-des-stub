@@ -16,11 +16,13 @@
 
 package unit.controllers
 
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.OptionValues
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.payedesstub.controllers.Binders
 
-class NinoBinderSpec extends WordSpecLike with Matchers with OptionValues {
+class NinoBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "Nino binding" should {
 
