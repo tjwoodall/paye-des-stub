@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import play.api.http.Status.{CREATED, NOT_FOUND, OK}
 import uk.gov.hmrc.payedesstub.repositories.IndividualEmploymentRepository
 
 import scala.concurrent.Await.result
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class IndividualEmploymentSpec extends BaseSpec {
   Feature("Fetch individual employment summary data") {
