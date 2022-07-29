@@ -6,14 +6,14 @@ object AppDependencies {
   private val compile = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"        %% "bootstrap-backend-play-28"    % "5.24.0",
-    "uk.gov.hmrc.mongo"  %% "hmrc-mongo-play-28"           % "0.64.0",
+    "uk.gov.hmrc.mongo"  %% "hmrc-mongo-play-28"           % "0.68.0",
     "uk.gov.hmrc"        %% "domain"                       % "8.1.0-play-28",
     "uk.gov.hmrc"        %% "tax-year"                     % "1.7.0",
     "uk.gov.hmrc"        %% "hmrc-stubs-core"              % "6.2.0-play-26"
   )
 
   private val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28"  % "0.64.0",
+    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28"  % "0.68.0",
     "org.scalatest"          %% "scalatest"                % "3.2.9",
     "org.scalatestplus.play" %% "scalatestplus-play"       % "5.1.0",
     "org.scalatestplus"      %% "mockito-3-4"              % "3.2.9.0",
