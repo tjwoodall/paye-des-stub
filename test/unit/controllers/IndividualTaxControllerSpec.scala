@@ -40,46 +40,51 @@ import uk.gov.hmrc.payedesstub.services.{IndividualTaxSummaryService, ScenarioLo
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class IndividualTaxControllerSpec extends AnyWordSpecLike with Matchers with OptionValues
-  with MockitoSugar with ScalaFutures with GuiceOneAppPerSuite with LogSuppressing {
+class IndividualTaxControllerSpec
+    extends AnyWordSpecLike
+    with Matchers
+    with OptionValues
+    with MockitoSugar
+    with ScalaFutures
+    with GuiceOneAppPerSuite
+    with LogSuppressing {
 
   trait Setup {
     implicit lazy val materializer: Materializer = fakeApplication.materializer
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier               = HeaderCarrier()
 
     def createIndividualTaxRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
+    val underTest                                                       =
+      new IndividualTaxController(mock[ScenarioLoader], mock[IndividualTaxSummaryService], stubControllerComponents())
 
-    val underTest = new IndividualTaxController(mock[ScenarioLoader], mock[IndividualTaxSummaryService],
-      stubControllerComponents()
-    )
-
-    def createSummaryRequest(scenario: String): FakeRequest[JsValue] = {
+    def createSummaryRequest(scenario: String): FakeRequest[JsValue] =
       createIndividualTaxRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
-    }
 
-    def emptyRequest: FakeRequest[JsValue] = {
+    def emptyRequest: FakeRequest[JsValue] =
       createIndividualTaxRequest.withBody[JsValue](Json.parse("{}"))
-    }
 
-    val validUtrString = "2234567890"
-    val validTaxYearString = "2016-17"
-    val utr: SaUtr = SaUtr(validUtrString)
-    val taxYear: TaxYear = TaxYear(validTaxYearString)
+    val validUtrString                               = "2234567890"
+    val validTaxYearString                           = "2016-17"
+    val utr: SaUtr                                   = SaUtr(validUtrString)
+    val taxYear: TaxYear                             = TaxYear(validTaxYearString)
     val individualTaxResponse: IndividualTaxResponse = IndividualTaxResponse(StateBenefits(0.0, 0.0), Refund(0.0), Nil)
-    val individualTax: IndividualTax = IndividualTax("", "", individualTaxResponse)
+    val individualTax: IndividualTax                 = IndividualTax("", "", individualTaxResponse)
   }
 
   "find" should {
     "return 200 (Ok) with the happy path response when called with a utr and taxYear that are found" in new Setup {
 
       given(underTest.service.fetch(validUtrString, validTaxYearString))
-        .willReturn(Future(Some(IndividualTax("", "", IndividualTaxResponse(StateBenefits(0.0, 0.0), Refund(0.0), Nil)))))
+        .willReturn(
+          Future(Some(IndividualTax("", "", IndividualTaxResponse(StateBenefits(0.0, 0.0), Refund(0.0), Nil))))
+        )
 
-      val result: Future[Result] = Future(underTest.find(validUtrString, validTaxYearString)(createIndividualTaxRequest)).futureValue
+      val result: Future[Result] =
+        Future(underTest.find(validUtrString, validTaxYearString)(createIndividualTaxRequest)).futureValue
 
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsJson(result) shouldBe Json.toJson(individualTaxResponse)
     }
 
@@ -87,7 +92,8 @@ class IndividualTaxControllerSpec extends AnyWordSpecLike with Matchers with Opt
 
       given(underTest.service.fetch(validUtrString, validTaxYearString)).willReturn(Future(None))
 
-      val result: Future[Result] = Future(underTest.find(validUtrString, validTaxYearString)(createIndividualTaxRequest)).futureValue
+      val result: Future[Result] =
+        Future(underTest.find(validUtrString, validTaxYearString)(createIndividualTaxRequest)).futureValue
 
       status(result) shouldBe NOT_FOUND
     }
@@ -102,7 +108,8 @@ class IndividualTaxControllerSpec extends AnyWordSpecLike with Matchers with Opt
       given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.successful(individualTax))
 
-      val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
 
       status(result) shouldBe CREATED
       verify(underTest.scenarioLoader).loadScenario[IndividualTaxResponse]("individual-tax", "HAPPY_PATH_1")
@@ -130,7 +137,8 @@ class IndividualTaxControllerSpec extends AnyWordSpecLike with Matchers with Opt
       given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.failed(new RuntimeException("expected test error")))
 
-      val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
@@ -142,7 +150,7 @@ class IndividualTaxControllerSpec extends AnyWordSpecLike with Matchers with Opt
 
       val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("INVALID"))).futureValue
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)                              shouldBe BAD_REQUEST
       (contentAsJson(result) \ "code").as[String] shouldBe "UNKNOWN_SCENARIO"
     }
   }

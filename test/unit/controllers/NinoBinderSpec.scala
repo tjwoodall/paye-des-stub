@@ -27,8 +27,8 @@ class NinoBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
   "Nino binding" should {
 
     "return a NINO object when the NINO is valid" in {
-      val validNinoString = "AA000000A"
-      val expectedNino = Nino(validNinoString)
+      val validNinoString              = "AA000000A"
+      val expectedNino                 = Nino(validNinoString)
       val result: Either[String, Nino] = Binders.ninoBinder.bind("x", validNinoString)
       result shouldBe Right(expectedNino)
     }
@@ -39,5 +39,3 @@ class NinoBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
     }
   }
 }
-
-

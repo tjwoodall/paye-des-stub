@@ -26,7 +26,6 @@ API microservices which this stubs behaviour for are:
 * individual-employment
 * individual-income
 * individual-tax
-* individuals-paye (deprecated)
 
 
 ## What does this service use?

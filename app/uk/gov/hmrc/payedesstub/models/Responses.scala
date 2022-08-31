@@ -24,47 +24,55 @@ case class IndividualBenefitsResponse(employments: List[IndividualBenefitsEmploy
 
 case class IndividualEmploymentResponse(employments: List[IndividualEmploymentEmployment]) extends IndividualResponse
 
-case class IndividualIncomeResponse(pensionsAnnuitiesAndOtherStateBenefits: ExtendedStateBenefits,
-                                    employments: List[IndividualIncomeEmployment]) extends IndividualResponse
+case class IndividualIncomeResponse(
+  pensionsAnnuitiesAndOtherStateBenefits: ExtendedStateBenefits,
+  employments: List[IndividualIncomeEmployment]
+) extends IndividualResponse
 
-case class IndividualTaxResponse(pensionsAnnuitiesAndOtherStateBenefits: StateBenefits,
-                                 refunds: Refund,
-                                 employments: List[IndividualTaxEmployment]) extends IndividualResponse
+case class IndividualTaxResponse(
+  pensionsAnnuitiesAndOtherStateBenefits: StateBenefits,
+  refunds: Refund,
+  employments: List[IndividualTaxEmployment]
+) extends IndividualResponse
 
-case class IndividualBenefitsEmployment(employerPayeReference: String,
-                                        companyCarsAndVansBenefit: Double,
-                                        fuelForCompanyCarsAndVansBenefit: Double,
-                                        privateMedicalDentalInsurance: Double,
-                                        vouchersCreditCardsExcessMileageAllowance: Double,
-                                        goodsEtcProvidedByEmployer: Double,
-                                        accommodationProvidedByEmployer: Double,
-                                        otherBenefits: Double,
-                                        expensesPaymentsReceived: Double)
+case class IndividualBenefitsEmployment(
+  employerPayeReference: String,
+  companyCarsAndVansBenefit: Double,
+  fuelForCompanyCarsAndVansBenefit: Double,
+  privateMedicalDentalInsurance: Double,
+  vouchersCreditCardsExcessMileageAllowance: Double,
+  goodsEtcProvidedByEmployer: Double,
+  accommodationProvidedByEmployer: Double,
+  otherBenefits: Double,
+  expensesPaymentsReceived: Double
+)
 
-case class IndividualTaxEmployment(employerPayeReference: String,
-                                   taxTakenOffPay: Double)
+case class IndividualTaxEmployment(employerPayeReference: String, taxTakenOffPay: Double)
 
-case class IndividualIncomeEmployment(employerPayeReference: String,
-                                      payFromEmployment: Double)
+case class IndividualIncomeEmployment(employerPayeReference: String, payFromEmployment: Double)
 
-case class IndividualEmploymentEmployment(employerPayeReference: String,
-                                          employerName: String,
-                                          offPayrollWorkFlag: Option[Boolean])
+case class IndividualEmploymentEmployment(
+  employerPayeReference: String,
+  employerName: String,
+  offPayrollWorkFlag: Option[Boolean]
+)
 
-case class StateBenefits(otherPensionsAndRetirementAnnuities: Double,
-                         incapacityBenefit: Double)
+case class StateBenefits(otherPensionsAndRetirementAnnuities: Double, incapacityBenefit: Double)
 
-case class ExtendedStateBenefits(otherPensionsAndRetirementAnnuities: Double,
-                                 incapacityBenefit: Double,
-                                 jobseekersAllowance: Double,
-                                 seissNetPaid: Option[Double])
+case class ExtendedStateBenefits(
+  otherPensionsAndRetirementAnnuities: Double,
+  incapacityBenefit: Double,
+  jobseekersAllowance: Double,
+  seissNetPaid: Option[Double]
+)
 
 case class Refund(taxRefundedOrSetOff: Double)
 
 object IndividualResponse {
 
-  implicit val doubleWrite: Writes[Double] = (value: Double) => JsNumber(
-    BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
-  )
+  implicit val doubleWrite: Writes[Double] = (value: Double) =>
+    JsNumber(
+      BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
+    )
 
 }

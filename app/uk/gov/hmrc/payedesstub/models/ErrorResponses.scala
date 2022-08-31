@@ -21,7 +21,8 @@ import play.api.libs.json.{Json, Writes}
 
 sealed case class ErrorResponse(httpStatusCode: Int, errorCode: String, message: String)
 
-object ErrorAcceptHeaderInvalid extends ErrorResponse(NOT_ACCEPTABLE, "ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+object ErrorAcceptHeaderInvalid
+    extends ErrorResponse(NOT_ACCEPTABLE, "ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
 
 object ErrorResponse {
   implicit val errorResponseWrites: Writes[ErrorResponse] = (e: ErrorResponse) =>

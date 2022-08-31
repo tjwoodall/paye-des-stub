@@ -40,7 +40,9 @@ class IndividualEmploymentSpec extends BaseSpec {
       response.code shouldBe CREATED
     }
 
-    Scenario("Individual employment summary data is returned for the given utr and taxYear when primed with the default scenario") {
+    Scenario(
+      "Individual employment summary data is returned for the given utr and taxYear when primed with the default scenario"
+    ) {
       When("I prime employment data for a given utr and taxYear")
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", "{}")
 
@@ -54,7 +56,9 @@ class IndividualEmploymentSpec extends BaseSpec {
       fetchResponse.code shouldBe OK
     }
 
-    Scenario("Individual employment summary data is returned for the given utr and taxYear when primed with a specific scenario") {
+    Scenario(
+      "Individual employment summary data is returned for the given utr and taxYear when primed with a specific scenario"
+    ) {
       When("I prime employment data for a given utr, taxYear and test scenario")
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 

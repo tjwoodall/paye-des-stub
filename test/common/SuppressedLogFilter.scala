@@ -28,43 +28,37 @@ import scala.collection.mutable
 class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggingEvent] {
   private val suppressedEntries = new mutable.MutableList[ILoggingEvent]()
 
-  override def decide(event: ILoggingEvent): FilterReply = {
+  override def decide(event: ILoggingEvent): FilterReply =
     if (event.getMessage.contains(messagesContaining)) {
       suppressedEntries += event
       FilterReply.DENY
     } else {
       FilterReply.NEUTRAL
     }
-  }
 
-  def hasError(msg: String): Boolean = {
+  def hasError(msg: String): Boolean =
     suppressedEntries.exists(entry => entry.getLevel == Level.ERROR && entry.getMessage.contains(msg))
-  }
 
-  def hasWarn(msg: String): Boolean = {
+  def hasWarn(msg: String): Boolean =
     suppressedEntries.exists(entry => entry.getLevel == Level.WARN && entry.getMessage.contains(msg))
-  }
 
-  def hasInfo(msg: String): Boolean = {
+  def hasInfo(msg: String): Boolean =
     suppressedEntries.exists(entry => entry.getLevel == Level.INFO && entry.getMessage.contains(msg))
-  }
 }
 
 trait LogSuppressing {
   def withSuppressedLoggingFrom(logger: Logger, messagesContaining: String)(body: SuppressedLogFilter => Unit) {
 
-    val appenders = logger.iteratorForAppenders().asScala.toList
+    val appenders            = logger.iteratorForAppenders().asScala.toList
     val appendersWithFilters = appenders.map(appender => appender -> appender.getCopyOfAttachedFiltersList)
 
     val filter = new SuppressedLogFilter(messagesContaining)
     appenders.foreach(_.addFilter(filter))
 
     try body(filter)
-    finally {
-      appendersWithFilters.foreach { case (appender, filters) =>
-        appender.clearAllFilters()
-        filters.asScala.foreach(appender.addFilter)
-      }
+    finally appendersWithFilters.foreach { case (appender, filters) =>
+      appender.clearAllFilters()
+      filters.asScala.foreach(appender.addFilter)
     }
   }
 

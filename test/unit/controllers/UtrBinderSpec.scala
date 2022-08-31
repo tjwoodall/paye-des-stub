@@ -22,19 +22,19 @@ import org.scalatest.OptionValues
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.payedesstub.controllers.Binders
 
-class UtrBinderSpec extends AnyWordSpecLike with Matchers with OptionValues{
+class UtrBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "a valid utr '2234567890'" should {
     "be transformed to an SaUtr object" in {
       val utr = "2234567890"
-      Binders.saUtrBinder.bind("utr",utr) shouldBe Right(SaUtr(utr))
+      Binders.saUtrBinder.bind("utr", utr) shouldBe Right(SaUtr(utr))
     }
   }
 
   "an invalid utr 'invalid'" should {
     "be transformed to a String error message" in {
       val utr = "invalid"
-      Binders.saUtrBinder.bind("utr",utr) shouldBe Left("ERROR_SA_UTR_INVALID")
+      Binders.saUtrBinder.bind("utr", utr) shouldBe Left("ERROR_SA_UTR_INVALID")
     }
   }
 

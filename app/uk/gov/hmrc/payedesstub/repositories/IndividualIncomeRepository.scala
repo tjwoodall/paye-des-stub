@@ -26,20 +26,17 @@ import uk.gov.hmrc.payedesstub.models.{IndividualIncome, _}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IndividualIncomeRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[IndividualIncome](
-    mongoComponent = mongo,
-    collectionName = "individualIncome",
-    domainFormat   =formatIndividualIncome,
-    indexes = Seq.empty
-  )
-{
+class IndividualIncomeRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[IndividualIncome](
+      mongoComponent = mongo,
+      collectionName = "individualIncome",
+      domainFormat = formatIndividualIncome,
+      indexes = Seq.empty
+    ) {
 
-  def store[T <: IndividualIncome](IndividualIncome: T): Future[T] = {
-    collection.insertOne(IndividualIncome).toFuture().map( _ =>IndividualIncome)
-  }
+  def store[T <: IndividualIncome](IndividualIncome: T): Future[T] =
+    collection.insertOne(IndividualIncome).toFuture().map(_ => IndividualIncome)
 
-  def fetch(utr: String, taxYear: String): Future[Option[IndividualIncome]] = {
-    collection.find(and(equal("utr" , utr), equal("taxYear" , taxYear))).headOption()
-  }
+  def fetch(utr: String, taxYear: String): Future[Option[IndividualIncome]] =
+    collection.find(and(equal("utr", utr), equal("taxYear", taxYear))).headOption()
 }

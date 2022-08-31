@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-sbt clean compile coverage test it:test coverageOff coverageReport
-python dependencyReport.py
+sbt clean compile scalafmtAll scalastyleAll coverage test it:test coverageOff coverageReport dependencyUpdates

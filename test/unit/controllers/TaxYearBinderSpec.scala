@@ -22,7 +22,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.payedesstub.controllers.Binders
 import uk.gov.hmrc.payedesstub.models.TaxYear
 
-class TaxYearBinderSpec extends AnyWordSpecLike with Matchers with OptionValues{
+class TaxYearBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "a valid tax year '2014-15'" should {
     "be transformed to a TaxYear object" in {

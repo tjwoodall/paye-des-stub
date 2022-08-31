@@ -27,36 +27,38 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TaxHistoryController @Inject()(val scenarioLoader: ScenarioLoader,
-    val service: TaxHistoryService,
-    val cc: ControllerComponents)
-  extends BackendController(cc) with HeaderValidator {
+class TaxHistoryController @Inject() (
+  val scenarioLoader: ScenarioLoader,
+  val service: TaxHistoryService,
+  val cc: ControllerComponents
+) extends BackendController(cc)
+    with HeaderValidator {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
   final def find(nino: Nino, taxYear: Int): Action[AnyContent] = Action async {
     service.fetch(nino, taxYear) map {
       case Some(result) => Ok(result.taxHistoryResponse)
-      case _ => NotFound
-    } recover {
-      case _ => InternalServerError
+      case _            => NotFound
+    } recover { case _ =>
+      InternalServerError
     }
   }
 
   final def create(nino: Nino, taxYear: TaxYear): Action[JsValue] =
     (cc.actionBuilder andThen validateAcceptHeader("2.0")).async(parse.json) { implicit request =>
-    withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
-      val scenario = createSummaryRequest.scenario.getOrElse("EVERYTHING")
+      withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
+        val scenario = createSummaryRequest.scenario.getOrElse("EVERYTHING")
 
-      for {
-        taxHistoryResponse <- scenarioLoader.loadScenarioRaw("tax-history", scenario)
-        _ <- service.create(nino, taxYear, taxHistoryResponse)
-      } yield Created("{}").withHeaders(CONTENT_TYPE -> JSON)
+        for {
+          taxHistoryResponse <- scenarioLoader.loadScenarioRaw("tax-history", scenario)
+          _                  <- service.create(nino, taxYear, taxHistoryResponse)
+        } yield Created("{}").withHeaders(CONTENT_TYPE -> JSON)
 
-    } recover {
-      case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
-      case _ => InternalServerError
+      } recover {
+        case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
+        case _                           => InternalServerError
+      }
     }
-  }
 
 }

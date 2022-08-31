@@ -26,9 +26,8 @@ import scala.io.Source
 @Singleton
 class ScenarioLoader {
 
-  private def pathForScenario(api: String, scenario: String) = {
+  private def pathForScenario(api: String, scenario: String) =
     s"/public/scenarios/$api/$scenario.json"
-  }
 
   def loadScenario[T: Reads](api: String, scenario: String): Future[T] = {
     val resource = getClass.getResourceAsStream(pathForScenario(api, scenario))

@@ -27,37 +27,39 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class IndividualEmploymentController @Inject()(val scenarioLoader: ScenarioLoader,
-    val service: IndividualEmploymentSummaryService,
-    val cc: ControllerComponents)
-  extends BackendController(cc) with HeaderValidator {
+class IndividualEmploymentController @Inject() (
+  val scenarioLoader: ScenarioLoader,
+  val service: IndividualEmploymentSummaryService,
+  val cc: ControllerComponents
+) extends BackendController(cc)
+    with HeaderValidator {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
       case Some(result) => Ok(Json.toJson(result.individualEmploymentResponse))
-      case _ => NotFound
-    } recover {
-      case _ => InternalServerError
+      case _            => NotFound
+    } recover { case _ =>
+      InternalServerError
     }
   }
-
 
   final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
     (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { implicit request =>
-    withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
-      val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
+      withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
+        val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
 
-      for {
-        individualEmployment <- scenarioLoader.loadScenario[IndividualEmploymentResponse]("individual-employment", scenario)
-        _ <- service.create(utr.utr, taxYear.startYr, individualEmployment)
-      } yield Created(Json.toJson(individualEmployment))
+        for {
+          individualEmployment <-
+            scenarioLoader.loadScenario[IndividualEmploymentResponse]("individual-employment", scenario)
+          _                    <- service.create(utr.utr, taxYear.startYr, individualEmployment)
+        } yield Created(Json.toJson(individualEmployment))
 
-    } recover {
-      case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
-      case _ => InternalServerError
+      } recover {
+        case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
+        case _                           => InternalServerError
+      }
     }
-  }
 
 }

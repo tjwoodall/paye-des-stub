@@ -30,10 +30,15 @@ trait HeaderValidator extends Results with ErrorConversion {
 
   private val validateContentType: String => Boolean = ct => ct == "json"
 
-  private val matchHeader: String => Option[Match] = new Regex("""^application/vnd\.hmrc\.(.*?)\+(.*)$""", "version", "contenttype") findFirstMatchIn _
+  private val matchHeader: String => Option[Match] =
+    new Regex("""^application/vnd\.hmrc\.(.*?)\+(.*)$""", "version", "contenttype") findFirstMatchIn _
 
   def acceptHeaderValidationRules(versions: String*): Option[String] => Boolean =
-    _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && versions.contains(res.group("version")))) getOrElse false
+    _ flatMap (a =>
+      matchHeader(a) map (res =>
+        validateContentType(res.group("contenttype")) && versions.contains(res.group("version"))
+      )
+    ) getOrElse false
 
   private def validateAction(rules: Option[String] => Boolean): ActionFilter[Request] = new ActionFilter[Request] {
 
@@ -48,7 +53,6 @@ trait HeaderValidator extends Results with ErrorConversion {
     override protected def executionContext: ExecutionContext = cc.executionContext
   }
 
-  def validateAcceptHeader(versions: String*) : ActionFilter[Request] = {
+  def validateAcceptHeader(versions: String*): ActionFilter[Request] =
     validateAction(acceptHeaderValidationRules(versions: _*))
-  }
 }

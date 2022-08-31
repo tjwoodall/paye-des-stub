@@ -57,7 +57,9 @@ class HeaderValidatorSpec extends AnyWordSpecLike with Matchers with OptionValue
     }
 
     "return true when the version is in range and the content type in header value is well formatted" in {
-      acceptHeaderValidationRules("0.9", "1.0", "1.2.Special")(Some("application/vnd.hmrc.1.2.Special+json")) shouldBe true
+      acceptHeaderValidationRules("0.9", "1.0", "1.2.Special")(
+        Some("application/vnd.hmrc.1.2.Special+json")
+      ) shouldBe true
     }
   }
 }

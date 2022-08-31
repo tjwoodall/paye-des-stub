@@ -24,17 +24,14 @@ import uk.gov.hmrc.payedesstub.views.txt
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 @Singleton
-class DocumentationController @Inject()(appConfig: ApplicationConfig,
-    assets: Assets,
-    cc: ControllerComponents)
-  extends BackendController(cc) {
+class DocumentationController @Inject() (appConfig: ApplicationConfig, assets: Assets, cc: ControllerComponents)
+    extends BackendController(cc) {
 
   def definition: Action[AnyContent] = Action {
     Ok(txt.definition(appConfig.access)).withHeaders(CONTENT_TYPE -> JSON)
   }
 
-  final def raml(version: String, file: String): Action[AnyContent] = {
+  final def raml(version: String, file: String): Action[AnyContent] =
     assets.at(s"/public/api/conf/$version", file)
-  }
 
 }

@@ -28,10 +28,12 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class IndividualBenefitsController @Inject()(val scenarioLoader: ScenarioLoader,
-    val service: IndividualBenefitsSummaryService,
-    val cc: ControllerComponents)
-  extends BackendController(cc) with HeaderValidator {
+class IndividualBenefitsController @Inject() (
+  val scenarioLoader: ScenarioLoader,
+  val service: IndividualBenefitsSummaryService,
+  val cc: ControllerComponents
+) extends BackendController(cc)
+    with HeaderValidator {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
@@ -40,28 +42,27 @@ class IndividualBenefitsController @Inject()(val scenarioLoader: ScenarioLoader,
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
       case Some(result) => Ok(Json.toJson(result.individualBenefitsResponse))
-      case _ => NotFound
-    } recover {
-      case e =>
-        logger.error("An error occurred while finding test data", e)
-        InternalServerError
+      case _            => NotFound
+    } recover { case e =>
+      logger.error("An error occurred while finding test data", e)
+      InternalServerError
     }
   }
 
   final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
     (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { implicit request =>
-    withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
-      val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
+      withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
+        val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
 
-      for {
-        individualBenefits <- scenarioLoader.loadScenario[IndividualBenefitsResponse]("individual-benefits", scenario)
-        _ <- service.create(utr.utr, taxYear.startYr, individualBenefits)
-      } yield Created(Json.toJson(individualBenefits))
+        for {
+          individualBenefits <- scenarioLoader.loadScenario[IndividualBenefitsResponse]("individual-benefits", scenario)
+          _                  <- service.create(utr.utr, taxYear.startYr, individualBenefits)
+        } yield Created(Json.toJson(individualBenefits))
 
-    } recover {
-      case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
-      case _ => InternalServerError
+      } recover {
+        case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
+        case _                           => InternalServerError
+      }
     }
-  }
 
 }
