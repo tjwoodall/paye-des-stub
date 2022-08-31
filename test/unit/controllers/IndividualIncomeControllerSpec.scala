@@ -40,13 +40,18 @@ import uk.gov.hmrc.payedesstub.services.{IndividualIncomeSummaryService, Scenari
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class IndividualIncomeControllerSpec extends
-  AnyWordSpec with Matchers with MockitoSugar with OptionValues
-  with GuiceOneServerPerSuite with LogSuppressing with ScalaFutures{
+class IndividualIncomeControllerSpec
+    extends AnyWordSpec
+    with Matchers
+    with MockitoSugar
+    with OptionValues
+    with GuiceOneServerPerSuite
+    with LogSuppressing
+    with ScalaFutures {
 
   trait Setup {
     implicit lazy val materializer: Materializer = fakeApplication.materializer
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier               = HeaderCarrier()
 
     val createIndividualIncomeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -60,20 +65,19 @@ class IndividualIncomeControllerSpec extends
       FakeRequest()
         .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    def createSummaryRequest(scenario: String): FakeRequest[JsValue] = {
+    def createSummaryRequest(scenario: String): FakeRequest[JsValue]  =
       createRequestWithHeaders.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
-    }
 
-    def emptyRequest: FakeRequest[JsValue] = {
+    def emptyRequest: FakeRequest[JsValue] =
       createRequestWithHeaders.withBody[JsValue](Json.parse("{}"))
-    }
 
-    val validUtrString = "2234567890"
-    val validTaxYearString = "2016-17"
-    val utr: SaUtr = SaUtr(validUtrString)
-    val taxYear: TaxYear = TaxYear(validTaxYearString)
-    val individualIncomeResponse: IndividualIncomeResponse = IndividualIncomeResponse(ExtendedStateBenefits(0.0, 0.0, 0.0, Some(0.0)), Nil)
-    val individualIncome: IndividualIncome = IndividualIncome("", "", individualIncomeResponse)
+    val validUtrString                                     = "2234567890"
+    val validTaxYearString                                 = "2016-17"
+    val utr: SaUtr                                         = SaUtr(validUtrString)
+    val taxYear: TaxYear                                   = TaxYear(validTaxYearString)
+    val individualIncomeResponse: IndividualIncomeResponse =
+      IndividualIncomeResponse(ExtendedStateBenefits(0.0, 0.0, 0.0, Some(0.0)), Nil)
+    val individualIncome: IndividualIncome                 = IndividualIncome("", "", individualIncomeResponse)
   }
 
   "find" should {
@@ -84,7 +88,7 @@ class IndividualIncomeControllerSpec extends
 
       val result: Future[Result] = underTest.find(validUtrString, validTaxYearString)(createIndividualIncomeRequest)
 
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsJson(result) shouldBe Json.toJson(individualIncomeResponse)
     }
 
@@ -147,7 +151,7 @@ class IndividualIncomeControllerSpec extends
 
       val result: Future[Result] = underTest.create(utr, taxYear)(createSummaryRequest("INVALID"))
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)                              shouldBe BAD_REQUEST
       (contentAsJson(result) \ "code").as[String] shouldBe "UNKNOWN_SCENARIO"
     }
   }

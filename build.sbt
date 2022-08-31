@@ -2,10 +2,9 @@ import _root_.play.sbt.routes.RoutesKeys.routesImport
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
-lazy val appName = "paye-des-stub"
-val silencerVersion = "1.7.1"
+lazy val appName    = "paye-des-stub"
 
-def unitFilter(name: String): Boolean = name startsWith "unit"
+def unitFilter(name: String): Boolean   = name startsWith "unit"
 def itTestFilter(name: String): Boolean = name startsWith "it"
 
 lazy val microservice = (project in file("."))
@@ -20,7 +19,7 @@ lazy val microservice = (project in file("."))
     name := appName,
     scalaSettings,
     majorVersion := 0,
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.12.16",
     publishingSettings,
     retrieveManaged := true,
     routesImport += "uk.gov.hmrc.payedesstub.controllers.Binders._",
@@ -30,7 +29,7 @@ lazy val microservice = (project in file("."))
     Test / fork := false,
     IntegrationTest / parallelExecution := false,
     IntegrationTest / testOptions := Seq(Tests.Filter(itTestFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
-    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "test")).value,
+    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "test")).value,
     libraryDependencies ++= AppDependencies(),
     coverageMinimumStmtTotal := 80,
     coverageFailOnMinimum := true,
@@ -41,3 +40,6 @@ lazy val microservice = (project in file("."))
 scalacOptions ++= Seq(
   "-P:silencer:pathFilters=views;routes"
 )
+
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt test:scalafmt")
+addCommandAlias("scalastyleAll", "all scalastyle test:scalastyle")

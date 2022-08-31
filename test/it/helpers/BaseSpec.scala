@@ -29,23 +29,31 @@ import uk.gov.hmrc.mongo.test.MongoSupport
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
-trait BaseSpec extends AnyFeatureSpecLike with MongoSupport with BeforeAndAfterAll with BeforeAndAfterEach with Matchers
-  with GuiceOneServerPerSuite with GivenWhenThen {
+trait BaseSpec
+    extends AnyFeatureSpecLike
+    with MongoSupport
+    with BeforeAndAfterAll
+    with BeforeAndAfterEach
+    with Matchers
+    with GuiceOneServerPerSuite
+    with GivenWhenThen {
 
-  implicit override lazy val app: Application = GuiceApplicationBuilder().configure(
-      "metrics.enabled" -> false,
-      "auditing.enabled" -> false,
+  implicit override lazy val app: Application = GuiceApplicationBuilder()
+    .configure(
+      "metrics.enabled"        -> false,
+      "auditing.enabled"       -> false,
       "auditing.traceRequests" -> false,
-      "mongodb.uri" -> mongoUri,
-      "run.mode" -> "It"
-    ).build()
+      "mongodb.uri"            -> mongoUri,
+      "run.mode"               -> "It"
+    )
+    .build()
 
-  val timeout: FiniteDuration = Duration(5, TimeUnit.SECONDS)
-  val serviceUrl = s"http://localhost:$port"
+  val timeoutInSeconds        = 5
+  val timeout: FiniteDuration = Duration(timeoutInSeconds, TimeUnit.SECONDS)
+  val serviceUrl              = s"http://localhost:$port"
 
   def getEndpoint(endpoint: String): HttpResponse[String] =
-    Http(s"$serviceUrl/$endpoint")
-      .asString
+    Http(s"$serviceUrl/$endpoint").asString
 
   def postEndpoint(endpoint: String, payload: String): HttpResponse[String] =
     Http(s"$serviceUrl/$endpoint")

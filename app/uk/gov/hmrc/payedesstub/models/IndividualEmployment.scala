@@ -16,4 +16,8 @@
 
 package uk.gov.hmrc.payedesstub.models
 
-case class IndividualEmployment(utr: String, taxYear: String, individualEmploymentResponse: IndividualEmploymentResponse)
+case class IndividualEmployment(
+  utr: String,
+  taxYear: String,
+  individualEmploymentResponse: IndividualEmploymentResponse
+)

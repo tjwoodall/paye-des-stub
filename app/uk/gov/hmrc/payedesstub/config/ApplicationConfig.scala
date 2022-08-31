@@ -21,12 +21,14 @@ import play.api.Configuration
 import uk.gov.hmrc.payedesstub.models.APIAccess
 
 @Singleton
-class ApplicationConfig @Inject()(configuration: Configuration) {
+class ApplicationConfig @Inject() (configuration: Configuration) {
   lazy val config: Option[Configuration] = configuration.getOptional[Configuration]("api.access")
 
   def access(version: String): APIAccess = APIAccess(
     `type` = config.flatMap(_.getOptional[String](s"version-$version.type")).getOrElse("PRIVATE"),
-    whitelistedApplicationIds =
-      config.foldLeft[Option[Seq[String]]](None){(_, conf) => conf.getOptional[Seq[String]](s"version-$version.whitelistedApplicationIds")},
-    isTrial = config.flatMap(_.getOptional[Boolean](s"version-$version.isTrial")))
+    whitelistedApplicationIds = config.foldLeft[Option[Seq[String]]](None) { (_, conf) =>
+      conf.getOptional[Seq[String]](s"version-$version.whitelistedApplicationIds")
+    },
+    isTrial = config.flatMap(_.getOptional[Boolean](s"version-$version.isTrial"))
+  )
 }

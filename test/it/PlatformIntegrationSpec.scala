@@ -38,24 +38,31 @@ import play.api.{Application, Mode}
   *
   * See: https://confluence.tools.tax.service.gov.uk/display/ApiPlatform/API+Platform+Architecture+with+Flows
   */
-class PlatformIntegrationSpec extends AnyWordSpecLike with Matchers with OptionValues with ScalaFutures with GuiceOneAppPerTest with LogSuppressing {
+class PlatformIntegrationSpec
+    extends AnyWordSpecLike
+    with Matchers
+    with OptionValues
+    with ScalaFutures
+    with GuiceOneAppPerTest
+    with LogSuppressing {
   implicit def mat: Materializer = app.injector.instanceOf[Materializer]
 
   override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Test")
-    .in(Mode.Test).build()
+    .in(Mode.Test)
+    .build()
 
   "microservice" should {
 
     "provide definition endpoint and documentation endpoint for each api" in {
       val result = route(app, FakeRequest(GET, "/api/definition")).get
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsString(result) should include("\"name\": \"Individual PAYE Test Support\"")
     }
 
     "provide raml documentation" in {
       val result = route(app, FakeRequest(GET, "/api/conf/1.0/application.raml")).get
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsString(result) should startWith("#%RAML 1.0")
     }
   }

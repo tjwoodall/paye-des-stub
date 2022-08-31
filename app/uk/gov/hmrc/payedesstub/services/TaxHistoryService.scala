@@ -24,16 +24,11 @@ import uk.gov.hmrc.payedesstub.repositories.TaxHistoryRepository
 import scala.concurrent.Future
 
 @Singleton
-class TaxHistoryService @Inject()(val repository: TaxHistoryRepository) {
+class TaxHistoryService @Inject() (val repository: TaxHistoryRepository) {
 
-  def create(nino: Nino,
-      taxYear: TaxYear,
-      taxHistoryResponse: String
-    ): Future[TaxHistory] = {
-      repository.store(TaxHistory(nino.nino, taxYear.startYr, taxHistoryResponse))
-  }
+  def create(nino: Nino, taxYear: TaxYear, taxHistoryResponse: String): Future[TaxHistory] =
+    repository.store(TaxHistory(nino.nino, taxYear.startYr, taxHistoryResponse))
 
-  def fetch(nino: Nino, taxYear: Int): Future[Option[TaxHistory]] = {
+  def fetch(nino: Nino, taxYear: Int): Future[Option[TaxHistory]] =
     repository.fetch(nino.nino, taxYear.toString)
-  }
 }

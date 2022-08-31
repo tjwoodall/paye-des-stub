@@ -25,20 +25,19 @@ import uk.gov.hmrc.payedesstub.models._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TaxHistoryRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[TaxHistory](
-    mongoComponent = mongo,
-    collectionName = "taxHistory",
-    domainFormat   = formatTaxHistory,
-    indexes = Seq.empty
-  )
-{
+class TaxHistoryRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[TaxHistory](
+      mongoComponent = mongo,
+      collectionName = "taxHistory",
+      domainFormat = formatTaxHistory,
+      indexes = Seq.empty
+    ) {
 
-  def store (taxHistory: TaxHistory): Future[TaxHistory] = {
-    collection.findOneAndReplace(and(equal("nino" , taxHistory.nino), equal("taxYear" , taxHistory.taxYear)),taxHistory).toFuture()
-  }
+  def store(taxHistory: TaxHistory): Future[TaxHistory] =
+    collection
+      .findOneAndReplace(and(equal("nino", taxHistory.nino), equal("taxYear", taxHistory.taxYear)), taxHistory)
+      .toFuture()
 
-  def fetch(nino: String, taxYear: String): Future[Option[TaxHistory]] = {
-    collection.find(and(equal("nino" , nino), equal("taxYear" , taxYear))).headOption()
-  }
+  def fetch(nino: String, taxYear: String): Future[Option[TaxHistory]] =
+    collection.find(and(equal("nino", nino), equal("taxYear", taxYear))).headOption()
 }

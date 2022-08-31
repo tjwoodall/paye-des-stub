@@ -39,36 +39,39 @@ import uk.gov.hmrc.payedesstub.services.{IndividualEmploymentSummaryService, Sce
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers with OptionValues
-  with MockitoSugar with ScalaFutures with GuiceOneAppPerSuite {
+class IndividualEmploymentControllerSpec
+    extends AnyWordSpecLike
+    with Matchers
+    with OptionValues
+    with MockitoSugar
+    with ScalaFutures
+    with GuiceOneAppPerSuite {
 
   trait Setup {
     implicit lazy val materializer: Materializer = fakeApplication.materializer
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier               = HeaderCarrier()
 
     def createIndividualEmploymentRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    val underTest = new IndividualEmploymentController(
+    val underTest                                                              = new IndividualEmploymentController(
       mock[ScenarioLoader],
       mock[IndividualEmploymentSummaryService],
       stubControllerComponents()
     )
 
-    def createSummaryRequest(scenario: String): FakeRequest[JsValue] = {
+    def createSummaryRequest(scenario: String): FakeRequest[JsValue] =
       createIndividualEmploymentRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
-    }
 
-    def emptyRequest: FakeRequest[JsValue] = {
+    def emptyRequest: FakeRequest[JsValue] =
       createIndividualEmploymentRequest.withBody[JsValue](Json.parse("{}"))
-    }
 
-    val validUtrString = "2234567890"
-    val validTaxYearString = "2016-17"
-    val utr: SaUtr = SaUtr(validUtrString)
-    val taxYear: TaxYear = TaxYear(validTaxYearString)
+    val validUtrString                                             = "2234567890"
+    val validTaxYearString                                         = "2016-17"
+    val utr: SaUtr                                                 = SaUtr(validUtrString)
+    val taxYear: TaxYear                                           = TaxYear(validTaxYearString)
     val individualEmploymentResponse: IndividualEmploymentResponse = IndividualEmploymentResponse(Nil)
-    val individualEmployment: IndividualEmployment = IndividualEmployment("", "", individualEmploymentResponse)
+    val individualEmployment: IndividualEmployment                 = IndividualEmployment("", "", individualEmploymentResponse)
   }
 
   "find" should {
@@ -77,9 +80,10 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
       given(underTest.service.fetch(validUtrString, validTaxYearString))
         .willReturn(Future(Some(IndividualEmployment("", "", IndividualEmploymentResponse(Nil)))))
 
-      val result: Future[Result] = Future(underTest.find(validUtrString, validTaxYearString)(createIndividualEmploymentRequest)).futureValue
+      val result: Future[Result] =
+        Future(underTest.find(validUtrString, validTaxYearString)(createIndividualEmploymentRequest)).futureValue
 
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsJson(result) shouldBe Json.toJson(individualEmploymentResponse)
     }
 
@@ -87,7 +91,8 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
 
       given(underTest.service.fetch(validUtrString, validTaxYearString)).willReturn(Future(None))
 
-      val result: Future[Result] = Future(underTest.find(validUtrString, validTaxYearString)(createIndividualEmploymentRequest)).futureValue
+      val result: Future[Result] =
+        Future(underTest.find(validUtrString, validTaxYearString)(createIndividualEmploymentRequest)).futureValue
 
       status(result) shouldBe NOT_FOUND
     }
@@ -102,10 +107,12 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
       given(underTest.service.create(anyString, anyString, any[IndividualEmploymentResponse]))
         .willReturn(Future.successful(individualEmployment))
 
-      val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
 
       status(result) shouldBe CREATED
-      verify(underTest.scenarioLoader).loadScenario[IndividualEmploymentResponse]("individual-employment", "HAPPY_PATH_1")
+      verify(underTest.scenarioLoader)
+        .loadScenario[IndividualEmploymentResponse]("individual-employment", "HAPPY_PATH_1")
       verify(underTest.service).create(validUtrString, taxYear.startYr, individualEmploymentResponse)
     }
 
@@ -119,7 +126,8 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
       val result: Future[Result] = Future(underTest.create(utr, taxYear)(emptyRequest)).futureValue
 
       status(result) shouldBe CREATED
-      verify(underTest.scenarioLoader).loadScenario[IndividualEmploymentResponse]("individual-employment", "HAPPY_PATH_1")
+      verify(underTest.scenarioLoader)
+        .loadScenario[IndividualEmploymentResponse]("individual-employment", "HAPPY_PATH_1")
       verify(underTest.service).create(validUtrString, taxYear.startYr, individualEmploymentResponse)
     }
 
@@ -130,7 +138,8 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
       given(underTest.service.create(anyString, anyString, any[IndividualEmploymentResponse]))
         .willReturn(Future.failed(new RuntimeException("expected test error")))
 
-      val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))).futureValue
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
     }
@@ -142,9 +151,8 @@ class IndividualEmploymentControllerSpec extends AnyWordSpecLike with Matchers w
 
       val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("INVALID"))).futureValue
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)                              shouldBe BAD_REQUEST
       (contentAsJson(result) \ "code").as[String] shouldBe "UNKNOWN_SCENARIO"
     }
   }
 }
-
