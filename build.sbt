@@ -2,7 +2,7 @@ import _root_.play.sbt.routes.RoutesKeys.routesImport
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
-lazy val appName    = "paye-des-stub"
+lazy val appName = "paye-des-stub"
 
 def unitFilter(name: String): Boolean   = name startsWith "unit"
 def itTestFilter(name: String): Boolean = name startsWith "it"
