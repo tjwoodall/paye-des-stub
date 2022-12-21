@@ -1,0 +1,20 @@
+@import models.APIAccess
+@import play.api.libs.json.Json
+@(access: String => APIAccess)
+{
+  "scopes":[],
+  "api": {
+    "name": "Individual PAYE Test Support",
+    "description": "Lets you set up test data for the Individual PAYE APIs: Individual PAYE, Individual Benefits, Individual Employment, Individual Income and Individual Tax.",
+    "context": "individual-paye-test-support",
+    "isTestSupport": true,
+    "versions": [
+      {
+        "version": "1.0",
+        "status": "BETA",
+        "endpointsEnabled": true,
+        "access": @Json.toJson(access("""1.0"""))
+      }
+    ]
+  }
+}

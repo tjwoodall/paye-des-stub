@@ -1,2 +1,2 @@
-GET        /api/definition                                  uk.gov.hmrc.payedesstub.controllers.DocumentationController.definition()
-GET        /api/conf/:version/*file                         uk.gov.hmrc.payedesstub.controllers.DocumentationController.raml(version, file)
+GET        /api/definition                                  controllers.DocumentationController.definition()
+GET        /api/conf/:version/*file                         controllers.DocumentationController.specification(version, file)

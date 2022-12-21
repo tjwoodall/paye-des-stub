@@ -18,7 +18,7 @@ package it
 
 import it.helpers.BaseSpec
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
-import uk.gov.hmrc.payedesstub.repositories.IndividualEmploymentRepository
+import repositories.IndividualEmploymentRepository
 
 import scala.concurrent.Await.result
 

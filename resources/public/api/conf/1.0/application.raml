@@ -6,14 +6,6 @@ version: 1.0
 protocols: [ HTTPS ]
 baseUri: https://api.service.hmrc.gov.uk/
 
-documentation:
- - title: Overview
-   content: !include docs/overview.md
- - title: Versioning
-   content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/versioning.md
- - title: Errors
-   content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/errors.md
-
 mediaType: [ application/json, application/hal+json ]
 
 uses:
@@ -40,7 +32,7 @@ uses:
                 type: types.taxYear
             post:
               displayName: Create benefits summary test data
-              description: Supports the [Individual Benefits API](https://test-developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits#_get-benefits-summary_get_accordion) by creating benefits summary test data.
+              description: Supports the [Individual Benefits API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits) by creating benefits summary test data.
               is: [headers.acceptHeader, headers.contentHeader]
               securedBy: [ sec.x-application ]
               body:
@@ -65,7 +57,7 @@ uses:
                 type: types.taxYear
             post:
               displayName: Create employment history test data
-              description: Supports the [Individual Employment API](https://test-developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-employment#_get-employment-history_get_accordion) by creating employment history test data.
+              description: Supports the [Individual Employment API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-employment) by creating employment history test data.
               is: [headers.acceptHeader, headers.contentHeader]
               securedBy: [ sec.x-application ]
               body:
@@ -90,7 +82,7 @@ uses:
                 type: types.taxYear
             post:
               displayName: Create annual income summary test data
-              description: Supports the [Individual Income API](https://test-developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-income#_get-annual-income-summary_get_accordion) by creating annual income test data.
+              description: Supports the [Individual Income API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-income) by creating annual income test data.
               is: [headers.acceptHeader, headers.contentHeader]
               securedBy: [ sec.x-application ]
               body:
@@ -115,7 +107,7 @@ uses:
                 type: types.taxYear
             post:
               displayName: Create tax summary test data
-              description: Supports the [Individual Tax API](https://test-developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-tax#_get-tax-summary_get_accordion) by creating annual tax test data.
+              description: Supports the [Individual Tax API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-tax) by creating annual tax test data.
               is: [headers.acceptHeader, headers.contentHeader]
               securedBy: [ sec.x-application ]
               body:

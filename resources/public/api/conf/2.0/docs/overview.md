@@ -1,2 +1,0 @@
-This API lets you set up test data for the [Individual PAYE API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-paye).
-It is for [testing in our sandbox environment](https://developer.service.hmrc.gov.uk/api-documentation/docs/testing) only.

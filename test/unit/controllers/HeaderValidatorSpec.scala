@@ -16,12 +16,12 @@
 
 package unit.controllers
 
+import controllers.HeaderValidator
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.OptionValues
 import play.api.mvc.ControllerComponents
 import play.api.test.Helpers.stubControllerComponents
-import uk.gov.hmrc.payedesstub.controllers.HeaderValidator
 
 class HeaderValidatorSpec extends AnyWordSpecLike with Matchers with OptionValues with HeaderValidator {
 

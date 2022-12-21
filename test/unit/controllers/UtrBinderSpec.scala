@@ -16,11 +16,11 @@
 
 package unit.controllers
 
+import controllers.Binders
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.OptionValues
 import uk.gov.hmrc.domain.SaUtr
-import uk.gov.hmrc.payedesstub.controllers.Binders
 
 class UtrBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
@@ -28,6 +28,13 @@ class UtrBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
     "be transformed to an SaUtr object" in {
       val utr = "2234567890"
       Binders.saUtrBinder.bind("utr", utr) shouldBe Right(SaUtr(utr))
+    }
+  }
+
+  "unbinding a SaUtr object" should {
+    "result in a utr" in {
+      val utr = "1097172564"
+      Binders.saUtrBinder.unbind("utr", SaUtr(utr)) shouldBe utr
     }
   }
 

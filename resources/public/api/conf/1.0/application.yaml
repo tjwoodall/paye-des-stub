@@ -1,0 +1,504 @@
+openapi: 3.0.3
+info:
+  title: Individual PAYE Test Support
+  version: '1.0'
+servers:
+  - url: https://test-api.service.hmrc.gov.uk
+paths:
+  /individual-paye-test-support/sa/{utr}/benefits/annual-summary/{taxYear}:
+    post:
+      tags:
+      - individual-paye-test-support
+      summary: Create benefits summary test data
+      description: Supports the [Individual Benefits API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits) by creating benefits summary test data.
+      operationId: createBenefitsSummaryTestData
+      parameters:
+        - $ref: '#/components/parameters/utr'
+        - name: taxYear
+          in: path
+          description: The tax year for the benefits test data being created.
+          required: true
+          style: simple
+          schema:
+            pattern: ^[0-9]{4}-[0-9]{2}$
+            type: string
+            example: 2016-17
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - $ref: '#/components/parameters/authorizationHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryRequest'
+            example:
+              scenario: HAPPY_PATH_1
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryResponse'
+              example:
+                employments:
+                - employerPayeReference: 123/AB456
+                  companyCarsAndVansBenefit: 44
+                  fuelForCompanyCarsAndVansBenefit: 99
+                  privateMedicalDentalInsurance: 64
+                  vouchersCreditCardsExcessMileageAllowance: 80
+                  goodsEtcProvidedByEmployer: 125
+                  accommodationProvidedByEmployer: 375
+                  otherBenefits: 16
+                  expensesPaymentsReceived: 415
+                - employerPayeReference: 456/AB456
+                  companyCarsAndVansBenefit: 50
+                  fuelForCompanyCarsAndVansBenefit: 249
+                  privateMedicalDentalInsurance: 75
+                  vouchersCreditCardsExcessMileageAllowance: 23
+                  goodsEtcProvidedByEmployer: 250
+                  accommodationProvidedByEmployer: 275
+                  otherBenefits: 87
+                  expensesPaymentsReceived: 265
+      deprecated: false
+      security:
+        - application-restricted: []
+  /individual-paye-test-support/sa/{utr}/employments/annual-summary/{taxYear}:
+    post:
+      tags:
+      - individual-paye-test-support
+      summary: Create employment history test data
+      description: Supports the [Individual Employment API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-employment) by creating employment history test data.
+      operationId: createEmploymentHistoryTestData
+      parameters:
+        - $ref: '#/components/parameters/utr'
+        - name: taxYear
+          in: path
+          description: The tax year for the employment test data being created.
+          required: true
+          style: simple
+          schema:
+            pattern: ^[0-9]{4}-[0-9]{2}$
+            type: string
+            example: 2016-17
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - $ref: '#/components/parameters/authorizationHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryRequest'
+            example:
+              scenario: HAPPY_PATH_1
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryResponse'
+              example:
+                employments:
+                - employerPayeReference: 123/AB456
+                  employerName: Company XYZ
+                  offPayrollWorkFlag: true
+                - employerPayeReference: 456/AB456
+                  employerName: Company ABC
+                  offPayrollWorkFlag: false
+      deprecated: false
+      security:
+        - application-restricted: []
+  /individual-paye-test-support/sa/{utr}/income/annual-summary/{taxYear}:
+    post:
+      tags:
+      - individual-paye-test-support
+      summary: Create annual income summary test data
+      description: Supports the [Individual Income API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-income) by creating annual income test data.
+      operationId: createAnnualIncomeSummaryTestData
+      parameters:
+        - $ref: '#/components/parameters/utr'
+        - name: taxYear
+          in: path
+          description: The tax year for the income test data being created.
+          required: true
+          style: simple
+          schema:
+            pattern: ^[0-9]{4}-[0-9]{2}$
+            type: string
+            example: 2016-17
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - $ref: '#/components/parameters/authorizationHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryRequest'
+            example:
+              scenario: HAPPY_PATH_1
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryResponse'
+              example:
+                pensionsAnnuitiesAndOtherStateBenefits:
+                  otherPensionsAndRetirementAnnuities: 36.5
+                  incapacityBenefit: 980.45
+                  jobseekersAllowance: 89.99
+                  seissNetPaid: 55.55
+                employments:
+                - employerPayeReference: 123/AB456
+                  payFromEmployment: 22500
+                - employerPayeReference: 456/AB456
+                  payFromEmployment: 8650
+      deprecated: false
+      security:
+        - application-restricted: []
+  /individual-paye-test-support/sa/{utr}/tax/annual-summary/{taxYear}:
+    post:
+      tags:
+      - individual-paye-test-support
+      summary: Create tax summary test data
+      description: Supports the [Individual Tax API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-tax) by creating annual tax test data.
+      operationId: createTaxSummaryTestData
+      parameters:
+        - $ref: '#/components/parameters/utr'
+        - name: taxYear
+          in: path
+          description: The tax year for the tax test data being created.
+          required: true
+          style: simple
+          schema:
+            pattern: ^[0-9]{4}-[0-9]{2}$
+            type: string
+            example: 2016-17
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - $ref: '#/components/parameters/authorizationHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryRequest'
+            example:
+              scenario: HAPPY_PATH_1
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryResponse'
+              example:
+                pensionsAnnuitiesAndOtherStateBenefits:
+                  otherPensionsAndRetirementAnnuities: 36.5
+                  incapacityBenefit: 980.45
+                refunds:
+                  taxRefundedOrSetOff: 325
+                employments:
+                - employerPayeReference: 123/AB456
+                  taxTakenOffPay: 890.35
+                - employerPayeReference: 456/AB456
+                  taxTakenOffPay: 224.99
+      deprecated: false
+      security:
+        - application-restricted: []
+components:
+  parameters:
+    utr:
+      name: utr
+      in: path
+      description: The 10 digit self assessment UTR for the individual.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 2234567890
+    acceptHeader:
+      name: Accept
+      in: header
+      style: simple
+      description: Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.
+      schema:
+        type: string
+        enum:
+          - application/vnd.hmrc.1.0+json
+      required: true
+    contentTypeHeader:
+      name: Content-Type
+      in: header
+      style: simple
+      description: Specifies the format of the request body, which must be JSON.
+      schema:
+        type: string
+        enum:
+          - application/json
+      required: true
+    authorizationHeader:
+      name: Authorization
+      in: header
+      style: simple
+      description: An [OAuth 2.0 Bearer Token](/api-documentation/docs/authorisation/application-restricted-endpoints).
+      schema:
+        type: string
+        example: Bearer 59fc92c1cdf0b8ef1f138a702effdbd2
+      required: true
+  securitySchemes:
+    application-restricted:
+      type: oauth2
+      description: HMRC supports OAuth 2.0 for authenticating [application-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/application-restricted-endpoints) API requests using an OAuth 2.0 Bearer Token in the Authorization header.
+      flows:
+        clientCredentials:
+          tokenUrl: https://test-api.service.hmrc.gov.uk/oauth/token
+          scopes: {}
+  schemas:
+    employmentForIndividualBenefits:
+      title: employment
+      required:
+      - employerPayeReference
+      type: object
+      properties:
+        employerPayeReference:
+          type: string
+          description: The employer’s PAYE reference.
+          example: 123/AB456
+        companyCarsAndVansBenefit:
+          type: number
+          description: The total value of company cars and vans.
+          example: 44
+        fuelForCompanyCarsAndVansBenefit:
+          type: number
+          description: The total value of fuel for company cars and vans.
+          example: 99
+        privateMedicalDentalInsurance:
+          type: number
+          description: The total value of private medical and dental treatment and insurance.
+          example: 64
+        vouchersCreditCardsExcessMileageAllowance:
+          type: number
+          description: The value of benefits in the form of vouchers, credit cards and excess mileage allowance.
+          example: 80
+        goodsEtcProvidedByEmployer:
+          type: number
+          description: The total value of goods and other assets provided by the employer.
+          example: 125
+        accommodationProvidedByEmployer:
+          type: number
+          description: The total value of accommodation provided by the employer.
+          example: 375
+        otherBenefits:
+          type: number
+          description: The total value of other benefits, including interest-free loans and loans below the HMRC official rates.
+          example: 16
+        expensesPaymentsReceived:
+          type: number
+          description: The value of expenses payments received and balancing charges.
+          example: 415
+    employmentForIndividualEmployment:
+      title: employment
+      required:
+      - employerPayeReference
+      - employerName
+      type: object
+      properties:
+        employerPayeReference:
+          type: string
+          description: The employer’s PAYE reference.
+          example: 123/AB456
+        employerName:
+          type: string
+          description: The name of the employer.
+          example: Company XYZ
+        offPayrollWorkFlag:
+          type: boolean
+          description: The value of OPW flag.
+          example: false
+    employmentForIndividualIncome:
+      title: employment
+      required:
+      - employerPayeReference
+      - payFromEmployment
+      type: object
+      properties:
+        employerPayeReference:
+          type: string
+          description: The employer’s PAYE reference.
+          example: 123/AB456
+        payFromEmployment:
+          type: number
+          description: The amount of pay from this employment, taken from the P45 or P60.
+          example: 22500
+    employmentForIndividualTax:
+      title: employment
+      required:
+      - employerPayeReference
+      - taxTakenOffPay
+      type: object
+      properties:
+        employerPayeReference:
+          type: string
+          description: The employer’s PAYE reference.
+          example: 123/AB456
+        taxTakenOffPay:
+          type: number
+          description: The amount of UK tax deducted from pay under this employment.
+          example: 890.35
+    pensionsAnnuitiesAndOtherStateBenefitsForIndividualIncome:
+      title: pensionsAnnuitiesAndOtherStateBenefits
+      type: object
+      properties:
+        otherPensionsAndRetirementAnnuities:
+          type: number
+          description: The amount of income from pensions (other than State Pension), retirement annuities and taxable trivial payments.
+          example: 36.5
+        incapacityBenefit:
+          type: number
+          description: The amount of taxable Incapacity Benefit and contribution-based Employment and Support Allowance.
+          example: 980.45
+        jobseekersAllowance:
+          type: number
+          description: The amount of income from Jobseeker’s Allowance.
+          example: 89.99
+        seissNetPaid:
+          type: number
+          description: The amount of income from the Self-Employment Income Support Scheme.
+          example: 55.55
+      description: Income from pensions, annuities and other state benefits.
+    pensionsAnnuitiesAndOtherStateBenefitsForIndividualTax:
+      title: pensionsAnnuitiesAndOtherStateBenefits
+      type: object
+      properties:
+        otherPensionsAndRetirementAnnuities:
+          type: number
+          description: The amount of tax deducted from pensions (other than State Pension), retirement annuities and taxable trivial payments.
+          example: 36.5
+        incapacityBenefit:
+          type: number
+          description: The amount of tax deducted from Incapacity Benefit.
+          example: 980.45
+      description: Tax deducted from pensions, annuities and other state benefits.
+    refunds:
+      title: refunds
+      type: object
+      properties:
+        taxRefundedOrSetOff:
+          type: number
+          description: The amount of Income Tax refunded or set off by HMRC or Jobcentre Plus.
+          example: 325
+    scenario:
+      enum:
+        - HAPPY_PATH_1
+      type: string
+      description: Standard happy path test scenario (default)
+    individualPayeTestSupportSaBenefitsAnnualSummaryRequest:
+      title: individualPayeTestSupportSaBenefitsAnnualSummaryRequest
+      type: object
+      properties:
+        scenario:
+          allOf:
+          - $ref: '#/components/schemas/scenario'
+          description: The scenario to create test data for
+      description: Create Individual Benefits summary test data request
+    individualPayeTestSupportSaBenefitsAnnualSummaryResponse:
+      title: individualPayeTestSupportSaBenefitsAnnualSummaryResponse
+      required:
+        - employments
+      type: object
+      properties:
+        employments:
+          type: array
+          items:
+            $ref: '#/components/schemas/employmentForIndividualBenefits'
+          description: An unordered list of one or more employments for which the taxpayer reported any benefits for the given tax year
+      description: Create Individual Benefits summary test data response
+    individualPayeTestSupportSaEmploymentsAnnualSummaryRequest:
+      title: individualPayeTestSupportSaEmploymentsAnnualSummaryRequest
+      type: object
+      properties:
+        scenario:
+          allOf:
+          - $ref: '#/components/schemas/scenario'
+          description: The scenario to create test data for
+      description: Create Individual Employment summary test data request
+    individualPayeTestSupportSaEmploymentsAnnualSummaryResponse:
+      title: IndividualPayeTestSupportSaEmploymentsAnnualSummaryResponse
+      required:
+      - employments
+      type: object
+      properties:
+        employments:
+          type: array
+          items:
+            $ref: '#/components/schemas/employmentForIndividualEmployment'
+          description: An unordered list of one or more employments which the taxpayer had in the given tax year.
+      description: Create Individual Employment summary test data response
+    individualPayeTestSupportSaIncomeAnnualSummaryRequest:
+      title: individualPayeTestSupportSaIncomeAnnualSummaryRequest
+      type: object
+      properties:
+        scenario:
+          allOf:
+          - $ref: '#/components/schemas/scenario'
+          description: The scenario to create test data for
+      description: Create Individual Income summary test data request
+    individualPayeTestSupportSaIncomeAnnualSummaryResponse:
+      title: individualPayeTestSupportSaIncomeAnnualSummaryResponse
+      required:
+      - pensionsAnnuitiesAndOtherStateBenefits
+      type: object
+      properties:
+        pensionsAnnuitiesAndOtherStateBenefits:
+          allOf:
+          - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualIncome'
+          - description: Income from pensions, annuities and other state benefits.
+        employments:
+          type: array
+          items:
+            $ref: '#/components/schemas/employmentForIndividualIncome'
+          description: An unordered list of zero or more employments for which the taxpayer received an income in the given tax year.
+      description: Create Individual Income summary test data request
+    individualPayeTestSupportSaTaxAnnualSummaryRequest:
+      title: individualPayeTestSupportSaTaxAnnualSummaryRequest
+      type: object
+      properties:
+        scenario:
+          allOf:
+          - $ref: '#/components/schemas/scenario'
+          description: The scenario to create test data for
+      description: Create Individual Tax summary test data request
+    individualPayeTestSupportSaTaxAnnualSummaryResponse:
+      title: individualPayeTestSupportSaTaxAnnualSummaryResponse
+      required:
+      - pensionsAnnuitiesAndOtherStateBenefits
+      - refunds
+      - employments
+      type: object
+      properties:
+        pensionsAnnuitiesAndOtherStateBenefits:
+          allOf:
+          - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualTax'
+          - description: Tax deducted from pensions, annuities and other state benefits.
+        refunds:
+          $ref: '#/components/schemas/refunds'
+        employments:
+          type: array
+          items:
+            $ref: '#/components/schemas/employmentForIndividualTax'
+          description: An unordered list of zero or more employments for which the taxpayer had tax deducted in the given tax year.
+      description: Create Individual Tax summary test data request

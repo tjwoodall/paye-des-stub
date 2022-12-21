@@ -16,11 +16,11 @@
 
 package unit.controllers
 
+import controllers.Binders
+import models.TaxYear
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import uk.gov.hmrc.payedesstub.controllers.Binders
-import uk.gov.hmrc.payedesstub.models.TaxYear
 
 class TaxYearBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
@@ -28,6 +28,13 @@ class TaxYearBinderSpec extends AnyWordSpecLike with Matchers with OptionValues 
     "be transformed to a TaxYear object" in {
       val ty = "2014-15"
       Binders.taxYearBinder.bind("taxYear", ty) shouldBe Right(TaxYear("2014-15"))
+    }
+  }
+
+  "unbinding a TaxYear object" should {
+    "result in a tax year string" in {
+      val ty = "2014-15"
+      Binders.taxYearBinder.unbind("taxYear", TaxYear(ty)) shouldBe ty
     }
   }
 

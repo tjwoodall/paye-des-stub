@@ -16,11 +16,11 @@
 
 package unit.controllers
 
+import controllers.Binders
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.OptionValues
 import uk.gov.hmrc.domain.Nino
-import uk.gov.hmrc.payedesstub.controllers.Binders
 
 class NinoBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
@@ -36,6 +36,13 @@ class NinoBinderSpec extends AnyWordSpecLike with Matchers with OptionValues {
     "indicate an error when the UTR is invalid" in {
       val result: Either[String, Nino] = Binders.ninoBinder.bind("x", "123")
       result shouldBe Left("ERROR_NINO_INVALID")
+    }
+  }
+
+  "unbinding a NINO object" should {
+    "result in a nino string" in {
+      val expectedNino = "AA000000A"
+      Binders.ninoBinder.unbind("nino", Nino(expectedNino)) shouldBe expectedNino
     }
   }
 }

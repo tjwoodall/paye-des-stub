@@ -1,14 +1,11 @@
-GET        /self-assessment-prepop/individual/:utr/benefits/tax-year/:taxYear                   uk.gov.hmrc.payedesstub.controllers.IndividualBenefitsController.find(utr, taxYear)
-POST       /sa/:utr/benefits/annual-summary/:taxYear                                            uk.gov.hmrc.payedesstub.controllers.IndividualBenefitsController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: uk.gov.hmrc.payedesstub.models.TaxYear)
+GET        /self-assessment-prepop/individual/:utr/benefits/tax-year/:taxYear                   controllers.IndividualBenefitsController.find(utr, taxYear)
+POST       /sa/:utr/benefits/annual-summary/:taxYear                                            controllers.IndividualBenefitsController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: models.TaxYear)
 
-GET        /self-assessment-prepop/individual/:utr/employment-history/tax-year/:taxYear         uk.gov.hmrc.payedesstub.controllers.IndividualEmploymentController.find(utr, taxYear)
-POST       /sa/:utr/employments/annual-summary/:taxYear                                         uk.gov.hmrc.payedesstub.controllers.IndividualEmploymentController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: uk.gov.hmrc.payedesstub.models.TaxYear)
+GET        /self-assessment-prepop/individual/:utr/employment-history/tax-year/:taxYear         controllers.IndividualEmploymentController.find(utr, taxYear)
+POST       /sa/:utr/employments/annual-summary/:taxYear                                         controllers.IndividualEmploymentController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: models.TaxYear)
 
-GET        /self-assessment-prepop/individual/:utr/income-summary/tax-year/:taxYear             uk.gov.hmrc.payedesstub.controllers.IndividualIncomeController.find(utr, taxYear)
-POST       /sa/:utr/income/annual-summary/:taxYear                                              uk.gov.hmrc.payedesstub.controllers.IndividualIncomeController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: uk.gov.hmrc.payedesstub.models.TaxYear)
+GET        /self-assessment-prepop/individual/:utr/income-summary/tax-year/:taxYear             controllers.IndividualIncomeController.find(utr, taxYear)
+POST       /sa/:utr/income/annual-summary/:taxYear                                              controllers.IndividualIncomeController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: models.TaxYear)
 
-GET        /self-assessment-prepop/individual/:utr/tax-summary/tax-year/:taxYear                uk.gov.hmrc.payedesstub.controllers.IndividualTaxController.find(utr, taxYear)
-POST       /sa/:utr/tax/annual-summary/:taxYear                                                 uk.gov.hmrc.payedesstub.controllers.IndividualTaxController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: uk.gov.hmrc.payedesstub.models.TaxYear)
-
-GET        /tax-history/:nino/:taxYear/all-details                                              uk.gov.hmrc.payedesstub.controllers.TaxHistoryController.find(nino: uk.gov.hmrc.domain.Nino, taxYear: Int)
-POST       /paye/nino/:nino/tax-year/:taxYear                                                   uk.gov.hmrc.payedesstub.controllers.TaxHistoryController.create(nino: uk.gov.hmrc.domain.Nino, taxYear: uk.gov.hmrc.payedesstub.models.TaxYear)
+GET        /self-assessment-prepop/individual/:utr/tax-summary/tax-year/:taxYear                controllers.IndividualTaxController.find(utr, taxYear)
+POST       /sa/:utr/tax/annual-summary/:taxYear                                                 controllers.IndividualTaxController.create(utr: uk.gov.hmrc.domain.SaUtr, taxYear: models.TaxYear)

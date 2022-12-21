@@ -32,7 +32,7 @@ import play.api.{Application, Mode}
   * Testcase to verify the capability of integration with the API platform.
   *
   * 1a, To expose API's to Third Party Developers, the service needs to make the API definition available under api/definition GET endpoint
-  * 1b, The endpoints need to be defined in an application.raml file for all versions  For all of the endpoints defined documentation will be provided and
+  * 1b, The endpoints need to be defined in an application.yaml file for all versions  For all of the endpoints defined documentation will be provided and
   * be available under api/documentation/[version]/[endpoint name] GET endpoint
   * Example: api/documentation/1.0/Fetch-Some-Data
   *
@@ -52,18 +52,20 @@ class PlatformIntegrationSpec
     .in(Mode.Test)
     .build()
 
-  "microservice" should {
+  "paye-des-stub" should {
 
-    "provide definition endpoint and documentation endpoint for each api" in {
+    "provide definition endpoint" in {
       val result = route(app, FakeRequest(GET, "/api/definition")).get
       status(result)        shouldBe OK
       contentAsString(result) should include("\"name\": \"Individual PAYE Test Support\"")
     }
 
-    "provide raml documentation" in {
-      val result = route(app, FakeRequest(GET, "/api/conf/1.0/application.raml")).get
+    "provide yaml documentation" in {
+      val result = route(app, FakeRequest(GET, "/api/conf/1.0/application.yaml")).get
       status(result)        shouldBe OK
-      contentAsString(result) should startWith("#%RAML 1.0")
+      contentAsString(result) should include("""openapi: 3.0.3
+                                                |info:
+                                                |  title: Individual PAYE Test Support""".stripMargin)
     }
   }
 }

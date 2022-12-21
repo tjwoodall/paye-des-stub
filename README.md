@@ -89,12 +89,21 @@ curl --header "Content-Type: application/json" \
 curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/tax-summary/tax-year/2017
 ```
 
-To test the stub endpoint for Individual PAYE:
-```
-curl --header "Content-Type: application/json" \
-  --header "Accept: application/vnd.hmrc.2.0+json" \
-  --request POST \
-  --data '{ "scenario": "EVERYTHING" }' \
-  http://localhost:9689/paye/nino/AA000001A/tax-year/2017-18
-curl -X GET http://localhost:9689/tax-history/AA000001A/2017/all-details
-```
+## Viewing Documentation
+### Locally
+- Run PAYE DES stub and other required services with the script:
+
+    ```
+     ./run_local_preview_documentation.sh
+    ```
+
+- Navigate to the preview page at http://localhost:9680/api-documentation/docs/openapi/preview
+- Enter the full URL path of the OpenAPI specification file with the appropriate port and version:
+
+    ```
+     http://localhost:9689/api/conf/1.0/application.yaml
+    ```
+- Ensure to uncomment the lines [here](https://github.com/hmrc/paye-des-stub/blob/main/conf/application.conf#L40-L43) in case of CORS errors
+
+### On Developer Hub
+Full documentation can be found on the [Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/paye-des-stub).

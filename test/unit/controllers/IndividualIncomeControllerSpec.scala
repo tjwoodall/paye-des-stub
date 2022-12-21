@@ -18,24 +18,23 @@ package unit.controllers
 
 import akka.stream.Materializer
 import common.LogSuppressing
+import controllers.IndividualIncomeController
+import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito.verify
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.OptionValues
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.{IndividualIncomeSummaryService, ScenarioLoader}
 import uk.gov.hmrc.domain.SaUtr
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.payedesstub.controllers.IndividualIncomeController
-import uk.gov.hmrc.payedesstub.models._
-import uk.gov.hmrc.payedesstub.services.{IndividualIncomeSummaryService, ScenarioLoader}
+import uk.gov.hmrc.http.{GatewayTimeoutException, HeaderCarrier}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -81,7 +80,7 @@ class IndividualIncomeControllerSpec
   }
 
   "find" should {
-    "return 200 (Ok) with the happy path response when called with a utr and taxYear that are found" in new Setup {
+    "return 200 (OK) with the happy path response when called with a utr and taxYear that are found" in new Setup {
 
       given(underTest.service.fetch(validUtrString, validTaxYearString))
         .willReturn(Future(Some(IndividualIncome("", "", individualIncomeResponse))))
@@ -92,13 +91,24 @@ class IndividualIncomeControllerSpec
       contentAsJson(result) shouldBe Json.toJson(individualIncomeResponse)
     }
 
-    "return 404 (NotFound) when called with a utr and taxYear that are not found" in new Setup {
+    "return 404 (NOT_FOUND) when called with a utr and taxYear that are not found" in new Setup {
 
       given(underTest.service.fetch(validUtrString, validTaxYearString)).willReturn(Future(None))
 
       val result: Future[Result] = underTest.find(validUtrString, validTaxYearString)(createIndividualIncomeRequest)
 
       status(result) shouldBe NOT_FOUND
+    }
+
+    "return 500 (INTERNAL_SERVER_ERROR) for failure from a GatewayTimeoutException" in new Setup {
+
+      given(underTest.service.fetch(validUtrString, validTaxYearString))
+        .willReturn(Future.failed(new GatewayTimeoutException("Expected timeout")))
+
+      val result: Future[Result] =
+        Future(underTest.find(validUtrString, validTaxYearString)(createIndividualIncomeRequest)).futureValue
+
+      status(result) shouldBe INTERNAL_SERVER_ERROR
     }
   }
 
@@ -142,6 +152,20 @@ class IndividualIncomeControllerSpec
       val result: Future[Result] = underTest.create(utr, taxYear)(createSummaryRequest("HAPPY_PATH_1"))
 
       status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
+
+    "return 406 (NOT_ACCEPTABLE) for an invalid accept header" in new Setup {
+
+      given(underTest.scenarioLoader.loadScenario[IndividualIncomeResponse](anyString, anyString)(any()))
+        .willReturn(Future.successful(individualIncomeResponse))
+      given(underTest.service.create(anyString, anyString, any[IndividualIncomeResponse]))
+        .willReturn(Future.successful(individualIncome))
+
+      val result: Future[Result] = Future(
+        underTest.create(utr, taxYear)(emptyRequest.withHeaders("Accept" -> "application/vnd.hmrc.0.9+json"))
+      ).futureValue
+
+      status(result) shouldBe NOT_ACCEPTABLE
     }
 
     "return a bad request when the scenario is invalid" in new Setup {
