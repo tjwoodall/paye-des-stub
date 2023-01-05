@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import controllers.IndividualTaxController
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
+import org.mockito.MockitoSugar
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.OptionValues
-import org.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
@@ -49,7 +49,7 @@ class IndividualTaxControllerSpec
     with LogSuppressing {
 
   trait Setup {
-    implicit lazy val materializer: Materializer = fakeApplication.materializer
+    implicit lazy val materializer: Materializer = fakeApplication().materializer
     implicit val hc: HeaderCarrier               = HeaderCarrier()
 
     def createIndividualTaxRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

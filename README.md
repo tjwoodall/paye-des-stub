@@ -36,7 +36,7 @@ API microservices which this stubs behaviour for are:
 
 ## Running the tests
 
-```
+```bash
 ./run_all_tests.sh
 ```
 
@@ -45,7 +45,7 @@ API microservices which this stubs behaviour for are:
 First, make sure you have mongo running locally
 
 To run the service locally on port `9689`:
-```
+```bash
 ./run_local.sh
 ```
 
@@ -93,7 +93,7 @@ curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/t
 ### Locally
 - Run PAYE DES stub and other required services with the script:
 
-    ```
+    ```bash
      ./run_local_preview_documentation.sh
     ```
 
