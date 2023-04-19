@@ -17,7 +17,6 @@
 package unit.controllers
 
 import akka.stream.Materializer
-import common.LogSuppressing
 import controllers.IndividualTaxController
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
@@ -45,8 +44,7 @@ class IndividualTaxControllerSpec
     with OptionValues
     with MockitoSugar
     with ScalaFutures
-    with GuiceOneAppPerSuite
-    with LogSuppressing {
+    with GuiceOneAppPerSuite {
 
   trait Setup {
     implicit lazy val materializer: Materializer = fakeApplication().materializer

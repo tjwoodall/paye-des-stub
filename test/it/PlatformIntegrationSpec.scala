@@ -17,7 +17,6 @@
 package it
 
 import akka.stream.Materializer
-import common.LogSuppressing
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -43,8 +42,7 @@ class PlatformIntegrationSpec
     with Matchers
     with OptionValues
     with ScalaFutures
-    with GuiceOneAppPerTest
-    with LogSuppressing {
+    with GuiceOneAppPerTest {
   implicit def mat: Materializer = app.injector.instanceOf[Materializer]
 
   override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()

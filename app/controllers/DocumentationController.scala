@@ -16,18 +16,16 @@
 
 package controllers
 
-import config.ApplicationConfig
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import views.txt
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 @Singleton
-class DocumentationController @Inject() (appConfig: ApplicationConfig, assets: Assets, cc: ControllerComponents)
-    extends BackendController(cc) {
+class DocumentationController @Inject() (assets: Assets, cc: ControllerComponents) extends BackendController(cc) {
 
   def definition: Action[AnyContent] = Action {
-    Ok(txt.definition(appConfig.access)).withHeaders(CONTENT_TYPE -> JSON)
+    Ok(txt.definition()).withHeaders(CONTENT_TYPE -> JSON)
   }
 
   def specification(version: String, file: String): Action[AnyContent] =

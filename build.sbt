@@ -1,6 +1,4 @@
-import _root_.play.sbt.routes.RoutesKeys.routesImport
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 lazy val appName = "paye-des-stub"
 
@@ -12,7 +10,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(Test / testOptions := Seq(Tests.Filter(unitFilter)))
   .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(inConfig(IntegrationTest)(Defaults.itSettings))
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
@@ -21,11 +19,9 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.13.10",
     // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
     libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
-    publishingSettings,
     retrieveManaged := true,
     routesImport += "controllers.Binders._",
     PlayKeys.playDefaultPort := 9689,
-    Test / javaOptions += "-Dconfig.resource=test.application.conf",
     Test / fork := false,
     IntegrationTest / parallelExecution := false,
     IntegrationTest / testOptions := Seq(Tests.Filter(itTestFilter)),

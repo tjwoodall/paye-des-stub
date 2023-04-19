@@ -82,6 +82,6 @@ class IndividualEmploymentSpec extends BaseSpec {
   override protected def beforeEach(): Unit = {
     val repository = app.injector.instanceOf[IndividualEmploymentRepository]
     result(repository.collection.drop().toFuture(), timeout)
-    result(repository.ensureIndexes, timeout)
+    result(repository.ensureIndexes(), timeout)
   }
 }

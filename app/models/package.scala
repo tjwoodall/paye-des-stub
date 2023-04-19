@@ -41,6 +41,4 @@ package object models {
   implicit val formatIndividualIncome: OFormat[IndividualIncome]         = Json.format[IndividualIncome]
   implicit val formatIndividualTax: OFormat[IndividualTax]               = Json.format[IndividualTax]
   implicit val formatIndividualBenefits: OFormat[IndividualBenefits]     = Json.format[IndividualBenefits]
-
-  implicit val apiAccessFmt: OFormat[APIAccess] = Json.format[APIAccess]
 }

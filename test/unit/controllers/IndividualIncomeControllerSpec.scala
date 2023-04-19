@@ -17,7 +17,6 @@
 package unit.controllers
 
 import akka.stream.Materializer
-import common.LogSuppressing
 import controllers.IndividualIncomeController
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
@@ -45,7 +44,6 @@ class IndividualIncomeControllerSpec
     with MockitoSugar
     with OptionValues
     with GuiceOneServerPerSuite
-    with LogSuppressing
     with ScalaFutures {
 
   trait Setup {
