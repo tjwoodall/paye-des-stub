@@ -16,7 +16,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     scalaSettings,
     majorVersion := 0,
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.11",
     // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
     libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
     retrieveManaged := true,
