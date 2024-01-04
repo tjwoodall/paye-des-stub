@@ -102,7 +102,7 @@ curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/t
     ```
      http://localhost:9689/api/conf/1.0/application.yaml
     ```
-- Ensure to uncomment the lines [here](https://github.com/hmrc/paye-des-stub/blob/main/conf/application.conf#L21-L25) in case of CORS errors
+- Ensure to uncomment the lines [here](https://github.com/hmrc/paye-des-stub/blob/main/conf/application.conf#L22-L25) in case of CORS errors
 
 ### On Developer Hub
 Full documentation can be found on the [Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/paye-des-stub).
