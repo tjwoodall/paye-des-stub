@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package it
-
-import it.helpers.BaseSpec
+import helpers.BaseSpec
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
+import play.api.libs.ws.StandaloneWSRequest
 import repositories.IndividualEmploymentRepository
 
 import scala.concurrent.Await.result
@@ -29,7 +28,7 @@ class IndividualEmploymentSpec extends BaseSpec {
       val response = fetchIndividualEmploymentData("1111111111", "2016-17")
 
       Then("The response should indicate that no data was found")
-      response.code shouldBe NOT_FOUND
+      response.status shouldBe NOT_FOUND
     }
 
     Scenario("Employment summary data can be primed") {
@@ -37,7 +36,7 @@ class IndividualEmploymentSpec extends BaseSpec {
       val response = primeIndividualEmploymentData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
       Then("The response should indicate that the summary has been created")
-      response.code shouldBe CREATED
+      response.status shouldBe CREATED
     }
 
     Scenario(
@@ -47,13 +46,13 @@ class IndividualEmploymentSpec extends BaseSpec {
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", "{}")
 
       Then("The response should contain individual employment data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request employment data for a given utr and taxYear")
       val fetchResponse = fetchIndividualEmploymentData("1111111111", "2016")
 
       And("The response should contain individual employment summary data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
 
     Scenario(
@@ -63,20 +62,24 @@ class IndividualEmploymentSpec extends BaseSpec {
       val primeResponse = primeIndividualEmploymentData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 
       Then("The response should contain individual employment summary data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request employment data for a given utr and taxYear")
       val fetchResponse = fetchIndividualEmploymentData("1111111111", "2016")
 
       And("The response should contain individual employment summary data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
   }
 
-  private def primeIndividualEmploymentData(utr: String, taxYear: String, payload: String) =
+  private def primeIndividualEmploymentData(
+    utr: String,
+    taxYear: String,
+    payload: String
+  ): StandaloneWSRequest#Self#Response =
     postEndpoint(s"sa/$utr/employments/annual-summary/$taxYear", payload)
 
-  private def fetchIndividualEmploymentData(utr: String, taxYear: String) =
+  private def fetchIndividualEmploymentData(utr: String, taxYear: String): StandaloneWSRequest#Response =
     getEndpoint(s"self-assessment-prepop/individual/$utr/employment-history/tax-year/$taxYear")
 
   override protected def beforeEach(): Unit = {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.util
+package util
 
 import scala.io.Source
 

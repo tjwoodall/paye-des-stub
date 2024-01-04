@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package unit.models
+package models
 
-import models.TaxYear
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
 
-class TaxYearParsingSpec extends AnyWordSpec with Matchers {
-
-  "a valid TaxYear" should {
-    "be transformed and startYr should be 2014" in {
-      TaxYear("2014-15").startYr shouldBe "2014"
-    }
-  }
-
-  "a valid TaxYear" should {
-    "be transformed and startYr should be 2015" in {
-      TaxYear("2015-16").startYr shouldBe "2015"
+class ErrorResponseSpec extends AnyWordSpec with Matchers {
+  "ErrorResponse" should {
+    "be translated to error Json with only the required fields" in {
+      Json.toJson[ErrorResponse](ErrorAcceptHeaderInvalid).toString() shouldBe
+        """{"code":"ACCEPT_HEADER_INVALID","message":"The accept header is missing or invalid"}"""
     }
   }
 

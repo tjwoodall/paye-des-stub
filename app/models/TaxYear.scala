@@ -23,7 +23,6 @@ case class TaxYear(ty: String) {
   if (!TaxYear.isValid(ty)) throw new IllegalArgumentException
 
   val startYr: String = ty.split("-")(0)
-  val endYr: String   = (startYr.toInt + 1).toString
 }
 
 object TaxYear {

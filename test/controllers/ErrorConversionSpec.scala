@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package unit.controllers
+package controllers
 
-import controllers.ErrorConversion
 import models.ErrorResponse
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

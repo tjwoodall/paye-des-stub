@@ -1,42 +1,30 @@
-import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 lazy val appName = "paye-des-stub"
 
-def unitFilter(name: String): Boolean   = name startsWith "unit"
-def itTestFilter(name: String): Boolean = name startsWith "it"
+ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
-  .settings(defaultSettings())
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
-  .settings(Test / testOptions := Seq(Tests.Filter(unitFilter)))
-  .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings))
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
+  .settings(CodeCoverageSettings.settings)
   .settings(
-    scalaSettings,
-    majorVersion := 0,
-    scalaVersion := "2.13.11",
-    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
-    libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
-    retrieveManaged := true,
     routesImport += "controllers.Binders._",
     PlayKeys.playDefaultPort := 9689,
-    Test / fork := false,
-    IntegrationTest / parallelExecution := false,
-    IntegrationTest / testOptions := Seq(Tests.Filter(itTestFilter)),
-    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "test")).value,
-    libraryDependencies ++= AppDependencies(),
-    coverageMinimumStmtTotal := 100,
-    coverageFailOnMinimum := true,
-    coverageExcludedPackages :=
-      "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;live.*;uk.gov.hmrc.BuildInfo;config",
-    addTestReportOption(IntegrationTest, "int-test-reports")
+    libraryDependencies ++= AppDependencies()
   )
 scalacOptions ++= Seq(
   "-Wconf:src=routes/.*:s",
   "-Wconf:cat=unused-imports&src=views/.*:s"
 )
 
-addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test")
+  .settings(itSettings())
+  .settings(libraryDependencies ++= AppDependencies.itDependencies)
+
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt it/Test/scalafmt")
+addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle it/Test/scalastyle")

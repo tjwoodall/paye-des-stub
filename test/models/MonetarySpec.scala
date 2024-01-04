@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package unit.models
+package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.{JsValue, Json, OFormat}
-import models.IndividualResponse.doubleWrite
+import play.api.libs.json.{JsValue, Json}
 
 class MonetarySpec extends AnyWordSpec with Matchers {
 
-  case class Test(d: Double)
-
-  object Test {
-    implicit val format: OFormat[Test] = Json.format[Test]
-  }
-
-  private val json: String => JsValue = (d: String) => Json.parse(s"""{"d":$d}""".stripMargin)
+  private val json: String => JsValue = (stringValue: String) =>
+    Json.parse(s"""{"employerPayeReference":"","taxTakenOffPay":$stringValue}""".stripMargin)
 
   private val m: Map[Double, String] = Map(
     100d     -> "100",
@@ -48,10 +42,10 @@ class MonetarySpec extends AnyWordSpec with Matchers {
   )
 
   "Monetary" should {
-    m.foreach { case (d, s) =>
-      s"be translated from value $d to $s" in {
-        val generatedJson = Json.toJson(Test(d))
-        val expectedJson  = json(s)
+    m.foreach { case (doubleValue, stringValue) =>
+      s"be translated from $doubleValue to $stringValue" in {
+        val generatedJson = Json.toJson(IndividualTaxEmployment("", doubleValue))
+        val expectedJson  = json(stringValue)
         generatedJson shouldBe expectedJson
       }
     }

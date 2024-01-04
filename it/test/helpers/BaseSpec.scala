@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package it.helpers
+package helpers
 
-import org.scalatest._
 import org.scalatest.featurespec.AnyFeatureSpecLike
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
-import scalaj.http.{Http, HttpResponse}
+import play.api.libs.ws.StandaloneWSRequest
 import uk.gov.hmrc.mongo.test.MongoSupport
 
 import java.util.concurrent.TimeUnit
+import scala.concurrent.Await.result
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait BaseSpec
@@ -36,7 +37,8 @@ trait BaseSpec
     with BeforeAndAfterEach
     with Matchers
     with GuiceOneServerPerSuite
-    with GivenWhenThen {
+    with GivenWhenThen
+    with HttpClient {
 
   implicit override lazy val app: Application = GuiceApplicationBuilder()
     .configure(
@@ -52,14 +54,19 @@ trait BaseSpec
   val timeout: FiniteDuration = Duration(timeoutInSeconds, TimeUnit.SECONDS)
   val serviceUrl              = s"http://localhost:$port"
 
-  def getEndpoint(endpoint: String): HttpResponse[String] =
-    Http(s"$serviceUrl/$endpoint").asString
+  def getEndpoint(endpoint: String): StandaloneWSRequest#Response =
+    result(
+      awaitable = get(s"$serviceUrl/$endpoint"),
+      atMost = timeout
+    )
 
-  def postEndpoint(endpoint: String, payload: String): HttpResponse[String] =
-    Http(s"$serviceUrl/$endpoint")
-      .method("POST")
-      .header(HeaderNames.CONTENT_TYPE, "application/json")
-      .header(HeaderNames.ACCEPT, "application/vnd.hmrc.1.0+json")
-      .postData(payload)
-      .asString
+  def postEndpoint(endpoint: String, payload: String): StandaloneWSRequest#Self#Response =
+    result(
+      awaitable = post(
+        s"$serviceUrl/$endpoint",
+        payload,
+        Seq((HeaderNames.CONTENT_TYPE, "application/json"), (HeaderNames.ACCEPT, "application/vnd.hmrc.1.0+json"))
+      ),
+      atMost = timeout
+    )
 }

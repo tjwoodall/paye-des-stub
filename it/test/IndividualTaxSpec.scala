@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package it
-
-import it.helpers.BaseSpec
+import helpers.BaseSpec
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
+import play.api.libs.ws.StandaloneWSRequest
 import repositories.IndividualTaxRepository
 
 import scala.concurrent.Await.result
@@ -29,7 +28,7 @@ class IndividualTaxSpec extends BaseSpec {
       val response = fetchIndividualTaxData("1111111111", "2016-17")
 
       Then("The response should indicate that no data was found")
-      response.code shouldBe NOT_FOUND
+      response.status shouldBe NOT_FOUND
     }
 
     Scenario("Tax summary data can be primed") {
@@ -37,7 +36,7 @@ class IndividualTaxSpec extends BaseSpec {
       val response = primeIndividualTaxData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
       Then("The response should indicate that the summary has been created")
-      response.code shouldBe CREATED
+      response.status shouldBe CREATED
     }
 
     Scenario(
@@ -47,13 +46,13 @@ class IndividualTaxSpec extends BaseSpec {
       val primeResponse = primeIndividualTaxData("1111111111", "2016-17", "{}")
 
       Then("The response should contain individual tax summary data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request tax summary data for a given utr and taxYear")
       val fetchResponse = fetchIndividualTaxData("1111111111", "2016")
 
       And("The response should contain individual tax summary data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
 
     Scenario(
@@ -63,20 +62,20 @@ class IndividualTaxSpec extends BaseSpec {
       val primeResponse = primeIndividualTaxData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 
       Then("The response should contain individual tax summary data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request tax summary data for a given utr and taxYear")
       val fetchResponse = fetchIndividualTaxData("1111111111", "2016")
 
       And("The response should contain individual tax data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
   }
 
-  private def primeIndividualTaxData(utr: String, taxYear: String, payload: String) =
+  private def primeIndividualTaxData(utr: String, taxYear: String, payload: String): StandaloneWSRequest#Self#Response =
     postEndpoint(s"sa/$utr/tax/annual-summary/$taxYear", payload)
 
-  private def fetchIndividualTaxData(utr: String, taxYear: String) =
+  private def fetchIndividualTaxData(utr: String, taxYear: String): StandaloneWSRequest#Response =
     getEndpoint(s"self-assessment-prepop/individual/$utr/tax-summary/tax-year/$taxYear")
 
   override protected def beforeEach(): Unit = {

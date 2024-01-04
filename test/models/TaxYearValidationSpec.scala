@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package unit.models
+package models
 
-import models.TaxYear
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class TaxYearValidationSpec extends AnyWordSpec with Matchers {
 
-  val validTaxYears = Seq("2014-15", "2013-14", "2016-17", "2019-20", "2099-00")
+  val validTaxYears: Seq[String] = Seq("2014-15", "2013-14", "2016-17", "2019-20", "2099-00")
 
-  val invalidTaxYears = Seq("2014", "201314", "2016-1X", "A2014-15", "2015-17", "2013-18")
+  val invalidTaxYears: Seq[String] = Seq("2014", "201314", "2016-1X", "A2014-15", "2015-17", "2013-18")
 
   "isValid" should {
     validTaxYears.foreach { ty =>

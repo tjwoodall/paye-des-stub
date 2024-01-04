@@ -15,9 +15,14 @@
  */
 
 import org.bson.types.ObjectId
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.{Format, JsNumber, Json, OFormat, Writes}
 import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
 package object models {
+  implicit val doubleWrite: Writes[Double] = (value: Double) =>
+    JsNumber(
+      BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
+    )
+
   implicit val formatObjectId: Format[ObjectId] = MongoFormats.objectIdFormat
 
   implicit val createSummaryRequest: OFormat[CreateSummaryRequest] = Json.format[CreateSummaryRequest]
@@ -41,4 +46,5 @@ package object models {
   implicit val formatIndividualIncome: OFormat[IndividualIncome]         = Json.format[IndividualIncome]
   implicit val formatIndividualTax: OFormat[IndividualTax]               = Json.format[IndividualTax]
   implicit val formatIndividualBenefits: OFormat[IndividualBenefits]     = Json.format[IndividualBenefits]
+
 }

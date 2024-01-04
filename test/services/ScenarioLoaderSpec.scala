@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package unit.services
+package services
 
 import models.{IndividualTaxResponse, InvalidScenarioException}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import services.ScenarioLoader
-import unit.util.ResourceLoader._
+import util.ResourceLoader._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

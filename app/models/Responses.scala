@@ -16,8 +16,6 @@
 
 package models
 
-import play.api.libs.json.{JsNumber, Writes}
-
 trait IndividualResponse
 
 case class IndividualBenefitsResponse(employments: List[IndividualBenefitsEmployment]) extends IndividualResponse
@@ -67,12 +65,3 @@ case class ExtendedStateBenefits(
 )
 
 case class Refund(taxRefundedOrSetOff: Double)
-
-object IndividualResponse {
-
-  implicit val doubleWrite: Writes[Double] = (value: Double) =>
-    JsNumber(
-      BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
-    )
-
-}
