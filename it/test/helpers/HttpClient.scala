@@ -37,5 +37,5 @@ trait HttpClient {
     url: String,
     requestBody: String,
     headers: Seq[(String, String)]
-  ): Future[StandaloneWSRequest#Self#Response] = wsClient.url(url).withHttpHeaders(headers: _*).post(requestBody)
+  ): Future[StandaloneWSRequest#Response] = wsClient.url(url).withHttpHeaders(headers: _*).post(requestBody)
 }

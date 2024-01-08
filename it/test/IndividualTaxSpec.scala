@@ -72,7 +72,7 @@ class IndividualTaxSpec extends BaseSpec {
     }
   }
 
-  private def primeIndividualTaxData(utr: String, taxYear: String, payload: String): StandaloneWSRequest#Self#Response =
+  private def primeIndividualTaxData(utr: String, taxYear: String, payload: String): StandaloneWSRequest#Response =
     postEndpoint(s"sa/$utr/tax/annual-summary/$taxYear", payload)
 
   private def fetchIndividualTaxData(utr: String, taxYear: String): StandaloneWSRequest#Response =

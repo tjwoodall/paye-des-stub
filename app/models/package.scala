@@ -15,7 +15,7 @@
  */
 
 import org.bson.types.ObjectId
-import play.api.libs.json.{Format, JsNumber, Json, OFormat, Writes}
+import play.api.libs.json._
 import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
 package object models {
   implicit val doubleWrite: Writes[Double] = (value: Double) =>

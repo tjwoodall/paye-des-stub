@@ -60,7 +60,7 @@ trait BaseSpec
       atMost = timeout
     )
 
-  def postEndpoint(endpoint: String, payload: String): StandaloneWSRequest#Self#Response =
+  def postEndpoint(endpoint: String, payload: String): StandaloneWSRequest#Response =
     result(
       awaitable = post(
         s"$serviceUrl/$endpoint",

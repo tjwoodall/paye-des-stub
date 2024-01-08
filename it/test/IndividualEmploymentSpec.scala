@@ -76,7 +76,7 @@ class IndividualEmploymentSpec extends BaseSpec {
     utr: String,
     taxYear: String,
     payload: String
-  ): StandaloneWSRequest#Self#Response =
+  ): StandaloneWSRequest#Response =
     postEndpoint(s"sa/$utr/employments/annual-summary/$taxYear", payload)
 
   private def fetchIndividualEmploymentData(utr: String, taxYear: String): StandaloneWSRequest#Response =
