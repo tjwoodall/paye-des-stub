@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package it
-
-import it.helpers.BaseSpec
+import helpers.BaseSpec
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
+import play.api.libs.ws.StandaloneWSRequest
 import repositories.IndividualIncomeRepository
 
 import scala.concurrent.Await.result
@@ -29,7 +28,7 @@ class IndividualIncomeSpec extends BaseSpec {
       val response = fetchIndividualIncomeData("1111111111", "2016-17")
 
       Then("The response should indicate that no data was found")
-      response.code shouldBe NOT_FOUND
+      response.status shouldBe NOT_FOUND
     }
 
     Scenario("Income summary data can be primed") {
@@ -37,7 +36,7 @@ class IndividualIncomeSpec extends BaseSpec {
       val response = primeIndividualIncomeData("1111111111", "2016-17", """{ "scenario": "HAPPY_PATH_1" }""")
 
       Then("The response should indicate that the summary has been created")
-      response.code shouldBe CREATED
+      response.status shouldBe CREATED
     }
 
     Scenario(
@@ -47,13 +46,13 @@ class IndividualIncomeSpec extends BaseSpec {
       val primeResponse = primeIndividualIncomeData("1111111111", "2016-17", "{}")
 
       Then("The response should contain individual income data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request income summary data for a given utr and taxYear")
       val fetchResponse = fetchIndividualIncomeData("1111111111", "2016")
 
       And("The response should contain individual income summary data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
 
     Scenario(
@@ -63,20 +62,24 @@ class IndividualIncomeSpec extends BaseSpec {
       val primeResponse = primeIndividualIncomeData("1111111111", "2016-17", """{"scenario":"HAPPY_PATH_1"}""")
 
       Then("The response should contain individual income summary data")
-      primeResponse.code shouldBe CREATED
+      primeResponse.status shouldBe CREATED
 
       And("I request employment data for a given utr and taxYear")
       val fetchResponse = fetchIndividualIncomeData("1111111111", "2016")
 
       And("The response should contain individual income summary data")
-      fetchResponse.code shouldBe OK
+      fetchResponse.status shouldBe OK
     }
   }
 
-  private def primeIndividualIncomeData(utr: String, taxYear: String, payload: String) =
+  private def primeIndividualIncomeData(
+    utr: String,
+    taxYear: String,
+    payload: String
+  ): StandaloneWSRequest#Response =
     postEndpoint(s"sa/$utr/income/annual-summary/$taxYear", payload)
 
-  private def fetchIndividualIncomeData(utr: String, taxYear: String) =
+  private def fetchIndividualIncomeData(utr: String, taxYear: String): StandaloneWSRequest#Response =
     getEndpoint(s"self-assessment-prepop/individual/$utr/income-summary/tax-year/$taxYear")
 
   override protected def beforeEach(): Unit = {

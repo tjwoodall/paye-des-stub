@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package unit.services
+package services
 
 import models.{IndividualTaxResponse, InvalidScenarioException}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import services.ScenarioLoader
-import unit.util.ResourceLoader._
+import util.ResourceLoader._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

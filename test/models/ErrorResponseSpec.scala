@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package unit.util
+package models
 
-import scala.io.Source
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
 
-trait ResourceLoader {
-
-  def loadResource(path: String): String = {
-    val resource = getClass.getResourceAsStream(path)
-    try Source.fromInputStream(resource).mkString
-    finally resource.close()
+class ErrorResponseSpec extends AnyWordSpec with Matchers {
+  "ErrorResponse" should {
+    "be translated to error Json with only the required fields" in {
+      Json.toJson[ErrorResponse](ErrorAcceptHeaderInvalid).toString() shouldBe
+        """{"code":"ACCEPT_HEADER_INVALID","message":"The accept header is missing or invalid"}"""
+    }
   }
-}
 
-object ResourceLoader extends ResourceLoader
+}

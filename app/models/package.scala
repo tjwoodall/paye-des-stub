@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,14 @@
  */
 
 import org.bson.types.ObjectId
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json._
 import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
 package object models {
+  implicit val doubleWrite: Writes[Double] = (value: Double) =>
+    JsNumber(
+      BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
+    )
+
   implicit val formatObjectId: Format[ObjectId] = MongoFormats.objectIdFormat
 
   implicit val createSummaryRequest: OFormat[CreateSummaryRequest] = Json.format[CreateSummaryRequest]
@@ -41,4 +46,5 @@ package object models {
   implicit val formatIndividualIncome: OFormat[IndividualIncome]         = Json.format[IndividualIncome]
   implicit val formatIndividualTax: OFormat[IndividualTax]               = Json.format[IndividualTax]
   implicit val formatIndividualBenefits: OFormat[IndividualBenefits]     = Json.format[IndividualBenefits]
+
 }

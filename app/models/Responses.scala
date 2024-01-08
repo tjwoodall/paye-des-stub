@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 
 package models
-
-import play.api.libs.json.{JsNumber, Writes}
 
 trait IndividualResponse
 
@@ -67,12 +65,3 @@ case class ExtendedStateBenefits(
 )
 
 case class Refund(taxRefundedOrSetOff: Double)
-
-object IndividualResponse {
-
-  implicit val doubleWrite: Writes[Double] = (value: Double) =>
-    JsNumber(
-      BigDecimal(value).setScale(2, BigDecimal.RoundingMode.FLOOR)
-    )
-
-}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package unit.controllers
+package controllers
 
-import akka.stream.Materializer
-import controllers.IndividualIncomeController
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
@@ -47,8 +45,7 @@ class IndividualIncomeControllerSpec
     with ScalaFutures {
 
   trait Setup {
-    implicit lazy val materializer: Materializer = fakeApplication().materializer
-    implicit val hc: HeaderCarrier               = HeaderCarrier()
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val createIndividualIncomeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 

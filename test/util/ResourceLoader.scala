@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package unit.models
+package util
 
-import models.TaxYear
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import scala.io.Source
 
-class TaxYearParsingSpec extends AnyWordSpec with Matchers {
+trait ResourceLoader {
 
-  "a valid TaxYear" should {
-    "be transformed and startYr should be 2014" in {
-      TaxYear("2014-15").startYr shouldBe "2014"
-    }
+  def loadResource(path: String): String = {
+    val resource = getClass.getResourceAsStream(path)
+    try Source.fromInputStream(resource).mkString
+    finally resource.close()
   }
-
-  "a valid TaxYear" should {
-    "be transformed and startYr should be 2015" in {
-      TaxYear("2015-16").startYr shouldBe "2015"
-    }
-  }
-
 }
+
+object ResourceLoader extends ResourceLoader

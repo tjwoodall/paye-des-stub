@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ case class TaxYear(ty: String) {
   if (!TaxYear.isValid(ty)) throw new IllegalArgumentException
 
   val startYr: String = ty.split("-")(0)
-  val endYr: String   = (startYr.toInt + 1).toString
 }
 
 object TaxYear {
