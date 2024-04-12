@@ -35,14 +35,14 @@ case class IndividualTaxResponse(
 
 case class IndividualBenefitsEmployment(
   employerPayeReference: String,
-  companyCarsAndVansBenefit: Double,
-  fuelForCompanyCarsAndVansBenefit: Double,
-  privateMedicalDentalInsurance: Double,
-  vouchersCreditCardsExcessMileageAllowance: Double,
-  goodsEtcProvidedByEmployer: Double,
-  accommodationProvidedByEmployer: Double,
-  otherBenefits: Double,
-  expensesPaymentsReceived: Double
+  companyCarsAndVansBenefit: Option[Double],
+  fuelForCompanyCarsAndVansBenefit: Option[Double],
+  privateMedicalDentalInsurance: Option[Double],
+  vouchersCreditCardsExcessMileageAllowance: Option[Double],
+  goodsEtcProvidedByEmployer: Option[Double],
+  accommodationProvidedByEmployer: Option[Double],
+  otherBenefits: Option[Double],
+  expensesPaymentsReceived: Option[Double]
 )
 
 case class IndividualTaxEmployment(employerPayeReference: String, taxTakenOffPay: Double)

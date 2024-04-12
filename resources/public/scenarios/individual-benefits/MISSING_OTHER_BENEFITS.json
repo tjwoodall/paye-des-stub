@@ -1,0 +1,14 @@
+{
+  "employments": [
+    {
+      "employerPayeReference": "123/AB456",
+      "companyCarsAndVansBenefit": 10,
+      "fuelForCompanyCarsAndVansBenefit": 10,
+      "privateMedicalDentalInsurance": 10,
+      "vouchersCreditCardsExcessMileageAllowance": 10,
+      "goodsEtcProvidedByEmployer": 10,
+      "accommodationProvidedByEmployer": 10,
+      "expensesPaymentsReceived": 10
+    }
+  ]
+}

@@ -16,15 +16,15 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import models._
 import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
-import models._
 import services.{IndividualBenefitsSummaryService, ScenarioLoader}
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -51,7 +51,7 @@ class IndividualBenefitsController @Inject() (
 
   final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
     (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { implicit request =>
-      withJsonBody[CreateSummaryRequest] { createSummaryRequest =>
+      withJsonBody[CreateSummaryRequest] { createSummaryRequest: CreateSummaryRequest =>
         val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
 
         for {
