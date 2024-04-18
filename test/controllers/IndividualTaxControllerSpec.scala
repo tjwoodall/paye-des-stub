@@ -63,7 +63,8 @@ class IndividualTaxControllerSpec
     val validTaxYearString                           = "2016-17"
     val utr: SaUtr                                   = SaUtr(validUtrString)
     val taxYear: TaxYear                             = TaxYear(validTaxYearString)
-    val individualTaxResponse: IndividualTaxResponse = IndividualTaxResponse(StateBenefits(0.0, 0.0), Refund(0.0), Nil)
+    val individualTaxResponse: IndividualTaxResponse =
+      IndividualTaxResponse(StateBenefits(Option(0.0), Option(0.0)), Refund(Option(0.0)), Nil)
     val individualTax: IndividualTax                 = IndividualTax("", "", individualTaxResponse)
   }
 
@@ -72,7 +73,15 @@ class IndividualTaxControllerSpec
 
       given(underTest.service.fetch(validUtrString, validTaxYearString))
         .willReturn(
-          Future(Some(IndividualTax("", "", IndividualTaxResponse(StateBenefits(0.0, 0.0), Refund(0.0), Nil))))
+          Future(
+            Some(
+              IndividualTax(
+                "",
+                "",
+                IndividualTaxResponse(StateBenefits(Option(0.0), Option(0.0)), Refund(Option(0.0)), Nil)
+              )
+            )
+          )
         )
 
       val result: Future[Result] =

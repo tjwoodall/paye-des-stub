@@ -55,7 +55,7 @@ case class IndividualEmploymentEmployment(
   offPayrollWorkFlag: Option[Boolean]
 )
 
-case class StateBenefits(otherPensionsAndRetirementAnnuities: Double, incapacityBenefit: Double)
+case class StateBenefits(otherPensionsAndRetirementAnnuities: Option[Double], incapacityBenefit: Option[Double])
 
 case class ExtendedStateBenefits(
   otherPensionsAndRetirementAnnuities: Double,
@@ -64,4 +64,4 @@ case class ExtendedStateBenefits(
   seissNetPaid: Option[Double]
 )
 
-case class Refund(taxRefundedOrSetOff: Double)
+case class Refund(taxRefundedOrSetOff: Option[Double])

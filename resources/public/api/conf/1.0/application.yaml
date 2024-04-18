@@ -401,19 +401,26 @@ components:
           type: number
           description: The amount of Income Tax refunded or set off by HMRC or Jobcentre Plus.
           example: 325
-    scenario:
+    firstScenario:
+      title: firstScenario
       enum:
         - HAPPY_PATH_1
       type: string
       description: Standard happy path test scenario (default)
+    secondScenario:
+      title: secondScenario
+      enum:
+        - HAPPY_PATH_2
+      type: string
+      description: Happy path test scenario with only mandatory fields
     individualPayeTestSupportSaBenefitsAnnualSummaryRequest:
       title: individualPayeTestSupportSaBenefitsAnnualSummaryRequest
       type: object
       properties:
         scenario:
           allOf:
-          - $ref: '#/components/schemas/scenario'
-          description: The scenario to create test data for
+          - $ref: '#/components/schemas/firstScenario'
+          description: The scenario to create test data for Individual Benefits
       description: Create Individual Benefits summary test data request
     individualPayeTestSupportSaBenefitsAnnualSummaryResponse:
       title: individualPayeTestSupportSaBenefitsAnnualSummaryResponse
@@ -433,8 +440,8 @@ components:
       properties:
         scenario:
           allOf:
-          - $ref: '#/components/schemas/scenario'
-          description: The scenario to create test data for
+          - $ref: '#/components/schemas/firstScenario'
+          description: The scenario to create test data for Individual Employment
       description: Create Individual Employment summary test data request
     individualPayeTestSupportSaEmploymentsAnnualSummaryResponse:
       title: IndividualPayeTestSupportSaEmploymentsAnnualSummaryResponse
@@ -454,8 +461,8 @@ components:
       properties:
         scenario:
           allOf:
-          - $ref: '#/components/schemas/scenario'
-          description: The scenario to create test data for
+          - $ref: '#/components/schemas/firstScenario'
+          description: The scenario to create test data for Individual Income
       description: Create Individual Income summary test data request
     individualPayeTestSupportSaIncomeAnnualSummaryResponse:
       title: individualPayeTestSupportSaIncomeAnnualSummaryResponse
@@ -478,9 +485,10 @@ components:
       type: object
       properties:
         scenario:
-          allOf:
-          - $ref: '#/components/schemas/scenario'
-          description: The scenario to create test data for
+          oneOf:
+            - $ref: '#/components/schemas/firstScenario'
+            - $ref: '#/components/schemas/secondScenario'
+          description: The scenario to create test data for Individual Tax
       description: Create Individual Tax summary test data request
     individualPayeTestSupportSaTaxAnnualSummaryResponse:
       title: individualPayeTestSupportSaTaxAnnualSummaryResponse
