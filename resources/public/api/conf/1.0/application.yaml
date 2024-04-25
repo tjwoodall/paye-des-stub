@@ -8,7 +8,7 @@ paths:
   /individual-paye-test-support/sa/{utr}/benefits/annual-summary/{taxYear}:
     post:
       tags:
-      - individual-paye-test-support
+        - individual-paye-test-support
       summary: Create benefits summary test data
       description: Supports the [Individual Benefits API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits) by creating benefits summary test data.
       operationId: createBenefitsSummaryTestData
@@ -31,9 +31,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryRequest'
-            example:
-              scenario: HAPPY_PATH_1
+                - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryRequest'
+            examples:
+              happy-path-1:
+                $ref: '#/components/examples/requestHappyPath1'
+              happy-path-2:
+                $ref: '#/components/examples/requestHappyPath2'
         required: true
       responses:
         '201':
@@ -42,34 +45,19 @@ paths:
             application/json:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryResponse'
-              example:
-                employments:
-                - employerPayeReference: 123/AB456
-                  companyCarsAndVansBenefit: 44
-                  fuelForCompanyCarsAndVansBenefit: 99
-                  privateMedicalDentalInsurance: 64
-                  vouchersCreditCardsExcessMileageAllowance: 80
-                  goodsEtcProvidedByEmployer: 125
-                  accommodationProvidedByEmployer: 375
-                  otherBenefits: 16
-                  expensesPaymentsReceived: 415
-                - employerPayeReference: 456/AB456
-                  companyCarsAndVansBenefit: 50
-                  fuelForCompanyCarsAndVansBenefit: 249
-                  privateMedicalDentalInsurance: 75
-                  vouchersCreditCardsExcessMileageAllowance: 23
-                  goodsEtcProvidedByEmployer: 250
-                  accommodationProvidedByEmployer: 275
-                  otherBenefits: 87
-                  expensesPaymentsReceived: 265
+                  - $ref: '#/components/schemas/individualPayeTestSupportSaBenefitsAnnualSummaryResponse'
+              examples:
+                happy-path-1:
+                  $ref: '#/components/examples/benefitsResponseHappyPath1'
+                happy-path-2:
+                  $ref: '#/components/examples/benefitsResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: []
+        - application-restricted: [ ]
   /individual-paye-test-support/sa/{utr}/employments/annual-summary/{taxYear}:
     post:
       tags:
-      - individual-paye-test-support
+        - individual-paye-test-support
       summary: Create employment history test data
       description: Supports the [Individual Employment API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-employment) by creating employment history test data.
       operationId: createEmploymentHistoryTestData
@@ -92,9 +80,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryRequest'
-            example:
-              scenario: HAPPY_PATH_1
+                - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryRequest'
+            examples:
+              happy-path-1:
+                $ref: '#/components/examples/requestHappyPath1'
+              happy-path-2:
+                $ref: '#/components/examples/requestHappyPath2'
         required: true
       responses:
         '201':
@@ -103,22 +94,19 @@ paths:
             application/json:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryResponse'
-              example:
-                employments:
-                - employerPayeReference: 123/AB456
-                  employerName: Company XYZ
-                  offPayrollWorkFlag: true
-                - employerPayeReference: 456/AB456
-                  employerName: Company ABC
-                  offPayrollWorkFlag: false
+                  - $ref: '#/components/schemas/individualPayeTestSupportSaEmploymentsAnnualSummaryResponse'
+              examples:
+                happy-path-1:
+                  $ref: '#/components/examples/employmentsResponseHappyPath1'
+                happy-path-2:
+                  $ref: '#/components/examples/employmentsResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: []
+        - application-restricted: [ ]
   /individual-paye-test-support/sa/{utr}/income/annual-summary/{taxYear}:
     post:
       tags:
-      - individual-paye-test-support
+        - individual-paye-test-support
       summary: Create annual income summary test data
       description: Supports the [Individual Income API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-income) by creating annual income test data.
       operationId: createAnnualIncomeSummaryTestData
@@ -141,9 +129,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryRequest'
-            example:
-              scenario: HAPPY_PATH_1
+                - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryRequest'
+            examples:
+              happy-path-1:
+                $ref: '#/components/examples/requestHappyPath1'
+              happy-path-2:
+                $ref: '#/components/examples/requestHappyPath2'
         required: true
       responses:
         '201':
@@ -152,25 +143,19 @@ paths:
             application/json:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryResponse'
-              example:
-                pensionsAnnuitiesAndOtherStateBenefits:
-                  otherPensionsAndRetirementAnnuities: 36.5
-                  incapacityBenefit: 980.45
-                  jobseekersAllowance: 89.99
-                  seissNetPaid: 55.55
-                employments:
-                - employerPayeReference: 123/AB456
-                  payFromEmployment: 22500
-                - employerPayeReference: 456/AB456
-                  payFromEmployment: 8650
+                  - $ref: '#/components/schemas/individualPayeTestSupportSaIncomeAnnualSummaryResponse'
+              examples:
+                happy-path-1:
+                  $ref: '#/components/examples/incomeResponseHappyPath1'
+                happy-path-2:
+                  $ref: '#/components/examples/incomeResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: []
+        - application-restricted: [ ]
   /individual-paye-test-support/sa/{utr}/tax/annual-summary/{taxYear}:
     post:
       tags:
-      - individual-paye-test-support
+        - individual-paye-test-support
       summary: Create tax summary test data
       description: Supports the [Individual Tax API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-tax) by creating annual tax test data.
       operationId: createTaxSummaryTestData
@@ -193,9 +178,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryRequest'
-            example:
-              scenario: HAPPY_PATH_1
+                - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryRequest'
+            examples:
+              happy-path-1:
+                $ref: '#/components/examples/requestHappyPath1'
+              happy-path-2:
+                $ref: '#/components/examples/requestHappyPath2'
         required: true
       responses:
         '201':
@@ -204,22 +192,109 @@ paths:
             application/json:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryResponse'
-              example:
-                pensionsAnnuitiesAndOtherStateBenefits:
-                  otherPensionsAndRetirementAnnuities: 36.5
-                  incapacityBenefit: 980.45
-                refunds:
-                  taxRefundedOrSetOff: 325
-                employments:
-                - employerPayeReference: 123/AB456
-                  taxTakenOffPay: 890.35
-                - employerPayeReference: 456/AB456
-                  taxTakenOffPay: 224.99
+                  - $ref: '#/components/schemas/individualPayeTestSupportSaTaxAnnualSummaryResponse'
+              examples:
+                happy-path-1:
+                  $ref: '#/components/examples/taxResponseHappyPath1'
+                happy-path-2:
+                  $ref: '#/components/examples/taxResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: []
+        - application-restricted: [ ]
 components:
+  examples:
+    requestHappyPath1:
+      description: Payload for scenario HAPPY_PATH_1
+      value:
+        scenario: HAPPY_PATH_1
+    requestHappyPath2:
+      description: Payload for scenario HAPPY_PATH_2
+      value:
+        scenario: HAPPY_PATH_2
+    benefitsResponseHappyPath1:
+      description: Response for scenario HAPPY_PATH_1 with all fields present
+      value:
+        employments:
+          - employerPayeReference: 123/AB456
+            companyCarsAndVansBenefit: 44
+            fuelForCompanyCarsAndVansBenefit: 99
+            privateMedicalDentalInsurance: 64
+            vouchersCreditCardsExcessMileageAllowance: 80
+            goodsEtcProvidedByEmployer: 125
+            accommodationProvidedByEmployer: 375
+            otherBenefits: 16
+            expensesPaymentsReceived: 415
+          - employerPayeReference: 456/AB456
+            companyCarsAndVansBenefit: 50
+            fuelForCompanyCarsAndVansBenefit: 249
+            privateMedicalDentalInsurance: 75
+            vouchersCreditCardsExcessMileageAllowance: 23
+            goodsEtcProvidedByEmployer: 250
+            accommodationProvidedByEmployer: 275
+            otherBenefits: 87
+            expensesPaymentsReceived: 265
+    benefitsResponseHappyPath2:
+      description: Response for scenario HAPPY_PATH_2 with only mandatory fields present
+      value:
+        employments:
+          - employerPayeReference: 123/AB456
+    employmentsResponseHappyPath1:
+      description: Response for scenario HAPPY_PATH_1 with all fields present
+      value:
+        employments:
+          - employerPayeReference: 123/AB456
+            employerName: Company XYZ
+            offPayrollWorkFlag: true
+          - employerPayeReference: 456/AB456
+            employerName: Company ABC
+            offPayrollWorkFlag: false
+    employmentsResponseHappyPath2:
+      description: Response for scenario HAPPY_PATH_2 with only mandatory fields present
+      value:
+        employments:
+          - employerPayeReference: 123/AB456
+            employerName: Company XYZ
+    incomeResponseHappyPath1:
+      description: Response for scenario HAPPY_PATH_1 with all fields present
+      value:
+        pensionsAnnuitiesAndOtherStateBenefits:
+          otherPensionsAndRetirementAnnuities: 36.5
+          incapacityBenefit: 980.45
+          jobseekersAllowance: 89.99
+          seissNetPaid: 55.55
+        employments:
+          - employerPayeReference: 123/AB456
+            payFromEmployment: 22500
+          - employerPayeReference: 456/AB456
+            payFromEmployment: 8650
+    incomeResponseHappyPath2:
+      description: Response for scenario HAPPY_PATH_2 with only mandatory fields present
+      value:
+        pensionsAnnuitiesAndOtherStateBenefits: {}
+        employments:
+          - employerPayeReference: 123/AB456
+            payFromEmployment: 22500
+    taxResponseHappyPath1:
+      description: Response for scenario HAPPY_PATH_1 with all fields present
+      value:
+        pensionsAnnuitiesAndOtherStateBenefits:
+          otherPensionsAndRetirementAnnuities: 36.5
+          incapacityBenefit: 980.45
+        refunds:
+          taxRefundedOrSetOff: 325
+        employments:
+          - employerPayeReference: 123/AB456
+            taxTakenOffPay: 890.35
+          - employerPayeReference: 456/AB456
+            taxTakenOffPay: 224.99
+    taxResponseHappyPath2:
+      description: Response for scenario HAPPY_PATH_2 with only mandatory fields present
+      value:
+        pensionsAnnuitiesAndOtherStateBenefits: { }
+        refunds: { }
+        employments:
+          - employerPayeReference: 111/AAA
+            taxTakenOffPay: 3000
   parameters:
     utr:
       name: utr
@@ -266,12 +341,12 @@ components:
       flows:
         clientCredentials:
           tokenUrl: https://test-api.service.hmrc.gov.uk/oauth/token
-          scopes: {}
+          scopes: { }
   schemas:
     employmentForIndividualBenefits:
       title: employment
       required:
-      - employerPayeReference
+        - employerPayeReference
       type: object
       properties:
         employerPayeReference:
@@ -313,8 +388,8 @@ components:
     employmentForIndividualEmployment:
       title: employment
       required:
-      - employerPayeReference
-      - employerName
+        - employerPayeReference
+        - employerName
       type: object
       properties:
         employerPayeReference:
@@ -332,8 +407,8 @@ components:
     employmentForIndividualIncome:
       title: employment
       required:
-      - employerPayeReference
-      - payFromEmployment
+        - employerPayeReference
+        - payFromEmployment
       type: object
       properties:
         employerPayeReference:
@@ -347,8 +422,8 @@ components:
     employmentForIndividualTax:
       title: employment
       required:
-      - employerPayeReference
-      - taxTakenOffPay
+        - employerPayeReference
+        - taxTakenOffPay
       type: object
       properties:
         employerPayeReference:
@@ -407,6 +482,11 @@ components:
         - HAPPY_PATH_1
       type: string
       description: Standard happy path test scenario (default)
+    scenario:
+      enum:
+        - HAPPY_PATH_1
+      type: string
+      description: Standard happy path test scenario (default)
     secondScenario:
       title: secondScenario
       enum:
@@ -418,8 +498,9 @@ components:
       type: object
       properties:
         scenario:
-          allOf:
-          - $ref: '#/components/schemas/firstScenario'
+          oneOf:
+            - $ref: '#/components/schemas/firstScenario'
+            - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Benefits
       description: Create Individual Benefits summary test data request
     individualPayeTestSupportSaBenefitsAnnualSummaryResponse:
@@ -439,14 +520,15 @@ components:
       type: object
       properties:
         scenario:
-          allOf:
-          - $ref: '#/components/schemas/firstScenario'
+          oneOf:
+            - $ref: '#/components/schemas/firstScenario'
+            - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Employment
       description: Create Individual Employment summary test data request
     individualPayeTestSupportSaEmploymentsAnnualSummaryResponse:
       title: IndividualPayeTestSupportSaEmploymentsAnnualSummaryResponse
       required:
-      - employments
+        - employments
       type: object
       properties:
         employments:
@@ -460,20 +542,22 @@ components:
       type: object
       properties:
         scenario:
-          allOf:
-          - $ref: '#/components/schemas/firstScenario'
+          oneOf:
+            - $ref: '#/components/schemas/firstScenario'
+            - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Income
       description: Create Individual Income summary test data request
     individualPayeTestSupportSaIncomeAnnualSummaryResponse:
       title: individualPayeTestSupportSaIncomeAnnualSummaryResponse
       required:
-      - pensionsAnnuitiesAndOtherStateBenefits
+        - pensionsAnnuitiesAndOtherStateBenefits
+        - employments
       type: object
       properties:
         pensionsAnnuitiesAndOtherStateBenefits:
           allOf:
-          - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualIncome'
-          - description: Income from pensions, annuities and other state benefits.
+            - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualIncome'
+            - description: Income from pensions, annuities and other state benefits.
         employments:
           type: array
           items:
@@ -493,15 +577,15 @@ components:
     individualPayeTestSupportSaTaxAnnualSummaryResponse:
       title: individualPayeTestSupportSaTaxAnnualSummaryResponse
       required:
-      - pensionsAnnuitiesAndOtherStateBenefits
-      - refunds
-      - employments
+        - pensionsAnnuitiesAndOtherStateBenefits
+        - refunds
+        - employments
       type: object
       properties:
         pensionsAnnuitiesAndOtherStateBenefits:
           allOf:
-          - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualTax'
-          - description: Tax deducted from pensions, annuities and other state benefits.
+            - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualTax'
+            - description: Tax deducted from pensions, annuities and other state benefits.
         refunds:
           $ref: '#/components/schemas/refunds'
         employments:

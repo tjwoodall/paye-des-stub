@@ -2,13 +2,13 @@ import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 lazy val appName = "paye-des-stub"
 
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.13"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
-  .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
-  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
+  .disablePlugins(JUnitXmlReportPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .settings(CodeCoverageSettings.settings)
   .settings(
     routesImport += "controllers.Binders._",

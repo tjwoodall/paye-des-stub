@@ -2,14 +2,11 @@ import sbt.Setting
 import scoverage.ScoverageKeys.*
 
 object CodeCoverageSettings {
+
   private val excludedPackages: Seq[String] = Seq(
     "<empty>",
     ".*definition.*",
-    "prod.*",
-    "testOnlyDoNotUseInAppConf.*",
-    "live.*",
-    "uk.gov.hmrc.BuildInfo",
-    "config"
+    ".*Routes.*"
   )
 
   val settings: Seq[Setting[?]] = Seq(

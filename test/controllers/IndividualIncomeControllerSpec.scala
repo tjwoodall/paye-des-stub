@@ -70,7 +70,7 @@ class IndividualIncomeControllerSpec
     val utr: SaUtr                                         = SaUtr(validUtrString)
     val taxYear: TaxYear                                   = TaxYear(validTaxYearString)
     val individualIncomeResponse: IndividualIncomeResponse =
-      IndividualIncomeResponse(ExtendedStateBenefits(0.0, 0.0, 0.0, Some(0.0)), Nil)
+      IndividualIncomeResponse(ExtendedStateBenefits(Some(0.0), Some(0.0), Some(0.0), Some(0.0)), Nil)
     val individualIncome: IndividualIncome                 = IndividualIncome("", "", individualIncomeResponse)
   }
 

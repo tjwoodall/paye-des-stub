@@ -1,12 +1,12 @@
 {
-  "pensionsAnnuitiesAndOtherStateBenefits" : {
-    "otherPensionsAndRetirementAnnuities": 36.50,
+  "pensionsAnnuitiesAndOtherStateBenefits": {
+    "otherPensionsAndRetirementAnnuities": 36.5,
     "incapacityBenefit": 980.45
   },
-  "refunds" : {
-    "taxRefundedOrSetOff": 325.00
+  "refunds": {
+    "taxRefundedOrSetOff": 325
   },
-  "employments" : [
+  "employments": [
     {
       "employerPayeReference": "123/AB456",
       "taxTakenOffPay": 890.35

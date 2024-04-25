@@ -58,9 +58,9 @@ case class IndividualEmploymentEmployment(
 case class StateBenefits(otherPensionsAndRetirementAnnuities: Option[Double], incapacityBenefit: Option[Double])
 
 case class ExtendedStateBenefits(
-  otherPensionsAndRetirementAnnuities: Double,
-  incapacityBenefit: Double,
-  jobseekersAllowance: Double,
+  otherPensionsAndRetirementAnnuities: Option[Double],
+  incapacityBenefit: Option[Double],
+  jobseekersAllowance: Option[Double],
   seissNetPaid: Option[Double]
 )
 
