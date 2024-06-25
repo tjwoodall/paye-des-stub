@@ -19,7 +19,8 @@ package controllers
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
-import org.mockito.MockitoSugar
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -39,7 +40,6 @@ import scala.concurrent.Future
 class IndividualIncomeControllerSpec
     extends AnyWordSpec
     with Matchers
-    with MockitoSugar
     with OptionValues
     with GuiceOneServerPerSuite
     with ScalaFutures {
@@ -50,8 +50,8 @@ class IndividualIncomeControllerSpec
     val createIndividualIncomeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
     val underTest = new IndividualIncomeController(
-      mock[ScenarioLoader],
-      mock[IndividualIncomeSummaryService],
+      Mockito.mock(classOf[ScenarioLoader]),
+      Mockito.mock(classOf[IndividualIncomeSummaryService]),
       stubControllerComponents()
     )
 

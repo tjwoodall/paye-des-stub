@@ -19,7 +19,8 @@ package controllers
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.BDDMockito.given
-import org.mockito.MockitoSugar
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -40,7 +41,6 @@ class IndividualEmploymentControllerSpec
     extends AnyWordSpecLike
     with Matchers
     with OptionValues
-    with MockitoSugar
     with ScalaFutures
     with GuiceOneAppPerSuite {
 
@@ -51,8 +51,8 @@ class IndividualEmploymentControllerSpec
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
     val underTest                                                              = new IndividualEmploymentController(
-      mock[ScenarioLoader],
-      mock[IndividualEmploymentSummaryService],
+      Mockito.mock(classOf[ScenarioLoader]),
+      Mockito.mock(classOf[IndividualEmploymentSummaryService]),
       stubControllerComponents()
     )
 

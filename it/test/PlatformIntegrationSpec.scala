@@ -25,8 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Mode}
 
-/**
-  * Testcase to verify the capability of integration with the API platform.
+/** Testcase to verify the capability of integration with the API platform.
   *
   * 1a, To expose API's to Third Party Developers, the service needs to make the API definition available under api/definition GET endpoint
   * 1b, The endpoints need to be defined in an application.yaml file for all versions  For all of the endpoints defined documentation will be provided and

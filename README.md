@@ -26,13 +26,6 @@ API microservices which this stubs behaviour for are:
 * individual-income
 * individual-tax
 
-
-## What does this service use?
-
-* datastream (for Audit)
-* Metrics/Grafana
-
-
 ## Running the tests
 
 ```bash

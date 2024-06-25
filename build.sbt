@@ -2,7 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 lazy val appName = "paye-des-stub"
 
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
@@ -24,7 +24,6 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
   .settings(itSettings())
-  .settings(libraryDependencies ++= AppDependencies.itDependencies)
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt it/Test/scalafmt")
 addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle it/Test/scalastyle")
