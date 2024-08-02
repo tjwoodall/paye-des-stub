@@ -15,15 +15,12 @@
  */
 
 import org.apache.pekko.stream.Materializer
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{OptionValues, TestData}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.{Application, Mode}
 
 /** Testcase to verify the capability of integration with the API platform.
   *
@@ -34,25 +31,39 @@ import play.api.{Application, Mode}
   *
   * See: https://confluence.tools.tax.service.gov.uk/display/ApiPlatform/API+Platform+Architecture+with+Flows
   */
-class PlatformIntegrationSpec
-    extends AnyWordSpecLike
-    with Matchers
-    with OptionValues
-    with ScalaFutures
-    with GuiceOneAppPerTest {
+class PlatformIntegrationSpec extends AnyWordSpecLike with Matchers with GuiceOneAppPerTest {
   implicit def mat: Materializer = app.injector.instanceOf[Materializer]
-
-  override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()
-    .configure("run.mode" -> "Test")
-    .in(Mode.Test)
-    .build()
 
   "paye-des-stub" should {
 
     "provide definition endpoint" in {
+      val description: String = "Lets you set up test data for the Individual PAYE APIs: " +
+        "Individual PAYE, Individual Benefits, Individual Employment, Individual Income and Individual Tax."
+
+      val apiDefinitionJson: JsValue = Json.parse(
+        s"""
+          |{
+          |    "scopes": [],
+          |    "api": {
+          |        "name": "Individual PAYE Test Support",
+          |        "description": "$description",
+          |        "context": "individual-paye-test-support",
+          |        "isTestSupport": true,
+          |        "versions": [
+          |            {
+          |                "version": "1.0",
+          |                "status": "BETA",
+          |                "endpointsEnabled": true
+          |            }
+          |        ]
+          |    }
+          |}
+        """.stripMargin
+      )
+
       val result = route(app, FakeRequest(GET, "/api/definition")).get
       status(result)        shouldBe OK
-      contentAsString(result) should include("\"name\": \"Individual PAYE Test Support\"")
+      contentAsJson(result) shouldBe apiDefinitionJson
     }
 
     "provide yaml documentation" in {
