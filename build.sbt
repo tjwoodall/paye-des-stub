@@ -2,7 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 lazy val appName = "paye-des-stub"
 
-ThisBuild / scalaVersion := "2.13.14"
+ThisBuild / scalaVersion := "3.4.2"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
@@ -15,10 +15,7 @@ lazy val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := 9689,
     libraryDependencies ++= AppDependencies()
   )
-scalacOptions ++= Seq(
-  "-Wconf:src=routes/.*:s",
-  "-Wconf:cat=unused-imports&src=views/.*:s"
-)
+scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all"))
 
 lazy val it = project
   .enablePlugins(PlayScala)

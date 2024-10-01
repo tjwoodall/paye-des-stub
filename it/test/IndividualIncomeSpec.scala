@@ -15,6 +15,7 @@
  */
 
 import helpers.BaseSpec
+import org.mongodb.scala.SingleObservableFuture
 import play.api.http.Status.{CREATED, NOT_FOUND, OK}
 import play.api.libs.ws.StandaloneWSRequest
 import repositories.IndividualIncomeRepository

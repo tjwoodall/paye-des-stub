@@ -19,6 +19,7 @@ package helpers
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.StandaloneWSRequest
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 
 import scala.concurrent.Future
 
@@ -30,12 +31,12 @@ trait HttpClient {
   def get(url: String, headers: Seq[(String, String)] = Seq()): Future[StandaloneWSRequest#Response] =
     wsClient
       .url(url)
-      .withHttpHeaders(headers: _*)
+      .withHttpHeaders(headers*)
       .get()
 
   def post(
     url: String,
     requestBody: String,
     headers: Seq[(String, String)]
-  ): Future[StandaloneWSRequest#Response] = wsClient.url(url).withHttpHeaders(headers: _*).post(requestBody)
+  ): Future[StandaloneWSRequest#Response] = wsClient.url(url).withHttpHeaders(headers*).post(requestBody)
 }

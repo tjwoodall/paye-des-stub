@@ -18,7 +18,7 @@ package controllers
 
 import models._
 import org.mockito.ArgumentMatchers.{any, anyString}
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.`given`
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.scalatest.OptionValues
@@ -50,7 +50,7 @@ class IndividualTaxControllerSpec
     def createIndividualTaxRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
-    val underTest                                                       =
+    val underTest =
       new IndividualTaxController(
         Mockito.mock(classOf[ScenarioLoader]),
         Mockito.mock(classOf[IndividualTaxSummaryService]),
@@ -75,7 +75,7 @@ class IndividualTaxControllerSpec
   "find" should {
     "return 200 (OK) with the happy path response when called with a utr and taxYear that are found" in new Setup {
 
-      given(underTest.service.fetch(validUtrString, validTaxYearString))
+      `given`(underTest.service.fetch(validUtrString, validTaxYearString))
         .willReturn(
           Future(
             Some(
@@ -97,7 +97,7 @@ class IndividualTaxControllerSpec
 
     "return 404 (NOT_FOUND) when called with a utr and taxYear that are not found" in new Setup {
 
-      given(underTest.service.fetch(validUtrString, validTaxYearString)).willReturn(Future(None))
+      `given`(underTest.service.fetch(validUtrString, validTaxYearString)).willReturn(Future(None))
 
       val result: Future[Result] =
         Future(underTest.find(validUtrString, validTaxYearString)(createIndividualTaxRequest)).futureValue
@@ -107,7 +107,7 @@ class IndividualTaxControllerSpec
 
     "return 500 (INTERNAL_SERVER_ERROR) for failure from a GatewayTimeoutException" in new Setup {
 
-      given(underTest.service.fetch(validUtrString, validTaxYearString))
+      `given`(underTest.service.fetch(validUtrString, validTaxYearString))
         .willReturn(Future.failed(new GatewayTimeoutException("Expected timeout")))
 
       val result: Future[Result] =
@@ -121,9 +121,9 @@ class IndividualTaxControllerSpec
 
     "return a created response and store the Individual Tax summary" in new Setup {
 
-      given(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(any()))
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
         .willReturn(Future.successful(individualTaxResponse))
-      given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.successful(individualTax))
 
       val result: Future[Result] =
@@ -136,9 +136,9 @@ class IndividualTaxControllerSpec
 
     "default to Happy Path Scenario 1 when no scenario is specified in the request" in new Setup {
 
-      given(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(any()))
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
         .willReturn(Future.successful(individualTaxResponse))
-      given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.successful(individualTax))
 
       val result: Future[Result] = Future(underTest.create(utr, taxYear)(emptyRequest)).futureValue
@@ -150,9 +150,9 @@ class IndividualTaxControllerSpec
 
     "return an invalid server error when the repository fails" in new Setup {
 
-      given(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(any()))
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
         .willReturn(Future.successful(individualTaxResponse))
-      given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.failed(new RuntimeException("expected test error")))
 
       val result: Future[Result] =
@@ -163,9 +163,9 @@ class IndividualTaxControllerSpec
 
     "return 406 (NOT_ACCEPTABLE) for an invalid accept header" in new Setup {
 
-      given(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(any()))
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
         .willReturn(Future.successful(individualTaxResponse))
-      given(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
         .willReturn(Future.successful(individualTax))
 
       val result: Future[Result] = Future(
@@ -177,7 +177,7 @@ class IndividualTaxControllerSpec
 
     "return a bad request when the scenario is invalid" in new Setup {
 
-      given(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(any()))
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
         .willReturn(Future.failed(new InvalidScenarioException("INVALID")))
 
       val result: Future[Result] = Future(underTest.create(utr, taxYear)(createSummaryRequest("INVALID"))).futureValue

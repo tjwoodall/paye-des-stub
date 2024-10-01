@@ -50,8 +50,9 @@ class IndividualBenefitsController @Inject() (
   }
 
   final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
-    (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { implicit request =>
-      withJsonBody[CreateSummaryRequest] { createSummaryRequest: CreateSummaryRequest =>
+    (cc.actionBuilder andThen validateAcceptHeader("1.0")).async(parse.json) { request =>
+      given Request[JsValue] = request
+      withJsonBody[CreateSummaryRequest] { (createSummaryRequest: CreateSummaryRequest) =>
         val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
 
         for {

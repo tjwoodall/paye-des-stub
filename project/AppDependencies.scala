@@ -1,7 +1,7 @@
 import sbt.*
 
 object AppDependencies {
-  private val bootstrapPlayVersion = "9.1.0"
+  private val bootstrapPlayVersion = "9.5.0"
   private val hmrcMongoPlayVersion = "2.2.0"
 
   private val compile: Seq[ModuleID] = Seq(
@@ -15,6 +15,6 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-30" % hmrcMongoPlayVersion
   ).map(_ % Test)
 
-  def apply(): Seq[ModuleID]      = compile ++ test
+  def apply(): Seq[ModuleID] = compile ++ test
 
 }

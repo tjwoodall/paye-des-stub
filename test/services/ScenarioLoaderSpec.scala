@@ -16,10 +16,11 @@
 
 package services
 
-import models.{IndividualTaxResponse, InvalidScenarioException}
+import models.*
+import org.scalatest.concurrent.Futures.whenReady
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import util.ResourceLoader._
+import util.ResourceLoader.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -33,7 +34,7 @@ class ScenarioLoaderSpec extends AnyWordSpec with Matchers {
     "loadScenario" should {
       "return Happy Path when valid scenario is supplied" in {
         val result = scenarioLoader.loadScenario[IndividualTaxResponse]("individual-tax", "HAPPY_PATH_1")
-        result.map(_ shouldBe happyPath)
+        result.map(r => r.toString shouldBe happyPath)
       }
 
       "return InvalidScenarioException when invalid scenario is supplied" in {

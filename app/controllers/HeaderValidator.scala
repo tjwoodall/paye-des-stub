@@ -54,5 +54,5 @@ trait HeaderValidator extends Results with ErrorConversion {
   }
 
   def validateAcceptHeader(versions: String*): ActionFilter[Request] =
-    validateAction(acceptHeaderValidationRules(versions: _*))
+    validateAction(acceptHeaderValidationRules(versions*))
 }

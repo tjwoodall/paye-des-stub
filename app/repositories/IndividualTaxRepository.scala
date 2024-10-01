@@ -24,6 +24,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.mongo.MongoComponent
 
 import scala.concurrent.{ExecutionContext, Future}
+import org.mongodb.scala.{ObservableFuture, SingleObservableFuture}
 
 @Singleton
 class IndividualTaxRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
