@@ -1,5 +1,6 @@
 @(apiStatus: String)
 {
+  "scopes":[],
   "api": {
     "name": "Individual PAYE Test Support",
     "description": "Lets you set up test data for the Individual PAYE APIs: Individual PAYE, Individual Benefits, Individual Employment, Individual Income and Individual Tax.",
