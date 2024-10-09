@@ -43,7 +43,6 @@ class PlatformIntegrationSpec extends AnyWordSpecLike with Matchers with GuiceOn
       val apiDefinitionJson: JsValue = Json.parse(
         s"""
           |{
-          |    "scopes": [],
           |    "api": {
           |        "name": "Individual PAYE Test Support",
           |        "description": "$description",
