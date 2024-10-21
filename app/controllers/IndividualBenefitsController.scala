@@ -16,10 +16,10 @@
 
 package controllers
 
-import models._
-import play.api.Logger
-import play.api.libs.json._
-import play.api.mvc._
+import models.*
+import play.api.libs.json.*
+import play.api.mvc.*
+import play.api.{Logger, Logging}
 import services.{IndividualBenefitsSummaryService, ScenarioLoader}
 import uk.gov.hmrc.domain.SaUtr
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -33,18 +33,17 @@ class IndividualBenefitsController @Inject() (
   val service: IndividualBenefitsSummaryService,
   val cc: ControllerComponents
 ) extends BackendController(cc)
-    with HeaderValidator {
+    with HeaderValidator
+    with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
-
-  private val logger = Logger(this.getClass)
 
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
       case Some(result) => Ok(Json.toJson(result.individualBenefitsResponse))
       case _            => NotFound
     } recover { case e =>
-      logger.error("An error occurred while finding test data", e)
+      logger.error("[IndividualBenefitsController][find] An error occurred while finding test data", e)
       InternalServerError
     }
   }
