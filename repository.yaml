@@ -1,6 +1,11 @@
+digital-service: SA Pre-pop / Self Assessment Pre-Population APIs
+description: A service to support stateful sandbox testing in the External Test environment.
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
+type: Service
+service-type: Backend
 test-repositories:
-  - individual-benefits-api-tests
-  - individual-employment-api-tests
-  - individual-income-api-tests
-  - individual-tax-api-tests
+  - sa-pre-pop-api-tests
+  - individual-benefits-performance-test
+  - individual-employment-performance-test
+  - individual-income-performance-test
+  - individual-tax-performance-test

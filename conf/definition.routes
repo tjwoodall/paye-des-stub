@@ -1,2 +1,2 @@
-GET        /api/definition                                  controllers.DocumentationController.definition()
-GET        /api/conf/:version/*file                         controllers.DocumentationController.specification(version, file)
+GET        /api/definition                                  controllers.docs.DocumentationController.definition()
+GET        /api/conf/:version/*file                         controllers.docs.DocumentationController.specification(version, file)
