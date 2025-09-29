@@ -38,7 +38,7 @@ class IndividualIncomeController @Inject() (
 
   final def find(utr: String, taxYear: String): Action[AnyContent] = Action async {
     service.fetch(utr, taxYear) map {
-      case Some(result) => Ok(Json.toJson(result.individualIncomeResponse))
+      case Some(result) => Ok(Json.toJson(result.individualIncomeRespone))
       case _            => NotFound
     } recover { case _ =>
       InternalServerError
