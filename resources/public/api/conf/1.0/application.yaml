@@ -498,7 +498,7 @@ components:
       type: object
       properties:
         scenario:
-          oneOf:
+          anyOf:
             - $ref: '#/components/schemas/firstScenario'
             - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Benefits
@@ -520,7 +520,7 @@ components:
       type: object
       properties:
         scenario:
-          oneOf:
+          anyOf:
             - $ref: '#/components/schemas/firstScenario'
             - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Employment
@@ -542,7 +542,7 @@ components:
       type: object
       properties:
         scenario:
-          oneOf:
+          anyOf:
             - $ref: '#/components/schemas/firstScenario'
             - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Income
@@ -557,7 +557,7 @@ components:
         pensionsAnnuitiesAndOtherStateBenefits:
           allOf:
             - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualIncome'
-            - description: Income from pensions, annuities and other state benefits.
+          description: Income from pensions, annuities and other state benefits.
         employments:
           type: array
           items:
@@ -569,7 +569,7 @@ components:
       type: object
       properties:
         scenario:
-          oneOf:
+          anyOf:
             - $ref: '#/components/schemas/firstScenario'
             - $ref: '#/components/schemas/secondScenario'
           description: The scenario to create test data for Individual Tax
@@ -585,7 +585,7 @@ components:
         pensionsAnnuitiesAndOtherStateBenefits:
           allOf:
             - $ref: '#/components/schemas/pensionsAnnuitiesAndOtherStateBenefitsForIndividualTax'
-            - description: Tax deducted from pensions, annuities and other state benefits.
+          description: Tax deducted from pensions, annuities and other state benefits.
         refunds:
           $ref: '#/components/schemas/refunds'
         employments:
