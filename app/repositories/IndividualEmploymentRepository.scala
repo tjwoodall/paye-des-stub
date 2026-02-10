@@ -17,13 +17,13 @@
 package repositories
 
 import javax.inject.{Inject, Singleton}
-import org.mongodb.scala.model.Filters.*
-import models.*
-import org.mongodb.scala.model.{IndexModel, IndexOptions, Indexes}
+import org.mongodb.scala.model.Filters._
+import models._
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import scala.concurrent.{ExecutionContext, Future}
+import org.mongodb.scala.{ObservableFuture, SingleObservableFuture}
 
 @Singleton
 class IndividualEmploymentRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
@@ -31,12 +31,7 @@ class IndividualEmploymentRepository @Inject() (mongo: MongoComponent)(implicit 
       mongoComponent = mongo,
       collectionName = "individualEmployment",
       domainFormat = formatIndividualEmployment,
-      indexes = Seq(
-        IndexModel(
-          Indexes.ascending("utr", "taxYear"),
-          IndexOptions().name("individual-employment-utr-taxYear").unique(true)
-        )
-      )
+      indexes = Seq.empty
     ) {
 
   def store[T <: IndividualEmployment](individualEmployment: T): Future[T] =
