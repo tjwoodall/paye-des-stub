@@ -16,13 +16,13 @@
 
 package repositories
 
-import org.mongodb.scala.model.Filters._
-import javax.inject.{Inject, Singleton}
-import models._
-import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import models.*
+import org.mongodb.scala.model.*
+import org.mongodb.scala.model.Filters.*
 import uk.gov.hmrc.mongo.MongoComponent
-import org.mongodb.scala.{ObservableFuture, SingleObservableFuture}
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -31,12 +31,30 @@ class IndividualBenefitsRepository @Inject() (mongo: MongoComponent)(implicit ec
       mongoComponent = mongo,
       collectionName = "individualBenefits",
       domainFormat = formatIndividualBenefits,
-      indexes = Seq.empty
+      indexes = Seq(
+        IndexModel(
+          Indexes.ascending("utr", "taxYear"),
+          IndexOptions().name("individual-benefits-utr-taxYear").unique(true)
+        )
+      )
     ) {
 
+  private def filter(utr: String, taxYear: String) =
+    Filters.and(
+      Filters.equal("utr", utr),
+      Filters.equal("taxYear", taxYear)
+    )
+
   def store[T <: IndividualBenefits](individualBenefits: T): Future[T] =
-    collection.insertOne(individualBenefits).toFuture().map(_ => individualBenefits)
+    collection
+      .replaceOne(
+        filter = filter(individualBenefits.utr, individualBenefits.taxYear),
+        replacement = individualBenefits,
+        options = ReplaceOptions().upsert(true)
+      )
+      .toFuture()
+      .map(_ => individualBenefits)
 
   def fetch(utr: String, taxYear: String): Future[Option[IndividualBenefits]] =
-    collection.find(and(equal("utr", utr), equal("taxYear", taxYear))).headOption()
+    collection.find(filter(utr, taxYear)).headOption()
 }
