@@ -17,13 +17,12 @@
 package repositories
 
 import models.*
+import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Filters.{and, equal}
-import org.mongodb.scala.model.{IndexModel, IndexOptions, Indexes}
+import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.mongo.MongoComponent
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,8 +39,21 @@ class IndividualTaxRepository @Inject() (mongo: MongoComponent)(implicit ec: Exe
       )
     ) {
 
-  def store[T <: IndividualTax](IndividualTax: T): Future[T] =
-    collection.insertOne(IndividualTax).toFuture().map(_ => IndividualTax)
+  private def filter(utr: String, taxYear: String) =
+    Filters.and(
+      Filters.equal("utr", utr),
+      Filters.equal("taxYear", taxYear)
+    )
+
+  def store[T <: IndividualTax](individualTax: T): Future[T] =
+    collection
+      .replaceOne(
+        filter = filter(individualTax.utr, individualTax.taxYear),
+        replacement = individualTax,
+        options = ReplaceOptions().upsert(true)
+      )
+      .toFuture()
+      .map(_ => individualTax)
 
   def fetch(utr: String, taxYear: String): Future[Option[IndividualTax]] =
     collection.find(and(equal("utr", utr), equal("taxYear", taxYear))).headOption()
