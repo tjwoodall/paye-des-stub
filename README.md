@@ -51,6 +51,15 @@ curl --header "Content-Type: application/json" \
 curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/benefits/tax-year/2017
 ```
 
+To test the stub endpoints for Child Benefit Entitlement:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/sa/2234567890/child-benefit-entitlement/annual-summary/2017-18
+curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/child-benefit-entitlement/tax-year/2017
+```
 To test the stub endpoint for Individual Employment:
 ```
 curl --header "Content-Type: application/json" \
@@ -80,6 +89,12 @@ curl --header "Content-Type: application/json" \
   http://localhost:9689/sa/2234567890/tax/annual-summary/2017-18
 curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/tax-summary/tax-year/2017
 ```
+
+## STUBBING RESPONSES for Child Benefit Entitlement
+- HAPPY_PATH_1 is a valid non-zero value
+- HAPPY_PATH_2 is a zero value
+- UNHAPPY_PATH_500 will stub to return a 500 response. Replace 500 with whatever other response you wish to stub.
+
 
 ## Viewing Documentation
 ### Locally

@@ -19,6 +19,7 @@ package models
 trait IndividualResponse
 
 case class IndividualBenefitsResponse(employments: List[IndividualBenefitsEmployment]) extends IndividualResponse
+case class IndividualChildBenefitsResponse(childBenefitEntitlement: BigDecimal, errorResponse: Option[Int] = None) extends IndividualResponse
 
 case class IndividualEmploymentResponse(employments: List[IndividualEmploymentEmployment]) extends IndividualResponse
 
