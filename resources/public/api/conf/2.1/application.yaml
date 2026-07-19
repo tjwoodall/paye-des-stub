@@ -446,7 +446,7 @@ components:
       style: simple
       schema:
         type: string
-        example: 2234567890
+        example: '2234567890'
     nino:
       name: nino
       in: path
