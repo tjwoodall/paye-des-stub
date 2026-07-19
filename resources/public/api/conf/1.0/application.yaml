@@ -53,7 +53,7 @@ paths:
                   $ref: '#/components/examples/benefitsResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: [ ]
+        - Application-Restricted: [ ]
   /individual-paye-test-support/sa/{utr}/employments/annual-summary/{taxYear}:
     post:
       tags:
@@ -102,7 +102,7 @@ paths:
                   $ref: '#/components/examples/employmentsResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: [ ]
+        - Application-Restricted: [ ]
   /individual-paye-test-support/sa/{utr}/income/annual-summary/{taxYear}:
     post:
       tags:
@@ -151,7 +151,7 @@ paths:
                   $ref: '#/components/examples/incomeResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: [ ]
+        - Application-Restricted: [ ]
   /individual-paye-test-support/sa/{utr}/tax/annual-summary/{taxYear}:
     post:
       tags:
@@ -200,7 +200,7 @@ paths:
                   $ref: '#/components/examples/taxResponseHappyPath2'
       deprecated: false
       security:
-        - application-restricted: [ ]
+        - Application-Restricted: [ ]
 components:
   examples:
     requestHappyPath1:
@@ -335,7 +335,7 @@ components:
         example: Bearer 59fc92c1cdf0b8ef1f138a702effdbd2
       required: true
   securitySchemes:
-    application-restricted:
+    Application-Restricted:
       type: oauth2
       description: HMRC supports OAuth 2.0 for authenticating [application-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/application-restricted-endpoints) API requests using an OAuth 2.0 Bearer Token in the Authorization header.
       flows:
