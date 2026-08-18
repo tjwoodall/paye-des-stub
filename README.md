@@ -58,12 +58,24 @@ curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/b
 To test the stub endpoints for Child Benefit Entitlement:
 ```
 curl --header "Content-Type: application/json" \
-  --header "Accept: application/vnd.hmrc.1.0+json" \
+  --header "Accept: application/vnd.hmrc.2.0+json" \
   --request POST \
   --data '{ "scenario": "HAPPY_PATH_1" }' \
   http://localhost:9689/sa/2234567890/child-benefit-entitlement/annual-summary/2017-18
 curl -X GET http://localhost:9689/benefits-and-credits/child-benefit/views/iv_sa_prepop_hicbc?input_utr=2234567890&input_tax_year=2018
 ```
+
+To test the stub endpoints for Winter Fuel Payment Amount:
+```
+curl --header "Content-Type: application/json" \
+  --header "Accept: application/vnd.hmrc.2.1+json" \
+  --request POST \
+  --data '{ "scenario": "HAPPY_PATH_1" }' \
+  http://localhost:9689/CE123457D/winter-fuel-payment-amount/annual-summary/2017-18
+curl -X GET http://localhost:9689/paye/iabd/taxpayer/CE123457D/tax-year/2017/deductions
+```
+**Note:** Unlike the other endpoints, Winter Fuel Payment is keyed by National Insurance number. The Individual Benefits API resolves the Unique Taxpayer Reference to a National Insurance number before calling it.
+
 To test the stub endpoint for Individual Employment:
 ```
 curl --header "Content-Type: application/json" \
@@ -100,6 +112,11 @@ curl -X GET http://localhost:9689/self-assessment-prepop/individual/2234567890/t
 - HAPPY_PATH_3 is an empty array
 - UNHAPPY_PATH_500 will stub to return a 500 response. Replace 500 with whatever other response you wish to stub.
 
+## STUBBING RESPONSES for Winter Fuel Payment Amount
+- HAPPY_PATH_1 is an array with one valid non-zero value
+- HAPPY_PATH_2 is an array with one zero value
+- HAPPY_PATH_3 is an empty array
+- UNHAPPY_PATH_500 will stub to return a 500 response. Replace 500 with whatever other response you wish to stub.
 
 ## Viewing Documentation
 ### Locally
