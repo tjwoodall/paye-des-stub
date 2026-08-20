@@ -727,7 +727,12 @@ paths:
       tags:
         - individual-paye-test-support
       summary: Create Winter Fuel Payment test data
-      description: Supports the [Individual Benefits API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits) by creating Winter Fuel Payment test data.
+      description: |
+        Supports the [Individual Benefits API](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individual-benefits) by creating Winter Fuel Payment test data.
+
+        Unlike the other endpoints in this API, this endpoint is keyed by National Insurance number rather than Unique Taxpayer Reference. The Individual Benefits API is called with a Self Assessment Unique Taxpayer Reference.
+
+        You will therefore need to take note of both IDs when you create a test user.
       operationId: createWinterFuelPaymentAmountTestData
       parameters:
         - name: nino
@@ -833,7 +838,7 @@ paths:
                   value:
                     expectedStatus: 200
                     expectedJson:
-                      winterFuelPaymentAmount: 300
+                      winterFuelPaymentAmount: 215.67
                 happy-path-2:
                   description: Response for scenario HAPPY_PATH_2, simulating no Winter Fuel Payment amount found for the NINO.
                   value:
