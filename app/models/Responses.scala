@@ -22,16 +22,24 @@ trait IndividualResponse
 
 case class IndividualBenefitsResponse(employments: List[IndividualBenefitsEmployment]) extends IndividualResponse
 case class IndividualChildBenefitsResponseDetail(child_benefit_entitlement: BigDecimal)
-case class IndividualChildBenefitsResponse(elements: Seq[IndividualChildBenefitsResponseDetail], errorResponse: Option[Int] = None) extends IndividualResponse
-case class IndividualChildBenefitsPostResponse(expectedStatus: Int, expectedJson: Option[JsObject] = None) extends IndividualResponse
+case class IndividualChildBenefitsResponse(
+  elements: Seq[IndividualChildBenefitsResponseDetail],
+  errorResponse: Option[Int] = None
+) extends IndividualResponse
+case class IndividualChildBenefitsPostResponse(expectedStatus: Int, expectedJson: Option[JsObject] = None)
+    extends IndividualResponse
 
 case class WinterFuelPaymentAmountResponseDetail(grossAmount: BigDecimal)
-case class WinterFuelPaymentAmountResponse(deductionsSummaryDetails: Seq[WinterFuelPaymentAmountResponseDetail], errorResponse: Option[Int] = None) extends IndividualResponse
-case class WinterFuelPaymentAmountPostResponse(expectedStatus: Int, expectedJson: Option[JsObject] = None) extends IndividualResponse
-
+case class WinterFuelPaymentAmountResponse(
+  deductionsSummaryDetails: Seq[WinterFuelPaymentAmountResponseDetail],
+  errorResponse: Option[Int] = None
+) extends IndividualResponse
+case class WinterFuelPaymentAmountPostResponse(expectedStatus: Int, expectedJson: Option[JsObject] = None)
+    extends IndividualResponse
 
 object IndividualChildBenefitsResponseDetail {
-  implicit val formats: Format[IndividualChildBenefitsResponseDetail] = Json.format[IndividualChildBenefitsResponseDetail]
+  implicit val formats: Format[IndividualChildBenefitsResponseDetail] =
+    Json.format[IndividualChildBenefitsResponseDetail]
 }
 object IndividualChildBenefitsPostResponse {
   implicit val formats: Format[IndividualChildBenefitsPostResponse] = Json.format[IndividualChildBenefitsPostResponse]
@@ -42,7 +50,8 @@ object IndividualChildBenefitsResponse {
 }
 
 object WinterFuelPaymentAmountResponseDetail {
-  implicit val formats: Format[WinterFuelPaymentAmountResponseDetail] = Json.format[WinterFuelPaymentAmountResponseDetail]
+  implicit val formats: Format[WinterFuelPaymentAmountResponseDetail] =
+    Json.format[WinterFuelPaymentAmountResponseDetail]
 }
 object WinterFuelPaymentAmountPostResponse {
   implicit val formats: Format[WinterFuelPaymentAmountPostResponse] = Json.format[WinterFuelPaymentAmountPostResponse]

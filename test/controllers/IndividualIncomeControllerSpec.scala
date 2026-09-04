@@ -61,12 +61,16 @@ class IndividualIncomeControllerSpec
     def createRequestWithHeadersAcceptV2_0: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest()
         .withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
-
+    def createRequestWithHeadersAcceptV2_1: FakeRequest[AnyContentAsEmpty.type] =
+      FakeRequest()
+        .withHeaders("Accept" -> "application/vnd.hmrc.2.1+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")    
+    
     def createSummaryRequest(scenario: String): FakeRequest[JsValue] =
       createRequestWithHeaders.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     def createSummaryRequestAcceptV2_0(scenario: String): FakeRequest[JsValue] =
       createRequestWithHeadersAcceptV2_0.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
-
+    def createSummaryRequestAcceptV2_1(scenario: String): FakeRequest[JsValue] =
+      createRequestWithHeadersAcceptV2_1.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     def emptyRequest: FakeRequest[JsValue] =
       createRequestWithHeaders.withBody[JsValue](Json.parse("{}"))
 
@@ -135,6 +139,20 @@ class IndividualIncomeControllerSpec
         .willReturn(Future.successful(individualIncome))
 
       val result: Future[Result] = underTest.create(utr, taxYear)(createSummaryRequestAcceptV2_0("HAPPY_PATH_1"))
+
+      status(result) shouldBe CREATED
+      verify(underTest.scenarioLoader).loadScenario[IndividualIncomeResponse]("individual-income", "HAPPY_PATH_1")
+      verify(underTest.service).create(validUtrString, taxYear.startYr, individualIncomeResponse)
+    }
+
+    "return a created response and store the Individual Income summary for accept v2.1" in new Setup {
+
+      `given`(underTest.scenarioLoader.loadScenario[IndividualIncomeResponse](anyString, anyString)(using any()))
+        .willReturn(Future.successful(individualIncomeResponse))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualIncomeResponse]))
+        .willReturn(Future.successful(individualIncome))
+
+      val result: Future[Result] = underTest.create(utr, taxYear)(createSummaryRequestAcceptV2_1("HAPPY_PATH_1"))
 
       status(result) shouldBe CREATED
       verify(underTest.scenarioLoader).loadScenario[IndividualIncomeResponse]("individual-income", "HAPPY_PATH_1")

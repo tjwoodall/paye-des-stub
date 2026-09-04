@@ -52,6 +52,9 @@ class IndividualTaxControllerSpec
     def createIndividualTaxRequestAcceptV2_0: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
+    def createIndividualTaxRequestAcceptV2_1: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+      .withHeaders("Accept" -> "application/vnd.hmrc.2.1+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
+
     val underTest =
       new IndividualTaxController(
         Mockito.mock(classOf[ScenarioLoader]),
@@ -63,7 +66,8 @@ class IndividualTaxControllerSpec
       createIndividualTaxRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     def createSummaryRequestAcceptV2_0(scenario: String): FakeRequest[JsValue] =
       createIndividualTaxRequestAcceptV2_0.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
-
+    def createSummaryRequestAcceptV2_1(scenario: String): FakeRequest[JsValue] =
+      createIndividualTaxRequestAcceptV2_1.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
     def emptyRequest: FakeRequest[JsValue] =
       createIndividualTaxRequest.withBody[JsValue](Json.parse("{}"))
 
@@ -146,6 +150,21 @@ class IndividualTaxControllerSpec
 
       val result: Future[Result] =
         Future(underTest.create(utr, taxYear)(createSummaryRequestAcceptV2_0("HAPPY_PATH_1"))).futureValue
+
+      status(result) shouldBe CREATED
+      verify(underTest.scenarioLoader).loadScenario[IndividualTaxResponse]("individual-tax", "HAPPY_PATH_1")
+      verify(underTest.service).create(validUtrString, taxYear.startYr, individualTaxResponse)
+    }
+
+    "return a created response and store the Individual Tax summary for accept v2.1" in new Setup {
+
+      `given`(underTest.scenarioLoader.loadScenario[IndividualTaxResponse](anyString, anyString)(using any()))
+        .willReturn(Future.successful(individualTaxResponse))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualTaxResponse]))
+        .willReturn(Future.successful(individualTax))
+
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequestAcceptV2_1("HAPPY_PATH_1"))).futureValue
 
       status(result) shouldBe CREATED
       verify(underTest.scenarioLoader).loadScenario[IndividualTaxResponse]("individual-tax", "HAPPY_PATH_1")

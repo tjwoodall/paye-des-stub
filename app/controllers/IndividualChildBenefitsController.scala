@@ -54,30 +54,31 @@ class IndividualChildBenefitsController @Inject() (
   }
 
   final def create(utr: SaUtr, taxYear: TaxYear): Action[JsValue] =
-    (cc.actionBuilder andThen validateAcceptHeader("2.0")).async(parse.json) { request =>
-      given Request[JsValue] = request
-      withJsonBody[CreateSummaryRequest] { (createSummaryRequest: CreateSummaryRequest) =>
-        val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
-        if (scenario.startsWith("UNHAPPY_PATH_")) {
-          val errorResponseStatus             = scenario.split("_")(2).toInt
-          val individualChildBenefitsResponse =
-            IndividualChildBenefitsResponse(Nil, Some(errorResponseStatus))
-            
-          service
-            .create(utr.utr, taxYear.endYr, individualChildBenefitsResponse)
-            .map(_ => Created(Json.toJson(IndividualChildBenefitsPostResponse(expectedStatus = errorResponseStatus))))
-        } else {
-          for {
-            Tuple2(individualChildBenefitsResponse, individualChildBenefitsPostResponse) <-
-              scenarioLoader.loadScenarioWithTransformedPayloadHICBC("individual-child-benefits", scenario)
-            _                                                                            <- service.create(utr.utr, taxYear.endYr, individualChildBenefitsResponse)
-          } yield Created(Json.toJson(individualChildBenefitsPostResponse))
-        }
+    (cc.actionBuilder andThen validateAcceptHeader(supportedVersions*)).async(parse.json) {
+      request =>
+        given Request[JsValue] = request
+        withJsonBody[CreateSummaryRequest] { (createSummaryRequest: CreateSummaryRequest) =>
+          val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
+          if (scenario.startsWith("UNHAPPY_PATH_")) {
+            val errorResponseStatus             = scenario.split("_")(2).toInt
+            val individualChildBenefitsResponse =
+              IndividualChildBenefitsResponse(Nil, Some(errorResponseStatus))
 
-      } recover {
-        case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
-        case _                           => InternalServerError
-      }
+            service
+              .create(utr.utr, taxYear.endYr, individualChildBenefitsResponse)
+              .map(_ => Created(Json.toJson(IndividualChildBenefitsPostResponse(expectedStatus = errorResponseStatus))))
+          } else {
+            for {
+              Tuple2(individualChildBenefitsResponse, individualChildBenefitsPostResponse) <-
+                scenarioLoader.loadScenarioWithTransformedPayloadHICBC("individual-child-benefits", scenario)
+              _                                                                            <- service.create(utr.utr, taxYear.endYr, individualChildBenefitsResponse)
+            } yield Created(Json.toJson(individualChildBenefitsPostResponse))
+          }
+
+        } recover {
+          case _: InvalidScenarioException => BadRequest(JsonErrorResponse("UNKNOWN_SCENARIO", "Unknown test scenario"))
+          case _                           => InternalServerError
+        }
     }
 
 }

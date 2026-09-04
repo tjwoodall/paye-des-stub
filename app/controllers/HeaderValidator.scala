@@ -33,6 +33,8 @@ trait HeaderValidator extends Results with ErrorConversion {
   private val matchHeader: String => Option[Match] =
     new Regex("""^application/vnd\.hmrc\.(.*?)\+(.*)$""", "version", "contenttype") findFirstMatchIn _
 
+  val supportedVersions: Seq[String] = Seq("1.0", "2.0", "2.1")
+
   def acceptHeaderValidationRules(versions: String*): Option[String] => Boolean =
     _ flatMap (a =>
       matchHeader(a) map (res =>

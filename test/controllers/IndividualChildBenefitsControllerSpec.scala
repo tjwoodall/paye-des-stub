@@ -50,6 +50,9 @@ class IndividualChildBenefitsControllerSpec
     def createIndividualChildBenefitsRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       .withHeaders("Accept" -> "application/vnd.hmrc.2.0+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
 
+    def createIndividualChildBenefitsRequestAccept2_1: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+      .withHeaders("Accept" -> "application/vnd.hmrc.2.1+json", "Content-Type" -> "application/vnd.hmrc.1.0+json")
+
     val underTest = new IndividualChildBenefitsController(
       Mockito.mock(classOf[ScenarioLoader]),
       Mockito.mock(classOf[IndividualChildBenefitsSummaryService]),
@@ -58,6 +61,9 @@ class IndividualChildBenefitsControllerSpec
 
     def createSummaryRequest(scenario: String): FakeRequest[JsValue] =
       createIndividualChildBenefitsRequest.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
+
+    def createSummaryRequestAccept2_1(scenario: String): FakeRequest[JsValue] =
+      createIndividualChildBenefitsRequestAccept2_1.withBody[JsValue](Json.parse(s"""{ "scenario": "$scenario" }"""))
 
     def emptyRequest: FakeRequest[JsValue] =
       createIndividualChildBenefitsRequest.withBody[JsValue](Json.parse("{}"))
@@ -125,7 +131,7 @@ class IndividualChildBenefitsControllerSpec
 
   "create" should {
 
-    "return a created response and store the Individual Benefits summary" in new Setup {
+    "return a created response and store the Child Benefits Entitlement" in new Setup {
       `given`(underTest.scenarioLoader.loadScenarioWithTransformedPayloadHICBC(anyString, anyString))
         .willReturn(Future.successful(Tuple2(individualChildBenefitsResponse, individualChildBenefitsPostResponse)))
       `given`(underTest.service.create(anyString, anyString, any[IndividualChildBenefitsResponse]))
@@ -140,7 +146,7 @@ class IndividualChildBenefitsControllerSpec
         .loadScenarioWithTransformedPayloadHICBC("individual-child-benefits", "HAPPY_PATH_1")
       verify(underTest.service).create(validUtrString, taxYear.endYr, individualChildBenefitsResponse)
     }
-    "return a created response and store the Individual Benefits summary for unhappy path" in new Setup {
+    "return a created response and store the Child Benefits Entitlement for unhappy path" in new Setup {
       `given`(underTest.scenarioLoader.loadScenarioWithTransformedPayloadHICBC(anyString, anyString))
         .willReturn(Future.successful(Tuple2(individualChildBenefitsResponse, individualChildBenefitsPostResponse)))
       `given`(underTest.service.create(anyString, anyString, any[IndividualChildBenefitsResponse]))
@@ -152,6 +158,23 @@ class IndividualChildBenefitsControllerSpec
       status(result)        shouldBe CREATED
       contentAsJson(result) shouldBe Json.toJson(IndividualChildBenefitsPostResponse(500))
       verify(underTest.service).create(validUtrString, taxYear.endYr, individualChildBenefits500Response)
+    }
+
+    "return a created response and store the Child Benefits Entitlement for accept 2.1" in new Setup {
+
+      `given`(underTest.scenarioLoader.loadScenarioWithTransformedPayloadHICBC(anyString, anyString))
+        .willReturn(Future.successful(Tuple2(individualChildBenefitsResponse, individualChildBenefitsPostResponse)))
+      `given`(underTest.service.create(anyString, anyString, any[IndividualChildBenefitsResponse]))
+        .willReturn(Future.successful(individualChildBenefits))
+
+      val result: Future[Result] =
+        Future(underTest.create(utr, taxYear)(createSummaryRequestAccept2_1("HAPPY_PATH_1"))).futureValue
+
+      status(result) shouldBe CREATED
+      contentAsJson(result) shouldBe Json.toJson(individualChildBenefitsPostResponse)
+      verify(underTest.scenarioLoader)
+        .loadScenarioWithTransformedPayloadHICBC("individual-child-benefits", "HAPPY_PATH_1")
+      verify(underTest.service).create(validUtrString, taxYear.endYr, individualChildBenefitsResponse)
     }
 
     "default to Happy Path Scenario 1 when no scenario is specified in the request" in new Setup {

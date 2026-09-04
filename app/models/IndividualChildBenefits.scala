@@ -16,4 +16,8 @@
 
 package models
 
-case class IndividualChildBenefits(utr: String, taxYear: String, individualChildBenefitsResponse: IndividualChildBenefitsResponse)
+case class IndividualChildBenefits(
+  utr: String,
+  taxYear: String,
+  individualChildBenefitsResponse: IndividualChildBenefitsResponse
+)

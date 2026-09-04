@@ -54,7 +54,7 @@ class WinterFuelPaymentAmountController @Inject() (
   }
 
   final def create(nino: Nino, taxYear: TaxYear): Action[JsValue] =
-    (cc.actionBuilder andThen validateAcceptHeader("2.1")).async(parse.json) { request =>
+    (cc.actionBuilder andThen validateAcceptHeader(supportedVersions*)).async(parse.json) { request =>
       given Request[JsValue] = request
       withJsonBody[CreateSummaryRequest] { (createSummaryRequest: CreateSummaryRequest) =>
         val scenario = createSummaryRequest.scenario.getOrElse("HAPPY_PATH_1")
